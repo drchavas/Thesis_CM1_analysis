@@ -18,8 +18,8 @@ run_TC_stats = 1;
     save_file = 1;  %for TC_stats only; note: program will not overwrite old file
 run_TC_stats_dynamicequil = 0;  %overwrites old file automatically
 run_TC_structure_ts = 0;    %overwrites old plot automatically
-run_TC_stats_plot = 0;  %overwrites old [simset].mat file and plots automatically
-    run_TC_stats_plot_dynamicequil = 1; %also run for dynamic equilibrium
+run_TC_stats_plot = 1;  %overwrites old [simset].mat file and plots automatically
+    run_TC_stats_plot_dynamicequil = 0; %also run for dynamic equilibrium
 
 %% Parameters for scripts
 v_usr_fracVp = .1;  %wind speed as fraction of Vp; beyond this radius, radiative subsidence radial wind profile should apply.

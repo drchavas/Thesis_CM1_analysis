@@ -998,7 +998,7 @@ if(plot_ts_multi==1)
     title(input_title)
     ylabel(input_title);
 %    xlabel('time [days]')
-    axis([0 150 0 1.1*max(max(Vmax_movave_all))])
+    axis([0 tf 0 1.1*max(max(Vmax_movave_all))])
 
     for i=1:numruns
         
@@ -1031,7 +1031,7 @@ if(plot_ts_multi==1)
     title(input_title)
     ylabel(input_title);
 %    xlabel('time [days]')
-    axis([0 150 0 1.1*max(max(rmax_movave_all(20:end,:)))])
+    axis([0 tf 0 1.1*max(max(rmax_movave_all(20:end,:)))])
 
     for i=1:numruns
         
@@ -1065,7 +1065,7 @@ if(plot_ts_multi==1)
     
     input_title=sprintf('rmid [km]');
     title(input_title)
-    axis([0 150 0 1.1*max(max(rmid_movave_all(100:end,:)))])
+    axis([0 tf 0 1.1*max(max(rmid_movave_all(100:end,:)))])
 %}
 %{
     %r0
@@ -1082,7 +1082,7 @@ if(plot_ts_multi==1)
     
     input_title=sprintf('r0 [km]');
     title(input_title)
-    axis([0 150 0 1.1*max(max(r0_movave_all(100:end,:)))])
+    axis([0 tf 0 1.1*max(max(r0_movave_all(100:end,:)))])
 %}
     %r0Lil
     for i=1:numruns
@@ -1097,7 +1097,7 @@ if(plot_ts_multi==1)
     title(input_title)
     ylabel(input_title);
     xlabel('time [days]')
-    axis([0 150 0 1.1*max(max(r0Lil_movave_all(20:end,:)))])
+    axis([0 tf 0 1.1*max(max(r0Lil_movave_all(20:end,:)))])
 
     for i=1:numruns
         
@@ -1230,7 +1230,7 @@ if(plot_ts_multi==1)
     title(input_title)
     ylabel(input_title);
 %    xlabel('time [days]')
-    axis([0 150 0 1.1*max(max(Vmax_movave_g_all))])
+    axis([0 tf 0 1.1*max(max(Vmax_movave_g_all))])
 
     for i=1:numruns
         
@@ -1263,7 +1263,7 @@ if(plot_ts_multi==1)
     title(input_title)
     ylabel(input_title);
 %    xlabel('time [days]')
-    axis([0 150 0 1.1*max(max(rmax_movave_g_all(20:end,:)))])
+    axis([0 tf 0 1.1*max(max(rmax_movave_g_all(20:end,:)))])
 
     for i=1:numruns
         
@@ -1297,7 +1297,7 @@ if(plot_ts_multi==1)
     
     input_title=sprintf('rmid [km]');
     title(input_title)
-    axis([0 150 0 1.1*max(max(rmid_movave_g_all(100:end,:)))])
+    axis([0 tf 0 1.1*max(max(rmid_movave_g_all(100:end,:)))])
 %}
 %{
     %r0
@@ -1314,7 +1314,7 @@ if(plot_ts_multi==1)
     
     input_title=sprintf('r0 [km]');
     title(input_title)
-    axis([0 150 0 1.1*max(max(r0_movave_g_all(100:end,:)))])
+    axis([0 tf 0 1.1*max(max(r0_movave_g_all(100:end,:)))])
 %}
     %r0Lil
     for i=1:numruns
@@ -1329,7 +1329,7 @@ if(plot_ts_multi==1)
     title(input_title)
     ylabel(input_title);
     xlabel('time [days]')
-    axis([0 150 0 1.1*max(max(r0Lil_movave_g_all(20:end,:)))])
+    axis([0 tf 0 1.1*max(max(r0Lil_movave_g_all(20:end,:)))])
 
     for i=1:numruns
         
@@ -1379,7 +1379,7 @@ if(plot_ts_multi==1)
     for i=1:numruns
         
         subplot(3,1,1)
-        plot(t_day,Vmax_movave_g_all(:,i)./mpi_all,pl_clrs{i})
+        plot(t_day,Vmax_movave_g_all(:,i)/mpi_all(i),pl_clrs{i})
         hold on
         
     end
@@ -1389,7 +1389,7 @@ if(plot_ts_multi==1)
     %title(input_title)
     ylabel(input_title);
 %    xlabel('time [days]')
-    axis([0 150 0 1.1*max(max(Vmax_movave_g_all./mpi_all))])
+    axis([0 tf 0 1.1*max(max(Vmax_movave_g_all/mpi_all(i)))])
 
     for i=1:numruns
         
@@ -1413,7 +1413,7 @@ if(plot_ts_multi==1)
     for i=1:numruns
         
         subplot(3,1,2)
-        plot(t_day,rmax_movave_g_all(:,i)./(mpi_all./fcor_all/1000),pl_clrs{i})
+        plot(t_day,rmax_movave_g_all(:,i)/(mpi_all(i)/fcor_all(i)/1000),pl_clrs{i})
         hold on
     end
     grid on
@@ -1422,21 +1422,22 @@ if(plot_ts_multi==1)
     %title(input_title)
     ylabel(input_title);
 %    xlabel('time [days]')
-    axis([0 150 0 1.1*max(max(rmax_movave_g_all(20:end,:)./(mpi_all./fcor_all/1000)))])
+%    axis([0 tf 0 1.1*max(max(rmax_movave_g_all(20:end,:)/(mpi_all(i)/fcor_all(i)/1000)))])
+    axis([0 tf 0 .07])
 
     for i=1:numruns
         
         hold on
         if(~isnan(tau_gen(i)))
-            h=plot(t_day(tau_gen(i)/(dt/60/60/24)),rmax_gen_g(i)./(mpi_all./fcor_all/1000),'d');
+            h=plot(t_day(tau_gen(i)/(dt/60/60/24)),rmax_gen_g(i)/(mpi_all(i)/fcor_all(i)/1000),'d');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
         if(~isnan(rmax_tau_max_g(i)))
-            h=plot(t_day(rmax_tau_max_g(i)/(dt/60/60/24)),rmax_max_g(i)./(mpi_all./fcor_all/1000),'^');
+            h=plot(t_day(rmax_tau_max_g(i)/(dt/60/60/24)),rmax_max_g(i)/(mpi_all(i)/fcor_all(i)/1000),'^');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
         if(~isnan(rmax_tau_equil_g(i)))
-            h=plot(t_day(rmax_tau_equil_g(i)/(dt/60/60/24)),rmax_equil_g(i)./(mpi_all./fcor_all/1000),'s');
+            h=plot(t_day(rmax_tau_equil_g(i)/(dt/60/60/24)),rmax_equil_g(i)/(mpi_all(i)/fcor_all(i)/1000),'s');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
     end
@@ -1456,7 +1457,7 @@ if(plot_ts_multi==1)
     
     input_title=sprintf('rmid [km]');
     title(input_title)
-    axis([0 150 0 1.1*max(max(rmid_movave_g_all(100:end,:)))])
+    axis([0 tf 0 1.1*max(max(rmid_movave_g_all(100:end,:)))])
 %}
 %{
     %r0
@@ -1473,13 +1474,13 @@ if(plot_ts_multi==1)
     
     input_title=sprintf('r0 [km]');
     title(input_title)
-    axis([0 150 0 1.1*max(max(r0_movave_g_all(100:end,:)))])
+    axis([0 tf 0 1.1*max(max(r0_movave_g_all(100:end,:)))])
 %}
     %r0Lil
     for i=1:numruns
         
         subplot(3,1,3)
-        plot(t_day,r0Lil_movave_g_all(:,i)./(mpi_all./fcor_all/1000),pl_clrs{i})
+        plot(t_day,r0Lil_movave_g_all(:,i)/(mpi_all(i)/fcor_all(i)/1000),pl_clrs{i})
         hold on
     end
     grid on
@@ -1488,21 +1489,22 @@ if(plot_ts_multi==1)
     %title(input_title)
     ylabel(input_title);
     xlabel('time [days]')
-    axis([0 150 0 1.1*max(max(r0Lil_movave_g_all(20:end,:)./(mpi_all./fcor_all/1000)))])
+%    axis([0 tf 0 1.1*max(max(r0Lil_movave_g_all(20:end,:)/(mpi_all(i)/fcor_all(i)/1000)))])
+    axis([0 tf 0 1.1])
 
     for i=1:numruns
         
         hold on
         if(~isnan(tau_gen(i)))
-            h=plot(t_day(tau_gen(i)/(dt/60/60/24)),r0Lil_gen_g(i)./(mpi_all./fcor_all/1000),'d');
+            h=plot(t_day(tau_gen(i)/(dt/60/60/24)),r0Lil_gen_g(i)/(mpi_all(i)/fcor_all(i)/1000),'d');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
         if(~isnan(r0Lil_tau_max_g(i)))
-            h=plot(t_day(r0Lil_tau_max_g(i)/(dt/60/60/24)),r0Lil_max_g(i)./(mpi_all./fcor_all/1000),'^');
+            h=plot(t_day(r0Lil_tau_max_g(i)/(dt/60/60/24)),r0Lil_max_g(i)/(mpi_all(i)/fcor_all(i)/1000),'^');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
         if(~isnan(r0Lil_tau_equil(i)))
-            h=plot(t_day(r0Lil_tau_equil_g(i)/(dt/60/60/24)),r0Lil_equil_g(i)./(mpi_all./fcor_all/1000),'s');
+            h=plot(t_day(r0Lil_tau_equil_g(i)/(dt/60/60/24)),r0Lil_equil_g(i)/(mpi_all(i)/fcor_all(i)/1000),'s');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
     end

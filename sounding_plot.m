@@ -42,7 +42,7 @@ for i=1:numruns
 
 
     %%load initial sounding variables
-    dir_full = '/Users/drchavas/Documents/Research/Thesis/CM1/v15/analysis/input_soundings/';
+    dir_full = '/Users/drchavas/Documents/Research/Thesis/CM1/v15/Thesis_CM1_analysis/input_soundings/';
     if(i==5)
         dir_full = '/Volumes/CHAVAS_CM1_FINAL/CM1_output/axisym/CTRL_icRCE/'
     end
