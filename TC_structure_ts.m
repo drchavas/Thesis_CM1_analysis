@@ -49,15 +49,15 @@ for ii = 1:length(equil_dynamics)
     %%Load data for given simulation
     if(equil_dynamic==1)
         if(wrad_const == 1)
-            load(sprintf('simdata_Tmean%i_dt%i_dynamic_wradconst/%s.mat',T_mean,dt_final_dynamic,subdir_load));
+            load(sprintf('../CM1_postproc_data/simdata_Tmean%i_dt%i_dynamic_wradconst/%s.mat',T_mean,dt_final_dynamic,subdir_load));
         else
-            load(sprintf('simdata_Tmean%i_dt%i_dynamic/%s.mat',T_mean,dt_final_dynamic,subdir_load));
+            load(sprintf('../CM1_postproc_data/simdata_Tmean%i_dt%i_dynamic/%s.mat',T_mean,dt_final_dynamic,subdir_load));
         end
     else
         if(wrad_const == 1)
-            load(sprintf('simdata_Tmean%i_%i_%i_wradconst/%s.mat',T_mean,tf-dt_final,tf,subdir_load));
+            load(sprintf('../CM1_postproc_data/simdata_Tmean%i_%i_%i_wradconst/%s.mat',T_mean,tf-dt_final,tf,subdir_load));
         else
-            load(sprintf('simdata_Tmean%i_%i_%i/%s.mat',T_mean,tf-dt_final,tf,subdir_load));
+            load(sprintf('../CM1_postproc_data/simdata_Tmean%i_%i_%i/%s.mat',T_mean,tf-dt_final,tf,subdir_load));
         end
     end
     
@@ -230,15 +230,15 @@ for ii = 1:length(equil_dynamics)
     if(save_plot == 1)
         if(equil_dynamic == 1)
             if(wrad_const == 1)
-                cd(sprintf('simplots_Tmean%i_dt%i_dynamic_wradconst',T_mean,dt_final_dynamic))
+                cd(sprintf('../CM1_postproc_data/simplots_Tmean%i_dt%i_dynamic_wradconst',T_mean,dt_final_dynamic))
             else
-                cd(sprintf('simplots_Tmean%i_dt%i_dynamic',T_mean,dt_final_dynamic))
+                cd(sprintf('../CM1_postproc_data/simplots_Tmean%i_dt%i_dynamic',T_mean,dt_final_dynamic))
             end
         else
             if(wrad_const == 1)
-                cd(sprintf('simplots_Tmean%i_%i_%i_wradconst',T_mean,tf-dt_final,tf))
+                cd(sprintf('../CM1_postproc_data/simplots_Tmean%i_%i_%i_wradconst',T_mean,tf-dt_final,tf))
             else
-                cd(sprintf('simplots_Tmean%i_%i_%i',T_mean,tf-dt_final,tf))
+                cd(sprintf('../CM1_postproc_data/simplots_Tmean%i_%i_%i',T_mean,tf-dt_final,tf))
             end
         end
         saveas(gcf,sprintf('%s_structevol.pdf',subdir_load),'pdf')

@@ -27,9 +27,9 @@ stop_overwrite = 0;
 if(save_file_dynamicequil==1)
 %check if new subdirectory exists
 if(wrad_const == 1)
-    subdir_dyn = sprintf('simdata_Tmean%i_dt%i_dynamic_wradconst',T_mean,dt_final_dynamic);
+    subdir_dyn = sprintf('../CM1_postproc_data/simdata_Tmean%i_dt%i_dynamic_wradconst',T_mean,dt_final_dynamic);
 else
-    subdir_dyn = sprintf('simdata_Tmean%i_dt%i_dynamic',T_mean,dt_final_dynamic);
+    subdir_dyn = sprintf('../CM1_postproc_data/simdata_Tmean%i_dt%i_dynamic',T_mean,dt_final_dynamic);
 end
 
 if(exist(subdir_dyn)==7)
@@ -45,22 +45,22 @@ if(exist(subdir_dyn)==7)
 else
     
     if(wrad_const == 1)
-        mkdir(sprintf('simdata_Tmean%i_dt%i_dynamic_wradconst',T_mean,dt_final_dynamic))
-        mkdir(sprintf('simplots_Tmean%i_dt%i_dynamic_wradconst',T_mean,dt_final_dynamic))
-        mkdir(sprintf('simsets_Tmean%i_dt%i_dynamic_wradconst',T_mean,dt_final_dynamic))
-        mkdir(sprintf('simsets_Tmean%i_dt%i_dynamic_wradconst/PLOTS',T_mean,dt_final_dynamic))
+        mkdir(sprintf('../CM1_postproc_data/simdata_Tmean%i_dt%i_dynamic_wradconst',T_mean,dt_final_dynamic))
+        mkdir(sprintf('../CM1_postproc_data/simplots_Tmean%i_dt%i_dynamic_wradconst',T_mean,dt_final_dynamic))
+        mkdir(sprintf('../CM1_postproc_data/simsets_Tmean%i_dt%i_dynamic_wradconst',T_mean,dt_final_dynamic))
+        mkdir(sprintf('../CM1_postproc_data/simsets_Tmean%i_dt%i_dynamic_wradconst/PLOTS',T_mean,dt_final_dynamic))
 
-        cd(sprintf('simdata_Tmean%i_dt%i_dynamic_wradconst',T_mean,dt_final_dynamic))
+        cd(sprintf('../CM1_postproc_data/simdata_Tmean%i_dt%i_dynamic_wradconst',T_mean,dt_final_dynamic))
         save NOTANORIGINALTCSTATS.mat T_mean tf dt_final dt_final_dynamic
         cd ..
     else
         
-        mkdir(sprintf('simdata_Tmean%i_dt%i_dynamic',T_mean,dt_final_dynamic))
-        mkdir(sprintf('simplots_Tmean%i_dt%i_dynamic',T_mean,dt_final_dynamic))
-        mkdir(sprintf('simsets_Tmean%i_dt%i_dynamic',T_mean,dt_final_dynamic))
-        mkdir(sprintf('simsets_Tmean%i_dt%i_dynamic/PLOTS',T_mean,dt_final_dynamic))
+        mkdir(sprintf('../CM1_postproc_data/simdata_Tmean%i_dt%i_dynamic',T_mean,dt_final_dynamic))
+        mkdir(sprintf('../CM1_postproc_data/simplots_Tmean%i_dt%i_dynamic',T_mean,dt_final_dynamic))
+        mkdir(sprintf('../CM1_postproc_data/simsets_Tmean%i_dt%i_dynamic',T_mean,dt_final_dynamic))
+        mkdir(sprintf('../CM1_postproc_data/simsets_Tmean%i_dt%i_dynamic/PLOTS',T_mean,dt_final_dynamic))
 
-        cd(sprintf('simdata_Tmean%i_dt%i_dynamic',T_mean,dt_final_dynamic))
+        cd(sprintf('../CM1_postproc_data/simdata_Tmean%i_dt%i_dynamic',T_mean,dt_final_dynamic))
         save NOTANORIGINALTCSTATS.mat T_mean tf dt_final dt_final_dynamic
         cd ..
     end
@@ -71,9 +71,9 @@ end
 if(stop_overwrite == 0)
 
     if(wrad_const == 1)
-        file_in_dyn = sprintf('simdata_Tmean%i_%i_%i_wradconst/ax%s.mat',T_mean,tf-dt_final,tf,subdir);
+        file_in_dyn = sprintf('../CM1_postproc_data/simdata_Tmean%i_%i_%i_wradconst/ax%s.mat',T_mean,tf-dt_final,tf,subdir);
     else
-        file_in_dyn = sprintf('simdata_Tmean%i_%i_%i/ax%s.mat',T_mean,tf-dt_final,tf,subdir);
+        file_in_dyn = sprintf('../CM1_postproc_data/simdata_Tmean%i_%i_%i/ax%s.mat',T_mean,tf-dt_final,tf,subdir);
     end
 
     
@@ -166,9 +166,9 @@ if(stop_overwrite == 0)
             load tempstuff.mat
             
             if(wrad_const == 1)
-                movefile('temp.mat',sprintf('simdata_Tmean%i_dt%i_dynamic_wradconst/ax%s.mat',T_mean,dt_final_dynamic,subdir))
+                movefile('temp.mat',sprintf('../CM1_postproc_data/simdata_Tmean%i_dt%i_dynamic_wradconst/ax%s.mat',T_mean,dt_final_dynamic,subdir))
             else
-                movefile('temp.mat',sprintf('simdata_Tmean%i_dt%i_dynamic/ax%s.mat',T_mean,dt_final_dynamic,subdir))
+                movefile('temp.mat',sprintf('../CM1_postproc_data/simdata_Tmean%i_dt%i_dynamic/ax%s.mat',T_mean,dt_final_dynamic,subdir))
             end
 
             

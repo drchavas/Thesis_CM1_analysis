@@ -85,15 +85,15 @@ for ss=1:numruns
     %%Load data for given simulation
     if(equil_dynamic==1)
         if(wrad_const == 1)
-            load(sprintf('simdata_Tmean%i_dt%i_dynamic_wradconst/%s.mat',T_mean,dt_final_dynamic,subdirs_load{ss}));
+            load(sprintf('../CM1_postproc_data/simdata_Tmean%i_dt%i_dynamic_wradconst/%s.mat',T_mean,dt_final_dynamic,subdirs_load{ss}));
         else
-            load(sprintf('simdata_Tmean%i_dt%i_dynamic/%s.mat',T_mean,dt_final_dynamic,subdirs_load{ss}));
+            load(sprintf('../CM1_postproc_data/simdata_Tmean%i_dt%i_dynamic/%s.mat',T_mean,dt_final_dynamic,subdirs_load{ss}));
         end
     else
         if(wrad_const == 1)
-            load(sprintf('simdata_Tmean%i_%i_%i_wradconst/%s.mat',T_mean,tf-dt_final,tf,subdirs_load{ss}));
+            load(sprintf('../CM1_postproc_data/simdata_Tmean%i_%i_%i_wradconst/%s.mat',T_mean,tf-dt_final,tf,subdirs_load{ss}));
         else
-            load(sprintf('simdata_Tmean%i_%i_%i/%s.mat',T_mean,tf-dt_final,tf,subdirs_load{ss}));
+            load(sprintf('../CM1_postproc_data/simdata_Tmean%i_%i_%i/%s.mat',T_mean,tf-dt_final,tf,subdirs_load{ss}));
         end
     end
     

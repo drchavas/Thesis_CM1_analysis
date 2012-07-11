@@ -1,0 +1,346 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% FULL WIND %%%%%%%
+%{
+var = 'vinterp';    %'vinterp'=full wind; 'vg'=gradient wind
+
+%%initialize the output vectors
+clear v_df_qv v_units_qv data_tmean_usr data_tmean
+data_tmean_usr=zeros(xf-x0+1,1);
+data_tmean=zeros(xf-x0+1,tf-t0);    %1 profile per day
+Vmax_movave=nan(i_tf-i_t0+1,1);
+rmax_movave=nan(i_tf-i_t0+1,1);
+r12_movave=nan(i_tf-i_t0+1,1);
+r0_movave=nan(i_tf-i_t0+1,1);
+r0Lil_movave=nan(i_tf-i_t0+1,1);
+num_prof = 1;   %initialize iteration of time average profiles
+numerr(rr)=0;
+
+clear t_day
+clear r12 r0
+for ii=1:i_tf-i_t0+1
+    fclose('all')
+    t_file=i_t0+ii-1;
+
+    t_day(ii) = (t_file-1)*dt/(24*60*60);
+
+
+    %%NC FILENAME (default)
+    if(run_type==1 || run_type==10 || run_type==30)
+        if(t_file<10)
+            nc_file = sprintf('cm1out_000%i.nc',t_file);
+        elseif(t_file<100)
+            nc_file = sprintf('cm1out_00%i.nc',t_file);
+        elseif(t_file<1000)
+            nc_file = sprintf('cm1out_0%i.nc',t_file);
+        else
+            nc_file = sprintf('cm1out_%i.nc',t_file);
+        end
+    elseif(run_type==3)
+        if(t_file<10)
+            nc_file = sprintf('cm1out_t000%i.nc',t_file);
+        elseif(t_file<100)
+            nc_file = sprintf('cm1out_t00%i.nc',t_file);
+        elseif(t_file<1000)
+            nc_file = sprintf('cm1out_t0%i.nc',t_file);
+        else
+            nc_file = sprintf('cm1out_t%i.nc',t_file);
+        end    
+    end
+
+    %% OPEN FILE AND EXTRACT nx, ny, nz -- only need to do once!
+
+    if(ii==1)
+        dir_start=pwd;
+        dir_tmp = strcat(dir_in,subdir);
+        cd(dir_tmp)
+        nc_file
+        ncid = netcdf.open(nc_file,'WRITE');
+
+        %NX
+        if(run_type==3)
+            dimid = netcdf.inqDimID(ncid,'nx');
+        else
+            dimid = netcdf.inqDimID(ncid,'ni');
+        end
+        [junk, nx] = netcdf.inqDim(ncid,dimid);
+
+        %NY
+        if(run_type==3)
+            dimid = netcdf.inqDimID(ncid,'ny');
+        else
+            dimid = netcdf.inqDimID(ncid,'nj');
+        end
+        [junk, ny] = netcdf.inqDim(ncid,dimid);
+
+        %NZ
+        if(run_type==3)
+            dimid = netcdf.inqDimID(ncid,'nz');
+        else
+            dimid = netcdf.inqDimID(ncid,'nk');
+        end
+        [junk, nz] = netcdf.inqDim(ncid,dimid);
+
+        cd(dir_start)
+
+    end
+
+    %% Calculate various thermodynamic quantities: NOT NEEDED FOR WIND STATS :)
+%{        
+    %%load prspert
+    var_temp = 'prspert';
+    [data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units] = nc_extract(dir_in,subdir,nc_file,var_temp,x0,xf,y0,yf,z0,zf);
+    pp_pert = squeeze(data);
+
+    %%load thpert
+    var_temp = 'thpert';
+    [data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units] = nc_extract(dir_in,subdir,nc_file,var_temp,x0,xf,y0,yf,z0,zf);
+    th_pert = squeeze(data);
+
+    %%load qvpert
+    var_temp = 'qvpert';
+    [data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units] = nc_extract(dir_in,subdir,nc_file,var_temp,x0,xf,y0,yf,z0,zf);
+    qv_pert = squeeze(data);
+
+    %%load upert
+    var_temp = 'uinterp';
+    [data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units] = nc_extract(dir_in,subdir,nc_file,var_temp,x0,xf,y0,yf,z0,zf);
+    u_pert = squeeze(data);
+
+    %%load vpert
+    var_temp = 'vinterp';
+    [data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units] = nc_extract(dir_in,subdir,nc_file,var_temp,x0,xf,y0,yf,z0,zf);
+    v_pert = squeeze(data);
+
+    %%calculate pressure
+    p = repmat(pp00(z0+1:z0+nz_sub),nx_sub,1) + pp_pert;
+
+    %%calculate potential temperature
+    th = repmat(th00(z0+1:z0+nz_sub),nx_sub,1) + th_pert;
+
+    %%calculate water vapor mixing ratio
+    qv = repmat(qv00(z0+1:z0+nz_sub),nx_sub,1) + qv_pert;    %[kg/kg]
+
+    %%calculate T, Tv, rho, rh
+    [T rho rh the s s_sat gam_m] = thermo(p,th,qv);
+%}        
+
+    if(strcmp(var,'vg'))    %gradient wind
+
+        %%load prspert
+        var_temp = 'prspert';
+        [data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units fcor] = nc_extract(dir_in,subdir,nc_file,var_temp,x0,xf,y0,yf,z0,zf);
+        pp_pert = squeeze(data);
+
+        %%calculate pressure
+        p = repmat(pp00(z0+1:z0+nz_sub),nx_sub,1) + pp_pert;
+
+        %%EXTRACT DATA: just need the model parameters here actually
+        clear data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units
+        [data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units fcor] = nc_extract(dir_in,subdir,nc_file,'vinterp',x0,xf,y0,yf,z0,zf);
+
+        xvals = xmin_sub:dx:xmax_sub;
+        zvals = zmin_sub:dz:zmax_sub;
+        xmat = repmat(xvals,length(zvals),1)';
+
+        %%Calculate radial pressure gradients at grid-points
+        dp_dr = (p(3:end,:)-p(1:end-2,:))/(2*1000*dx); %[m/s^2]
+        dp_dr(2:end+1,:)=dp_dr;  %add extra level at center equal to nearest level value
+        dp_dr(end+1,:)=dp_dr(end,:);  %add extra level at outer edge equal to nearest level value
+
+        %%alternative: calculate at mid-points between grid points
+%            dp_dr = (p(2:end,:)-p(1:end-1,:))/(1000*dx); %[m/s^2]
+%            dp_dr(2:end+1,:)=dp_dr;  %add extra level at center equal to nearest level value
+
+        %%Calculate gradient wind from pressure field
+        vinterp = data;
+        temp2=(xmat*1000*fcor).^2+4*xmat*1000.*dp_dr;
+        data =  .5*(-xmat*1000*fcor+sqrt((xmat*1000*fcor).^2+4*xmat*1000.*dp_dr));   %Vg^2 + r*f*Vg-r*(dp_dr); solve for Vg
+        data = real(data);  %remove imaginary numbers, which are always very small
+        %data(imag(data)~=0)=NaN;    %ignore imaginary numbers
+%            data = data - squeeze(vinterp);
+
+        v_def = 'Gradient wind';
+        v_units = 'm/s';
+
+    elseif(strcmp(var,'vinterp'))   %full azimuthal wind
+
+        %%EXTRACT DATA
+        clear data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units
+        [data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units fcor] = nc_extract(dir_in,subdir,nc_file,var,x0,xf,y0,yf,z0,zf);
+
+    end
+
+    %% Find quasi-steady states
+
+    %%Extract subset of data corresponding to desired wind level
+    %ALL DATA
+    xvals = xmin_sub:dx:xmax_sub;
+    zvals = zmin_sub:dz:zmax_sub;
+    i_xvals = max(1,x0+1):max(1,x0+1)+nx_sub;
+    i_zvals = max(1,z0+1):max(1,z0+1)+nz_sub;
+
+    %SUBSET DATA
+    indices = find(xvals>=rmin_sub & xvals<=rmax_sub);
+    i_xvals = i_xvals(indices);
+    clear indices
+    indices = find(zvals>=zmin_subsub & zvals<=zmax_subsub,1);
+    indices = indices(end); %pick the highest level below z=1km
+    i_zvals = i_zvals(indices);
+    clear indices
+
+    data_temp = squeeze(data);
+    data_sub = data_temp(i_xvals',i_zvals');
+    xvals_sub = xvals(i_xvals);
+    data_tmean=data_tmean(i_xvals,:);
+
+    %%Calculate and save instantaneous Vmax time-series
+    i_temp = round(length(data_sub)/8); %should be at small r relative to domain size
+    Vmax(ii) = max(data_sub(1:i_temp));  %index of max wind speed
+
+    %%Calculate and save instantaneous rmax time-series
+    xres = dx;
+    i_max = find(data_sub(1:i_temp)==max(data_sub(1:i_temp)));  %index of max wind speed
+    i_max = i_max(1);
+    if(~isempty(i_max))
+        rmax(ii)=xres*i_max-.5*xres;
+    else
+        rmax(ii)=NaN;
+    end
+
+    %%Calculate and save instantaneous r12 time-series
+    v_usr = 12;
+    data_sub_temp = smooth(data_sub,30);
+    temp1=find(data_sub_temp<=v_usr);
+    temp2=find(temp1>i_max,1);
+    i_vusr_out=temp1(temp2);
+    clear temp1 temp2
+    if(~isempty(i_vusr_out))
+        v_out = data_sub_temp(i_vusr_out);   %v at first point where v<=v_usr
+        v_in = data_sub_temp(i_vusr_out-1);  %v at last point where v>=v_usr
+        r_usr = xres*(i_vusr_out-(v_out-v_usr)/(v_out-v_in)) - .5*xres;   %r=dr/2 @ i=1
+        if(r_usr<0 || r_usr>1000000 || max(data_sub)<15)
+            r_usr=NaN;
+        end
+    else
+        r_usr = NaN;
+    end
+    r12(ii)=r_usr;
+    clear i_vusr_out v_out v_in
+
+    %%Calculate and save instantaneous r0 time-series
+    v_usr = 0;
+    data_sub_temp = smooth(data_sub,30);
+    temp1=find(data_sub_temp<=v_usr);
+    temp2=find(temp1>i_max,1);
+    i_vusr_out=temp1(temp2);
+    clear temp1 temp2
+    if(~isempty(i_vusr_out))
+        v_out = data_sub_temp(i_vusr_out);   %v at first point where v<=v_usr
+        v_in = data_sub_temp(i_vusr_out-1);  %v at last point where v>=v_usr
+        r_usr = xres*(i_vusr_out-(v_out-v_usr)/(v_out-v_in)) - .5*xres;   %r=dr/2 @ i=1
+        if(r_usr<0 || r_usr>1000000 || max(data_sub)<15)
+            r_usr=NaN;
+        end
+    else
+        r_usr = NaN;
+    end
+    r0(ii)=r_usr;
+    clear i_vusr_out v_out v_in i_max
+
+    %%Calculate T-day running mean time-series of rmax and r0
+    nfile_mean = T_mean*(24*60*60/dt)+1;  %corresponding number of files
+
+    if(ii==1)
+        v_r_store = data_sub;
+        v_r_mean = 0*data_sub; %initialize moving average radial profile
+    else
+        v_r_store = [v_r_store data_sub];
+    end
+
+    if(ii>=nfile_mean)   %if have enough data to cover T_mean period, then begin to save
+        v_r_mean = mean(v_r_store,2);   %represents the middle of the period
+        v_r_store = v_r_store(:,2:end); %drop the earliest radial wind profile to make room for the next iteration
+
+        %%Calculate and save T-day running mean Vmax
+        Vmax_movave_temp = max(v_r_mean);  %index of max wind speed
+        Vmax_movave(ii-floor(nfile_mean/2))=Vmax_movave_temp;
+
+        %%Calculate and save T-day running mean rmax
+        i_max = find(v_r_mean(1:i_temp)==max(v_r_mean(1:i_temp)));  %index of max wind speed
+        i_max = i_max(1);
+        if(~isempty(i_max))
+            rmax_movave_temp=xres*i_max-.5*xres;
+        else
+            rmax_movave_temp=NaN;
+        end
+        rmax_movave(ii-floor(nfile_mean/2))=rmax_movave_temp;
+
+        %%Calculate and save T-day running mean r12
+        v_usr = 12;
+        v_r_mean_temp = smooth(v_r_mean,30);
+        temp1=find(v_r_mean_temp<=v_usr);
+        temp2=find(temp1>i_max,1);
+        i_vusr_out=temp1(temp2);
+        clear temp1 temp2
+        if(~isempty(i_vusr_out))
+            v_out = v_r_mean_temp(i_vusr_out);   %v at first point where v<=v_usr
+            v_in = v_r_mean_temp(i_vusr_out-1);  %v at last point where v>=v_usr
+            r_usr_movave = xres*(i_vusr_out-(v_out-v_usr)/(v_out-v_in)) - .5*xres;   %r=dr/2 @ i=1
+            if(r_usr_movave<0 || r_usr_movave>1000000 || max(v_r_mean)<15)
+                r_usr_movave=NaN;
+            end
+        else
+            r_usr_movave = NaN;
+        end
+        r12_movave(ii-floor(nfile_mean/2)) = r_usr_movave;
+        if(~isnan(r_usr_movave))
+            V_user = 12;
+            r_user = r12_movave(ii-floor(nfile_mean/2));
+            [r_0_full,res_error,i_error] = r0_calc(r_user,V_user,fcor,Cd_in,wrad);
+            r_0_full/1000
+            numerr = numerr+i_error;
+            clear junk1 junk2
+
+            r0Lil_movave(ii-floor(nfile_mean/2)) = r_0_full/1000;
+        else
+            r0Lil_movave(ii-floor(nfile_mean/2)) = NaN;
+        end
+        clear i_vusr_out v_out v_in
+
+        %%Calculate and save T-day running mean r0
+        v_usr = 0;
+        v_r_mean_temp = smooth(v_r_mean,30);
+        temp1=find(v_r_mean_temp<=v_usr);
+        temp2=find(temp1>i_max,1);
+        i_vusr_out=temp1(temp2);
+        clear temp1 temp2
+        if(~isempty(i_vusr_out))
+            v_out = v_r_mean_temp(i_vusr_out);   %v at first point where v<=v_usr
+            v_in = v_r_mean_temp(i_vusr_out-1);  %v at last point where v>=v_usr
+            r_usr_movave = xres*(i_vusr_out-(v_out-v_usr)/(v_out-v_in)) - .5*xres;   %r=dr/2 @ i=1
+            if(r_usr_movave<0 || r_usr_movave>1000000 || max(v_r_mean)<15)
+                r_usr_movave=NaN;
+            end
+        else
+            r_usr_movave = NaN;
+        end
+        r0_movave(ii-floor(nfile_mean/2)) = r_usr_movave;
+        clear i_vusr_out v_out v_in i_max
+    end
+
+        
+    %%CALCULATE days tmean0-tmeanf TIME-AVERAGED xz-cross-section
+    if(t_day(ii)>=tmean0_usr & t_day(ii)<=tmeanf_usr)
+        data_tmean_usr=data_tmean_usr(i_xvals,1);
+        data_tmean_usr=data_tmean_usr+data_sub/(i_tf_usr-i_t0_usr+1);
+    end
+
+    %%CALCULATE TIME-AVERAGED xz-cross-section for set time periods
+    data_tmean(:,num_prof)=data_tmean(:,num_prof)+data_sub/(T_mean*(60*60*24/dt));
+    if(ii>1)
+        if(mod(t_day(ii),1)<mod(t_day(ii-1),1))
+            num_prof=num_prof+1;
+        end
+    end
+
+end

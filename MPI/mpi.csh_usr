@@ -1,0 +1,24 @@
+#!/bin/csh
+
+# $1 = filename (ex/ input_sounding_3dRCE_nx48_SST300.00K_radfull_usfc3) $2 = SST
+
+## Compile MPI code
+gfortran -o mpi.exe mpi.F -ffixed-line-length-none
+
+## Copy over desired input_sounding and corresponding pressure file
+cp ../input_soundings/$1 input_sounding
+cp ../input_soundings/$1_pressures input_sounding_pres.txt
+
+## Update sstk.txt
+echo $2 > sstk.txt
+
+## Run code: requires input_sounding, input_sounding_pres.txt
+grep -c "." input_sounding_pres.txt > num_lev.txt	#number of lines in sounding
+./mpi.exe > dan.temp
+tail -1 dan.temp
+tail -1 dan.temp > dan2.temp
+rm dan.temp
+
+mv dan2.temp ../input_soundings/$1_mpi
+
+

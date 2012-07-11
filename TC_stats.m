@@ -64,26 +64,26 @@ wrad_const = 0; %1 = use CTRL value for wrad
 Cpd = 1004; %[J/K/kg]
 
 if(wrad_const == 1)
-    file_in = sprintf('simdata_Tmean%i_%i_%i_wradconst/ax%s.mat',T_mean,tf-dt_final,tf,subdir);
+    file_in = sprintf('../CM1_postproc_data/simdata_Tmean%i_%i_%i_wradconst/ax%s.mat',T_mean,tf-dt_final,tf,subdir);
 else
-    file_in = sprintf('simdata_Tmean%i_%i_%i/ax%s.mat',T_mean,tf-dt_final,tf,subdir);
+    file_in = sprintf('../CM1_postproc_data/simdata_Tmean%i_%i_%i/ax%s.mat',T_mean,tf-dt_final,tf,subdir);
 end
 
 if(exist(file_in)==2 && save_file == 1)
     sprintf('Data already saved for ax%s',subdir)
     
     %%Load data for given simulation to fix things within if needed
-%    load(sprintf('simdata_Tmean%i_%i_%i/ax%s.mat',T_mean,tf-dt_final,tf,subdirs_save{rr}));
+%    load(sprintf('../CM1_postproc_data/simdata_Tmean%i_%i_%i/ax%s.mat',T_mean,tf-dt_final,tf,subdirs_save{rr}));
 
 %{    
 %    clear Vpots
 %    subdirs_save = subdirs_save_drc;
 %    clear subdirs_save_drc
-%    save(sprintf('simdata_Tmean%i_%i_%i/ax%s.mat',T_mean,tf-dt_final,tf,subdirs_save{rr}));
+%    save(sprintf('../CM1_postproc_data/simdata_Tmean%i_%i_%i/ax%s.mat',T_mean,tf-dt_final,tf,subdirs_save{rr}));
     
     %Extract and save MPI in existing data file
 %    mpi = mpi_retrieve(subdir) %[ms-1]
-%    save(sprintf('simdata_Tmean%i_%i_%i/ax%s.mat',T_mean,tf-dt_final,tf,subdir),'mpi','-append')
+%    save(sprintf('../CM1_postproc_data/simdata_Tmean%i_%i_%i/ax%s.mat',T_mean,tf-dt_final,tf,subdir),'mpi','-append')
     
     %Extract and save lh from simulation namelist.input file
     %%EXTRACT RUN_TYPE AND SUBDIR NAME
@@ -112,7 +112,7 @@ if(exist(file_in)==2 && save_file == 1)
     subdir_full=sprintf('%s%s',dir_in,subdir)
     
     [lh] = lh_retrieve(subdir_full)
-    save(sprintf('simdata_Tmean%i_%i_%i/ax%s.mat',T_mean,tf-dt_final,tf,subdir),'lh','-append')
+    save(sprintf('../CM1_postproc_data/simdata_Tmean%i_%i_%i/ax%s.mat',T_mean,tf-dt_final,tf,subdir),'lh','-append')
 %}
     
     
@@ -1155,9 +1155,9 @@ if(save_file == 1)
     save temp.mat
     load tempstuff.mat
     if(wrad_const == 1)
-        movefile('temp.mat',sprintf('simdata_Tmean%i_%i_%i_wradconst/ax%s.mat',T_mean,tf-dt_final,tf,subdir))
+        movefile('temp.mat',sprintf('../CM1_postproc_data/simdata_Tmean%i_%i_%i_wradconst/ax%s.mat',T_mean,tf-dt_final,tf,subdir))
     else
-        movefile('temp.mat',sprintf('simdata_Tmean%i_%i_%i/ax%s.mat',T_mean,tf-dt_final,tf,subdir))
+        movefile('temp.mat',sprintf('../CM1_postproc_data/simdata_Tmean%i_%i_%i/ax%s.mat',T_mean,tf-dt_final,tf,subdir))
     end
 
     
