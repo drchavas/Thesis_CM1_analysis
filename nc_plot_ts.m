@@ -14,8 +14,8 @@ clf(1)     %clear figures without closing them
 
 %% USER INPUT %%%%%%%%%%%%%%%%%%
 
-%subdir_pre='CTRL_icRCE/';
-subdir_pre='TRANSFER/';
+subdir_pre='CTRL_icRCE/';
+%subdir_pre='TRANSFER/';
 %subdir_pre='RCE/';    %general subdir that includes multiple runs within
 ext_hd = 1; %0=local hard drive; 1=external hard drive
 
@@ -27,7 +27,7 @@ run_types= [1 1 1 1]; %1=axisym; 3=3D
     div_dat_by=ones(30,1);
 subdirs = {
 
-'CTRLv0qro400000qrhSATqdz5000_nx3072_fdiv2_lh3000'
+'CTRLv0qro400000qrhSATqdz5000_nx3072_fdiv2_lh3000_75day'
 
 }; %name of sub-directory with nc files
 

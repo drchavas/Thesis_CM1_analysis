@@ -5,7 +5,7 @@
 %This file plots and saves the timeseries of Vm, rm, and r0 for each
 %simulation
 
-function [junk] = TC_structure_ts(run_type,T_mean,dt_final,t0,tf,dt_final_dynamic,subdir);
+function [junk] = TC_structure_ts(run_type,T_mean,dt_final,t0,tf,dt_final_dynamic,subdir,dir_home);
 junk='junk';
 %clear
 %clc
@@ -143,16 +143,16 @@ for ii = 1:length(equil_dynamics)
     %Single simulation: Plot time-series of Vmax, rmax, rmid, r0 for both V and Vg
 
     %Plot time series
-    h=figure(1)
+    h = figure(1);set(gcf,'Visible', 'off'); 
+    set(gcf, 'Visible', 'off') 
     clf(1)
 
     set(h,'Position',[160 578 575 400],'Visible', 'off')
 
     ax1=axes('position',[0.15    0.15    0.75    0.75]);
-    axes(ax1)
 
     Vm_plot = Vmax_movave_g_all/Vmax_equil_g;
-    plot(t_day,Vm_plot,'Color',pl_clrs{1})
+    plot(ax1,t_day,Vm_plot,'Color',pl_clrs{1})
     hold on
     %    if(~isnan(Vmax_tau_equil_g(i)))
     %        h=plot(t_day(Vmax_tau_equil_g(i)/(dt/60/60/24)),Vmax_equil_g(i)/max(Vmax_movave_g_all(:,i)),'d');
@@ -160,39 +160,39 @@ for ii = 1:length(equil_dynamics)
     %    end
 
     rm_plot = rmax_movave_g_all/rmax_equil_g;
-    plot(t_day(Vm_plot>.7),rm_plot(Vm_plot>.7),'Color',pl_clrs{2})
+    plot(ax1,t_day(Vm_plot>.7),rm_plot(Vm_plot>.7),'Color',pl_clrs{2})
     %    if(~isnan(rmax_tau_equil_g(i)))
     %        h=plot(t_day(rmax_tau_equil_g(i)/(dt/60/60/24)),rmax_equil_g(i)/max(rmax_movave_g_all(:,i)),'d');
     %        set(h,'markersize',10,'MarkerFaceColor',[.49 1 .63]);
     %    end
 
     rmid_plot = rmid_movave_g_all/rmid_equil_g;
-    plot(t_day(Vm_plot>.7),rmid_plot(Vm_plot>.7),'Color',pl_clrs{4})
+    plot(ax1,t_day(Vm_plot>.7),rmid_plot(Vm_plot>.7),'Color',pl_clrs{4})
     %    if(~isnan(r0Lil_tau_equil_g(i)))
     %        h=plot(t_day(r0Lil_tau_equil_g(i)/(dt/60/60/24)),r0Lil_equil_g(i)/max(r0Lil_movave_g_all(:,i)),'d');
     %        set(h,'markersize',10,'MarkerFaceColor',.5*[.49 1 .63]);
     %    end
     
     r0_plot = r0Lil_movave_g_all/r0Lil_equil_g;
-    plot(t_day(Vm_plot>.7),r0_plot(Vm_plot>.7),'Color',pl_clrs{3})
+    plot(ax1,t_day(Vm_plot>.7),r0_plot(Vm_plot>.7),'Color',pl_clrs{3})
     %    if(~isnan(r0Lil_tau_equil_g(i)))
     %        h=plot(t_day(r0Lil_tau_equil_g(i)/(dt/60/60/24)),r0Lil_equil_g(i)/max(r0Lil_movave_g_all(:,i)),'d');
     %        set(h,'markersize',10,'MarkerFaceColor',.5*[.49 1 .63]);
     %    end
 
-    plot(t_day,.9*ones(length(t_day),1),'k--','LineWidth',1)
-    plot(t_day,1.1*ones(length(t_day),1),'k--','LineWidth',1)
-    plot(Vmax_tau_equil_g,0,'x-.','MarkerEdgeColor',pl_clrs{1},'MarkerSize',12)
-    plot(rmax_tau_equil_g,0,'x-.','MarkerEdgeColor',pl_clrs{2},'MarkerSize',12)
-    plot(rmid_tau_equil_g,0,'x-.','MarkerEdgeColor',pl_clrs{4},'MarkerSize',12)
-    plot(r0Lil_tau_equil_g,0,'x-.','MarkerEdgeColor',pl_clrs{3},'MarkerSize',12)
+    plot(ax1,t_day,.9*ones(length(t_day),1),'k--','LineWidth',1)
+    plot(ax1,t_day,1.1*ones(length(t_day),1),'k--','LineWidth',1)
+    plot(ax1,Vmax_tau_equil_g,0,'x-.','MarkerEdgeColor',pl_clrs{1},'MarkerSize',12)
+    plot(ax1,rmax_tau_equil_g,0,'x-.','MarkerEdgeColor',pl_clrs{2},'MarkerSize',12)
+    plot(ax1,rmid_tau_equil_g,0,'x-.','MarkerEdgeColor',pl_clrs{4},'MarkerSize',12)
+    plot(ax1,r0Lil_tau_equil_g,0,'x-.','MarkerEdgeColor',pl_clrs{3},'MarkerSize',12)
 
     if(equil_dynamic == 1)
         t_equil = t0_equil:dt/60/60/24:tf_equil;
-        plot(t_equil,ones(length(t_equil),1),'m','LineWidth',2)
+        plot(ax1,t_equil,ones(length(t_equil),1),'m','LineWidth',2)
     else
         t_equil = tf-dt_final:dt/60/60/24:tf;
-        plot(t_equil,ones(length(t_equil),1),'m','LineWidth',2)
+        plot(ax1,t_equil,ones(length(t_equil),1),'m','LineWidth',2)
     end
     
     input_legend = {'V_m','r_m','r_{rad}','r_0'};
@@ -242,7 +242,7 @@ for ii = 1:length(equil_dynamics)
             end
         end
         saveas(gcf,sprintf('%s_structevol.pdf',subdir_load),'pdf')
-        cd ..
+        cd(dir_home)
 
     end
     

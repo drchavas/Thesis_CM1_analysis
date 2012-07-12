@@ -113,7 +113,7 @@ list=(1:length(xvals_pl))';
 
 h=figure(1)
 
-set(h,'Position',[360 278 300 600])
+set(h,'Position',[360 278 400 700])
 
 dat_max=0;
 dat_min = 0;

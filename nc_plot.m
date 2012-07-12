@@ -17,7 +17,6 @@ run_type=1; %1=axisym; 3=3d; 10/30=initial condition test (subdir 'code_test')
 
 subdir_pre='CTRL_icRCE/';    %general subdir that includes multiple runs within
 %subdir_pre='TRANSFER/';
-subdir_pre='STATSTEST/';
 %subdir_pre='RCE/';    %general subdir that includes multiple runs within
 ext_hd = 1; %0=local hard drive; 1=external hard drive
 

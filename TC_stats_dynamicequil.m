@@ -10,7 +10,7 @@
 
 %NOTE: data at varying x (i.e. zonal cross-sec) = matrix COLUMN in MATLAB!
 
-function [junk] = TC_stats_dynamicequil(tf,T_mean,dt_final,dt_final_dynamic,subdir);
+function [junk] = TC_stats_dynamicequil(tf,T_mean,dt_final,dt_final_dynamic,subdir,dir_home);
 junk='junk';
 %clear
 %clc
@@ -52,7 +52,7 @@ else
 
         cd(sprintf('../CM1_postproc_data/simdata_Tmean%i_dt%i_dynamic_wradconst',T_mean,dt_final_dynamic))
         save NOTANORIGINALTCSTATS.mat T_mean tf dt_final dt_final_dynamic
-        cd ..
+        cd(dir_home)
     else
         
         mkdir(sprintf('../CM1_postproc_data/simdata_Tmean%i_dt%i_dynamic',T_mean,dt_final_dynamic))
@@ -62,7 +62,7 @@ else
 
         cd(sprintf('../CM1_postproc_data/simdata_Tmean%i_dt%i_dynamic',T_mean,dt_final_dynamic))
         save NOTANORIGINALTCSTATS.mat T_mean tf dt_final dt_final_dynamic
-        cd ..
+        cd(dir_home)
     end
     
 end

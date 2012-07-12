@@ -8,30 +8,29 @@ clc
 close all
 
 %% Which simulations (or sets) should I run?
-%sim_sets_all = {'Lx' 'dx' 'dz' 'lh' 'lv' 'qro' 'ro' 'fcor' 'Tsst' 'Ttpp' 'usfc' 'Qcool' 'Cd' 'QcoolVpcnst' 'QcoolVplvHcnst' 'nondim'};  %name out output subdir (within simsets_Tmean#/PLOTS/[sim_set]/) where plots will be saved
-sim_sets_all = {'transient'};  %name out output subdir (within simsets_Tmean#/PLOTS/[sim_set]/) where plots will be saved
+sim_sets_all = {'Lx' 'dx' 'dz' 'lh' 'lv' 'qro' 'ro' 'fcor' 'Tsst' 'Ttpp' 'usfc' 'Qcool' 'Cd' 'QcoolVpcnst' 'QcoolVplvHcnst' 'mpi' 'nondim'};  %name out output subdir (within simsets_Tmean#/PLOTS/[sim_set]/) where plots will be saved
+%sim_sets_all = {'lh'};  %name out output subdir (within simsets_Tmean#/PLOTS/[sim_set]/) where plots will be saved
     %IF 'single'
     sim_single = 'CTRLv0qrhSATqdz5000_nx3072';    %runs only this simulation
 
 %% Which scripts should I run?
 run_TC_stats = 1;
     save_file = 1;  %for TC_stats only; note: program will not overwrite old file
-run_TC_stats_dynamicequil = 0;  %overwrites old file automatically
-run_TC_structure_ts = 0;    %overwrites old plot automatically
+run_TC_stats_dynamicequil = 1;  %overwrites old file automatically
+run_TC_structure_ts = 1;    %overwrites old plot automatically
 run_TC_stats_plot = 1;  %overwrites old [simset].mat file and plots automatically
-    run_TC_stats_plot_dynamicequil = 0; %also run for dynamic equilibrium
+    run_TC_stats_plot_dynamicequil = 1; %also run for dynamic equilibrium
 
 %% Parameters for scripts
 v_usr_fracVp = .1;  %wind speed as fraction of Vp; beyond this radius, radiative subsidence radial wind profile should apply.
-T_mean = 2; %[days]; averaging time period used to calculate moving time-average radial profile from which rmax and r0 are calculated
-dt_equil = 15;  %[days]; how long must be quasi-steady to define equilibrium
+T_mean = 5; %[days]; averaging time period used to calculate moving time-average radial profile from which rmax and r0 are calculated
+dt_equil = 30;  %[days]; how long must be quasi-steady to define equilibrium
     %%For static equilibrium (equil_dynamic = 0):
-    dt_final = 25;  %[day]; length of static equilibrium period
-    tf = 75;   %[day]; end of static equilibrium period
+    dt_final = 50;  %[day]; length of static equilibrium period
+    tf = 150;   %[day]; end of static equilibrium period
     %%For dynamic (most stable) equilibrium (equil_dynamic = 1):
-    dt_final_dynamic = 30;  %[days]; length of most stable period after day 68 over which equilibrium is calculated
+    dt_final_dynamic = 30;  %[days]; length of most stable period after day 60 over which equilibrium is calculated
 wrad_const = 0; %1 = use CTRL value for wrad
-Cd_in = 1.5e-3; %only used to calculate r0_Lilly
 
 %Plotting domain (TC_stats_plot.m only)
 rmin_plot = 0;  %[km]
@@ -67,6 +66,8 @@ tmeanf_usr = 150;    %[day]
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
+dir_home = pwd;
+
 for jj = 1:length(sim_sets_all)
 
     sim_set = sim_sets_all{jj};
@@ -113,8 +114,7 @@ for jj = 1:length(sim_sets_all)
         case 'lh'
             CTRL_val = 1500; %CTRL value of quantity varied across simulations
             units = 'm';
-            %multipliers = [-3 -2 -1 0 1 2 3];
-            multipliers = [0];
+            multipliers = [-3 -2 -1 0 1 2 3];
             subdirs_set = {
                 %%HORIZONTAL MIXING LENGTH
                 'CTRLv0qrhSATqdz5000_nx3072_lh187.5'
@@ -170,7 +170,7 @@ for jj = 1:length(sim_sets_all)
         case 'fcor'
             CTRL_val = 5; %CTRL value of quantity varied across simulations
             units = '**10^{-5} s^{-1}';
-            multipliers = [-2 -1 0 1 2];
+            multipliers = [-2 -1 0 1 2 3];
             subdirs_set = {
                 %%CORIOLIS
                 %%'CTRLv0qrhSATqdz5000_nx3072_fdiv8' -- HITS DOMAIN WALL
@@ -292,6 +292,48 @@ for jj = 1:length(sim_sets_all)
                 %'CTRLv0qrhSATqdz5000_nx3072_Tthresh255K_rad8.0K_lv26'
                 %'CTRLv0qrhSATqdz5000_nx3072_Tthresh257K_rad16.0K_lv19'
             }
+        case 'mpi'
+            CTRL_val = 93.0; %CTRL value of quantity varied across simulations
+            units = 'm s^{-1}';
+
+            subdirs_set = {
+%{
+              %%Tsst
+                'CTRLv0qrhSATqdz5000_nx3072_SST275.00K' %-- large rmax oscillation
+                'CTRLv0qrhSATqdz5000_nx3072_SST285.00K' %-- medium rmax oscillation
+                'CTRLv0qrhSATqdz5000_nx3072_SST290.00K'
+                'CTRLv0qrhSATqdz5000_nx3072_SST295.00K'
+                'CTRLv0qrhSATqdz5000_nx3072_SST297.50K'
+                'CTRLv0qrhSATqdz5000_nx3072'
+                'CTRLv0qrhSATqdz5000_nx3072_SST302.50K'
+                'CTRLv0qrhSATqdz5000_nx3072_SST305.00K'
+                'CTRLv0qrhSATqdz5000_nx3072_SST310.00K'
+%}            
+                %%Ttpp
+                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K'
+                'CTRLv0qrhSATqdz5000_nx3072_Tthresh225K'
+                'CTRLv0qrhSATqdz5000_nx3072'
+                'CTRLv0qrhSATqdz5000_nx3072_Tthresh175K'
+                'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K'
+%{           
+                %%usfc
+                'CTRLv0qrhSATqdz5000_nx3072_usfc.5'
+                'CTRLv0qrhSATqdz5000_nx3072_usfc1'
+                'CTRLv0qrhSATqdz5000_nx3072_usfc2'
+                %'CTRLv0qrhSATqdz5000_nx3072'
+                'CTRLv0qrhSATqdz5000_nx3072_usfc4'
+                'CTRLv0qrhSATqdz5000_nx3072_usfc5'
+                'CTRLv0qrhSATqdz5000_nx3072_usfc10'
+                
+                %%Qcool
+                'CTRLv0qrhSATqdz5000_nx3072_rad0.125K'
+                'CTRLv0qrhSATqdz5000_nx3072_rad0.25K'
+                %'CTRLv0qrhSATqdz5000_nx3072'
+                'CTRLv0qrhSATqdz5000_nx3072_rad1.0K'
+                'CTRLv0qrhSATqdz5000_nx3072_rad2.0K'
+%}                
+            }
+            multipliers = ones(length(subdirs_set),1);
         case 'nondim'
             CTRL_val = 1; %CTRL value of quantity varied across simulations
             units = '-';
@@ -368,16 +410,16 @@ for jj = 1:length(sim_sets_all)
         subdir = subdirs_set{ii};
         
         if(run_TC_stats == 1)
-            [junk] = TC_stats(subdir_pre,ext_hd,run_type,t0,tf,tmean0_usr,tmeanf_usr,v_usr_fracVp,T_mean,dt_equil,dt_final,Cd_in,save_file,subdir,x0,xf,y0,yf,z0,zf,rmin_sub,rmax_sub,zmin_subsub,zmax_subsub);
+            [junk] = TC_stats(subdir_pre,ext_hd,run_type,t0,tf,tmean0_usr,tmeanf_usr,v_usr_fracVp,T_mean,dt_equil,dt_final,save_file,subdir,x0,xf,y0,yf,z0,zf,rmin_sub,rmax_sub,zmin_subsub,zmax_subsub,dir_home);
         end
         
         if(run_TC_stats_dynamicequil == 1)
-            [junk] = TC_stats_dynamicequil(tf,T_mean,dt_final,dt_final_dynamic,subdir);
+            [junk] = TC_stats_dynamicequil(tf,T_mean,dt_final,dt_final_dynamic,subdir,dir_home);
         end
         
         if(run_TC_structure_ts == 1)
             %%this subroutine runs for both static and dynamic equilibrium automatically
-            [junk] = TC_structure_ts(run_type,T_mean,dt_final,t0,tf,dt_final_dynamic,subdir);
+            [junk] = TC_structure_ts(run_type,T_mean,dt_final,t0,tf,dt_final_dynamic,subdir,dir_home);
         end
         
 
@@ -386,12 +428,12 @@ for jj = 1:length(sim_sets_all)
     if(run_TC_stats_plot == 1)
         %%fixed equilibrium period
         equil_dynamic = 0;
-        [junk] = TC_stats_plot(run_type,T_mean,equil_dynamic,dt_final,tf,dt_final_dynamic,rmin_plot,rmax_plot,CTRL_val,units,multipliers,subdirs_set,sim_set);
+        [junk] = TC_stats_plot(run_type,T_mean,equil_dynamic,dt_final,tf,dt_final_dynamic,rmin_plot,rmax_plot,CTRL_val,units,multipliers,subdirs_set,sim_set,dir_home);
         
         %%most stable equilibrium period
         if(run_TC_stats_dynamicequil == 1)
             equil_dynamic = 1;
-            [junk] = TC_stats_plot(run_type,T_mean,equil_dynamic,dt_final,tf,dt_final_dynamic,rmin_plot,rmax_plot,CTRL_val,units,multipliers,subdirs_set,sim_set);
+            [junk] = TC_stats_plot(run_type,T_mean,equil_dynamic,dt_final,tf,dt_final_dynamic,rmin_plot,rmax_plot,CTRL_val,units,multipliers,subdirs_set,sim_set,dir_home);
         end
     end
     

@@ -22,7 +22,6 @@ v_usr_fracVp = 0.1000;
 T_mean = 5;
 dt_equil = 30;
 dt_final = 50;
-Cd_in = 0.0015;
 save_file = 0;
 subdir = 'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fx4_lh3000';
 x0 = 0;
@@ -37,7 +36,7 @@ zmin_subsub = 0.5000;
 zmax_subsub = 1;
 %}
 
-function [junk] = TC_stats(subdir_pre,ext_hd,run_type,t0,tf,tmean0_usr,tmeanf_usr,v_usr_fracVp,T_mean,dt_equil,dt_final,Cd_in,save_file,subdir,x0,xf,y0,yf,z0,zf,rmin_sub,rmax_sub,zmin_subsub,zmax_subsub);
+function [junk] = TC_stats(subdir_pre,ext_hd,run_type,t0,tf,tmean0_usr,tmeanf_usr,v_usr_fracVp,T_mean,dt_equil,dt_final,save_file,subdir,x0,xf,y0,yf,z0,zf,rmin_sub,rmax_sub,zmin_subsub,zmax_subsub,dir_home);
 junk='junk';
 %clear
 %clc
@@ -55,7 +54,6 @@ junk='junk';
 %T_mean = 5; %[days]; averaging time period used to calculate moving time-average radial profile from which rmax and r0 are calculated
 %dt_equil = 30;  %[days]; how long must be quasi-steady to define equilibrium
 %dt_final = 50;  %[days]; length of period from end of simulation over which equilibrium is calculated
-%Cd_in = 1.5e-3; %only used to calculate r0_Lilly
 wrad_const = 0; %1 = use CTRL value for wrad
 
 %save_file = 1;
@@ -149,6 +147,9 @@ subdir_full=sprintf('%s%s',dir_in,subdir)
 
 %%EXTRACT lh
 [lh] = lh_retrieve(subdir_full);
+
+%%EXTRACT Cd
+[Cd_in] = Cd_retrieve(subdir_full);
 
 %%EXTRACT TIMESTEP SIZE
 var_dt = 'qvpert'; %doesn't matter, just need any variable
@@ -256,7 +257,6 @@ for ii=1:i_tf-i_t0+1
     %% OPEN FILE AND EXTRACT nx, ny, nz -- only need to do once!
 
     if(ii==1)
-        dir_start=pwd;
         dir_tmp = strcat(dir_in,subdir);
         cd(dir_tmp)
         nc_file
@@ -286,7 +286,7 @@ for ii=1:i_tf-i_t0+1
         end
         [junk, nz] = netcdf.inqDim(ncid,dimid);
 
-        cd(dir_start)
+        cd(dir_home)
 
     end
 
@@ -603,7 +603,6 @@ for ii=1:i_tf-i_t0+1
     %% OPEN FILE AND EXTRACT nx, ny, nz -- only need to do once!
 
     if(ii==1)
-        dir_start=pwd;
         dir_tmp = strcat(dir_in,subdir);
         cd(dir_tmp)
         nc_file
@@ -633,7 +632,7 @@ for ii=1:i_tf-i_t0+1
         end
         [junk, nz] = netcdf.inqDim(ncid,dimid);
 
-        cd(dir_start)
+        cd(dir_home)
 
     end
 

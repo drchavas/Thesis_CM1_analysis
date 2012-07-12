@@ -103,26 +103,19 @@ for m=1:length(sim_sets)
    
 end
 
-%% Plot a best-fit line to the data
+%%
 %options = fitoptions('Method','Smooth','SmoothingParam',0.3)
 %f = fit(xvals_pl_all', data_pl_all', 'smooth',options)
 f = fit(xvals_pl_all', data_pl_all', 'poly1')
 % plot(f, xvals_pl_all, data_pl_all)
-%%Linear model: f(x) = p1*x + p2
- xmin_pl = min(xvals_pl_all);
- xmax_pl = max(xvals_pl_all);
- xdiff_pl = xmax_pl-xmin_pl;
- xfit = xmin_pl-xdiff_pl/10:xdiff_pl/20:xmax_pl+xdiff_pl/10
+%%f(x) = p1*x + p2
+ xfit = 1.2*min(xvals_pl_all):(max(xvals_pl_all)-min(xvals_pl_all))/20:1.2*max(xvals_pl_all)
  yfit = f.p1.*xfit + f.p2;
  plot(xfit,yfit,'r--')
-
  
-%% Define the size of the figure
 h=figure(1)
 set(h,'Position',[360 278 375 350])
 
-
-%% Plot aesthetics
 %subplot(3,1,1)
 axes(ax1)
 axis([-2 2 -2 2])

@@ -45,7 +45,7 @@ sim_set = 'nondim';
 multipliers = ones(length(subdirs_set),1);
 
 %}
-function [junk] = TC_stats_plot(run_type,T_mean,equil_dynamic,dt_final,tf,dt_final_dynamic,rmin_plot,rmax_plot,CTRL_val,units,multipliers,subdirs_set,sim_set);
+function [junk] = TC_stats_plot(run_type,T_mean,equil_dynamic,dt_final,tf,dt_final_dynamic,rmin_plot,rmax_plot,CTRL_val,units,multipliers,subdirs_set,sim_set,dir_home);
 junk='junk';
 %clear
 %clc        
@@ -270,7 +270,7 @@ if(plot_usrprof==1)
     
     cd(sprintf('%s/PLOTS/%s',subdir_out,sim_set))
     saveas(gcf,'radprof','jpeg')
-    cd ../../..
+    cd(dir_home)
     
     %%SAME PLOT BUT WITH Vm SCALED BY Vp AND RADII SCALED BY Vp/f
     figure(51)
@@ -306,7 +306,7 @@ if(plot_usrprof==1)
     
     cd(sprintf('%s/PLOTS/%s',subdir_out,sim_set))
     saveas(gcf,'radprof_nondim','jpeg')
-    cd ../../..
+    cd(dir_home)
     
     
     end
@@ -501,7 +501,7 @@ if(plot_stats==1)
     
     cd(sprintf('%s/PLOTS/%s',subdir_out,sim_set))
     saveas(gcf,'equil','jpeg')
-    cd ../../..
+    cd(dir_home)
     
     %%Timescales to equilibrium
     figure(71)
@@ -565,7 +565,7 @@ if(plot_stats==1)
     
     cd(sprintf('%s/PLOTS/%s',subdir_out,sim_set))
     saveas(gcf,'tau_equil','jpeg')
-    cd ../../..
+    cd(dir_home)
 
     end
     
@@ -764,7 +764,7 @@ if(plot_stats==1)
     
     cd(sprintf('%s/PLOTS/%s',subdir_out,sim_set))
     saveas(gcf,'gen','jpeg')
-    cd ../../..
+    cd(dir_home)
 
     end
     
@@ -904,7 +904,7 @@ if(plot_stats==1)
     
     cd(sprintf('%s/PLOTS/%s',subdir_out,sim_set))
     saveas(gcf,'max','jpeg')
-    cd ../../..
+    cd(dir_home)
 
     figure(131)
     set(gcf, 'Visible', 'off') 
@@ -956,7 +956,7 @@ if(plot_stats==1)
     
     cd(sprintf('%s/PLOTS/%s',subdir_out,sim_set))
     saveas(gcf,'tau_max','jpeg')
-    cd ../../..
+    cd(dir_home)
 
     end
     
@@ -1357,7 +1357,7 @@ if(plot_ts_multi==1)
     set(gcf, 'Visible', 'off') 
     cd(sprintf('%s/PLOTS/%s',subdir_out,sim_set))
     saveas(gcf,'ts','jpeg')
-    cd ../../..
+    cd(dir_home)
     
 %%Plot non-dimensional time series
     figure(151)
@@ -1518,7 +1518,7 @@ if(plot_ts_multi==1)
     set(gcf, 'Visible', 'off') 
     cd(sprintf('%s/PLOTS/%s',subdir_out,sim_set))
     saveas(gcf,'ts_nondim','jpeg')
-    cd ../../..
+    cd(dir_home)
     
 %% Zoom in on genesis period; plot from 0:tau_gen
     figure(17)
@@ -1600,7 +1600,7 @@ if(plot_ts_multi==1)
     set(gcf, 'Visible', 'off') 
     cd(sprintf('%s/PLOTS/%s',subdir_out,sim_set))
     saveas(gcf,'pregen','jpeg')
-    cd ../../..
+    cd(dir_home)
 
     end
 end
