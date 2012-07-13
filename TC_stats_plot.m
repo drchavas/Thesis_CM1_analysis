@@ -46,6 +46,10 @@ multipliers = ones(length(subdirs_set),1);
 
 %}
 function [junk] = TC_stats_plot(run_type,T_mean,equil_dynamic,dt_final,tf,dt_final_dynamic,rmin_plot,rmax_plot,CTRL_val,units,multipliers,subdirs_set,sim_set,dir_home);
+
+%%Write out to screen whats going on
+sprintf('TC_stats_plot for: %s',sim_set)
+
 junk='junk';
 %clear
 %clc        
@@ -223,9 +227,12 @@ save temp.mat
 movefile('temp.mat',sprintf('%s/%s.mat',subdir_out,sim_set))
 
 %% PLOTTING %%%%%%%%%%%%%%%%
-mkdir(sprintf('%s/PLOTS/%s',subdir_out,sim_set))
+dir_plot=sprintf('%s/PLOTS/%s',subdir_out,sim_set);
+if(isdir(dir_plot)~=1)
+    mkdir(dir_plot)
+end
 
-set(0,'defaultaxesfontsize',12,'defaultaxesfontweight','bold','defaultlinelinewidth',1)
+set(0,'defaultaxesfontsize',8,'defaultaxesfontweight','bold','defaultlinelinewidth',1)
 %Single/Multi simulation: Plot user-defined radial wind profiles
 if(plot_usrprof==1)
 
@@ -309,7 +316,7 @@ if(plot_usrprof==1)
         
         plot(xvals_pl/(mpi_all(i)/fcor),data_tmean_usr_g_all{i}(i_xvals_pl)/mpi_all(i),pl_clrs{i},'LineWidth',1)
         hold on
-        mpi_all(i)
+        
     end
     plot(0*(.01:.01:xvals_pl(end)/(min(mpi_all(i))/fcor)),'k')
     input_title = sprintf('Time-mean radial GRADIENT wind profiles: days %i - %i; z=%5.2f %s',tmean0_usr,tmeanf_usr,zvals(i_zvals),zunits);
@@ -510,7 +517,14 @@ if(plot_stats==1)
     xlabel({sprintf('log_2(X/X*)'),sprintf('%s: X* = %5.2f [%s]',sim_set,CTRL_val,units)})
     
     legend({'Vmax','rmax','rmid','r0Lil'},'Location','SouthEast')
-    input_title1=sprintf('GRADIENT Equilibrium storm %i - %i days: log_2(Y/Y*) vs. %s [%s]',tf-dt_final,tf,sim_set,units);
+    %%DRCDRC
+    if(equil_dynamic==0)
+        input_title1=sprintf('GRADIENT Equilibrium storm, day %i - %i: log_2(Y/Y*) vs. %s [%s]',tf-dt_final,tf,sim_set,units);
+    else
+        input_title1=sprintf('GRADIENT Equilibrium storm, %i-day dynamic: log_2(Y/Y*) vs. %s [%s]',dt_final_dynamic,sim_set,units);
+    end
+    
+    
     input_title2=sprintf('Y*: Vmax* = %5.2f m/s; rmax* = %5.2f km; rmid* = %5.2f km; r0Lil* = %5.2f km',Vmax_equil_g(i_ctrl),rmax_equil_g(i_ctrl),rmid_equil_g(i_ctrl),r0Lil_equil_g(i_ctrl));
     title({input_title1,input_title2})
     grid on
@@ -1235,7 +1249,7 @@ if(plot_ts_multi==1)
     %Vmax
     for i=1:numruns
         
-        subplot(3,1,1)
+        subplot(4,1,1)
         plot(t_day,Vmax_movave_g_all(:,i),pl_clrs{i})
         hold on
         
@@ -1250,7 +1264,7 @@ if(plot_ts_multi==1)
 
     for i=1:numruns
         
-        subplot(3,1,1)
+        subplot(4,1,1)
         hold on
         if(~isnan(tau_gen(i)))
             h=plot(t_day(tau_gen(i)/(dt/60/60/24)),Vmax_gen_g(i),'d');
@@ -1269,7 +1283,7 @@ if(plot_ts_multi==1)
     %rmax
     for i=1:numruns
         
-        subplot(3,1,2)
+        subplot(4,1,2)
         plot(t_day,rmax_movave_g_all(:,i),pl_clrs{i})
         hold on
     end
@@ -1298,44 +1312,41 @@ if(plot_ts_multi==1)
         end
     end
     
-%{
     %rmid
     for i=1:numruns
         
-        subplot(2,2,3)
+        subplot(4,1,3)
         plot(t_day,rmid_movave_g_all(:,i),pl_clrs{i})
         hold on
-        if(~isnan(rmid_tau_equil_g(i)))
+    end
+    grid on
+    legend(input_legend,'Location','EastOutside')
+    input_title=sprintf('rmid [km]');
+    title(input_title)
+    ylabel(input_title);
+    axis([0 tf 0 1.1*max(max(rmid_movave_g_all(20:end,:)))])
+
+    for i=1:numruns
+        
+        hold on
+        if(~isnan(tau_gen(i)))
+            h=plot(t_day(tau_gen(i)/(dt/60/60/24)),rmid_gen_g(i),'d');
+            set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
+        end
+        if(~isnan(rmid_tau_max_g(i)))
+            h=plot(t_day(rmid_tau_max_g(i)/(dt/60/60/24)),rmid_max_g(i),'^');
+            set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
+        end
+        if(~isnan(rmid_tau_equil(i)))
             h=plot(t_day(rmid_tau_equil_g(i)/(dt/60/60/24)),rmid_equil_g(i),'s');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
     end
     
-    input_title=sprintf('rmid [km]');
-    title(input_title)
-    axis([0 tf 0 1.1*max(max(rmid_movave_g_all(100:end,:)))])
-%}
-%{
-    %r0
-    for i=1:numruns
-        
-        subplot(2,2,4)
-        plot(t_day,r0_movave_g_all(:,i),pl_clrs{i})
-        hold on
-        if(~isnan(r0_tau_equil_g(i)))
-            h=plot(t_day(r0_tau_equil_g(i)/(dt/60/60/24)),r0_equil_g(i),'s');
-            set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
-        end
-    end
-    
-    input_title=sprintf('r0 [km]');
-    title(input_title)
-    axis([0 tf 0 1.1*max(max(r0_movave_g_all(100:end,:)))])
-%}
     %r0Lil
     for i=1:numruns
         
-        subplot(3,1,3)
+        subplot(4,1,4)
         plot(t_day,r0Lil_movave_g_all(:,i),pl_clrs{i})
         hold on
     end
@@ -1394,7 +1405,7 @@ if(plot_ts_multi==1)
     %Vmax
     for i=1:numruns
         
-        subplot(3,1,1)
+        subplot(4,1,1)
         plot(t_day,Vmax_movave_g_all(:,i)/mpi_all(i),pl_clrs{i})
         hold on
         
@@ -1409,7 +1420,7 @@ if(plot_ts_multi==1)
 
     for i=1:numruns
         
-        subplot(3,1,1)
+        subplot(4,1,1)
         hold on
         if(~isnan(tau_gen(i)))
             h=plot(t_day(tau_gen(i)/(dt/60/60/24)),Vmax_gen_g(i)/mpi_all(i),'d');
@@ -1428,7 +1439,7 @@ if(plot_ts_multi==1)
     %rmax
     for i=1:numruns
         
-        subplot(3,1,2)
+        subplot(4,1,2)
         plot(t_day,rmax_movave_g_all(:,i)/(mpi_all(i)/fcor_all(i)/1000),pl_clrs{i})
         hold on
     end
@@ -1438,8 +1449,7 @@ if(plot_ts_multi==1)
     %title(input_title)
     ylabel(input_title);
 %    xlabel('time [days]')
-%    axis([0 tf 0 1.1*max(max(rmax_movave_g_all(20:end,:)/(mpi_all(i)/fcor_all(i)/1000)))])
-    axis([0 tf 0 .07])
+    axis([0 tf 0 1.1*max(max(rmax_movave_g_all(20:end,:)/(mpi_all(i)/fcor_all(i)/1000)))])
 
     for i=1:numruns
         
@@ -1458,44 +1468,42 @@ if(plot_ts_multi==1)
         end
     end
     
-%{
     %rmid
     for i=1:numruns
         
-        subplot(2,2,3)
-        plot(t_day,rmid_movave_g_all(:,i),pl_clrs{i})
+        subplot(4,1,3)
+        plot(t_day,rmid_movave_g_all(:,i)/(mpi_all(i)/fcor_all(i)/1000),pl_clrs{i})
         hold on
-        if(~isnan(rmid_tau_equil_g(i)))
-            h=plot(t_day(rmid_tau_equil_g(i)/(dt/60/60/24)),rmid_equil_g(i),'s');
-            set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
-        end
     end
-    
-    input_title=sprintf('rmid [km]');
-    title(input_title)
-    axis([0 tf 0 1.1*max(max(rmid_movave_g_all(100:end,:)))])
-%}
-%{
-    %r0
+    grid on
+    legend(input_legend,'Location','EastOutside')
+    input_title=sprintf('r_{mid} / (V_p / f)');
+    %title(input_title)
+    ylabel(input_title);
+    xlabel('time [days]')
+    axis([0 tf 0 1.1*max(max(rmid_movave_g_all(20:end,:)/(mpi_all(i)/fcor_all(i)/1000)))])
+
     for i=1:numruns
         
-        subplot(2,2,4)
-        plot(t_day,r0_movave_g_all(:,i),pl_clrs{i})
         hold on
-        if(~isnan(r0_tau_equil_g(i)))
-            h=plot(t_day(r0_tau_equil_g(i)/(dt/60/60/24)),r0_equil_g(i),'s');
+        if(~isnan(tau_gen(i)))
+            h=plot(t_day(tau_gen(i)/(dt/60/60/24)),rmid_gen_g(i)/(mpi_all(i)/fcor_all(i)/1000),'d');
+            set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
+        end
+        if(~isnan(rmid_tau_max_g(i)))
+            h=plot(t_day(rmid_tau_max_g(i)/(dt/60/60/24)),rmid_max_g(i)/(mpi_all(i)/fcor_all(i)/1000),'^');
+            set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
+        end
+        if(~isnan(rmid_tau_equil(i)))
+            h=plot(t_day(rmid_tau_equil_g(i)/(dt/60/60/24)),rmid_equil_g(i)/(mpi_all(i)/fcor_all(i)/1000),'s');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
     end
     
-    input_title=sprintf('r0 [km]');
-    title(input_title)
-    axis([0 tf 0 1.1*max(max(r0_movave_g_all(100:end,:)))])
-%}
     %r0Lil
     for i=1:numruns
         
-        subplot(3,1,3)
+        subplot(4,1,4)
         plot(t_day,r0Lil_movave_g_all(:,i)/(mpi_all(i)/fcor_all(i)/1000),pl_clrs{i})
         hold on
     end
@@ -1505,8 +1513,7 @@ if(plot_ts_multi==1)
     %title(input_title)
     ylabel(input_title);
     xlabel('time [days]')
-%    axis([0 tf 0 1.1*max(max(r0Lil_movave_g_all(20:end,:)/(mpi_all(i)/fcor_all(i)/1000)))])
-    axis([0 tf 0 1.1])
+    axis([0 tf 0 1.1*max(max(r0Lil_movave_g_all(20:end,:)/(mpi_all(i)/fcor_all(i)/1000)))])
 
     for i=1:numruns
         

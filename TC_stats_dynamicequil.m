@@ -11,6 +11,10 @@
 %NOTE: data at varying x (i.e. zonal cross-sec) = matrix COLUMN in MATLAB!
 
 function [junk] = TC_stats_dynamicequil(tf,T_mean,dt_final,dt_final_dynamic,subdir,dir_home);
+
+%%Write out to screen whats going on
+sprintf('TC_stats_dynamicequil for: %s',subdir)
+
 junk='junk';
 %clear
 %clc

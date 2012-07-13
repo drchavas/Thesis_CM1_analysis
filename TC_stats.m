@@ -37,6 +37,10 @@ zmax_subsub = 1;
 %}
 
 function [junk] = TC_stats(subdir_pre,ext_hd,run_type,t0,tf,tmean0_usr,tmeanf_usr,v_usr_fracVp,T_mean,dt_equil,dt_final,save_file,subdir,x0,xf,y0,yf,z0,zf,rmin_sub,rmax_sub,zmin_subsub,zmax_subsub,dir_home);
+
+%%Write out to screen whats going on
+sprintf('TC_stats for: %s',subdir)
+
 junk='junk';
 %clear
 %clc
@@ -143,7 +147,7 @@ elseif(run_type==3)
 end
 
 %%DIRECTORY WITH OUTPUT DATA
-subdir_full=sprintf('%s%s',dir_in,subdir)
+subdir_full=sprintf('%s%s',dir_in,subdir);
 
 %%EXTRACT lh
 [lh] = lh_retrieve(subdir_full);
@@ -174,7 +178,7 @@ i_tf_usr = min(numfiles,round(tmeanf_usr*24*60*60/dt)+1); %timestep correspondin
 %    t_max_day = dt*i_tf/86400;
 
 %%DIRECTORY WITH OUTPUT DATA
-subdir_full=sprintf('%s%s',dir_in,subdir)
+subdir_full=sprintf('%s%s',dir_in,subdir);
 
 %% EXTRACT DATA FROM input_sounding
 snd_file = 'input_sounding';
@@ -190,13 +194,13 @@ zz_lowtrop = zz00(zz00<=5000 & zz00>=1500);
 dthdz_wrad = (th_lowtrop(end)-th_lowtrop(1))/(zz_lowtrop(end)-zz_lowtrop(1));
 
 %Extract Qrad [K/day]
-temp1 = subdir(strfind(subdir,'rad')+3:end)
+temp1 = subdir(strfind(subdir,'rad')+3:end);
 if(isempty(temp1))
     Qrad = 1;
 else
     itemp = strfind(temp1,'K');
     itemp = itemp(1);
-    Qrad = temp1(1:itemp-1) %K/halfday
+    Qrad = temp1(1:itemp-1); %K/halfday
     Qrad = 2*str2num(Qrad); %K/day
 end
 wrad = (Qrad/86400) / dthdz_wrad;

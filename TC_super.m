@@ -8,16 +8,16 @@ clc
 close all
 
 %% Which simulations (or sets) should I run?
-sim_sets_all = {'Lx' 'dx' 'dz' 'lh' 'lv' 'qro' 'ro' 'fcor' 'Tsst' 'Ttpp' 'usfc' 'Qcool' 'Cd' 'QcoolVpcnst' 'QcoolVplvHcnst' 'mpi' 'nondim'};  %name out output subdir (within simsets_Tmean#/PLOTS/[sim_set]/) where plots will be saved
-%sim_sets_all = {'Ttpp'};  %name out output subdir (within simsets_Tmean#/PLOTS/[sim_set]/) where plots will be saved
+%sim_sets_all = {'Lx' 'dx' 'dz' 'lh' 'lv' 'qro' 'ro' 'fcor' 'Tsst' 'Ttpp' 'usfc' 'Qcool' 'Cd' 'QcoolVpcnst' 'QcoolVplvHcnst' 'mpi' 'nondim' 'transient'};  %name out output subdir (within simsets_Tmean#/PLOTS/[sim_set]/) where plots will be saved
+sim_sets_all = {'lh'};  %name out output subdir (within simsets_Tmean#/PLOTS/[sim_set]/) where plots will be saved
     %IF 'single'
     sim_single = 'CTRLv0qrhSATqdz5000_nx3072';    %runs only this simulation
 
 %% Which scripts should I run?
-run_TC_stats = 1;
-    save_file = 1;  %for TC_stats only; note: program will not overwrite old file
-run_TC_stats_dynamicequil = 1;  %overwrites old file automatically
-run_TC_structure_ts = 1;    %overwrites old plot automatically
+run_TC_stats = 0;
+    save_file = 0;  %for TC_stats only; note: program will not overwrite old file
+run_TC_stats_dynamicequil = 0;  %overwrites old file automatically
+run_TC_structure_ts = 0;    %overwrites old plot automatically
 run_TC_stats_plot = 1;  %overwrites old [simset].mat file and plots automatically
     run_TC_stats_plot_dynamicequil = 1; %also run for dynamic equilibrium
 
@@ -59,7 +59,7 @@ rmax_sub = 100000;    %[km]; highest value
 zmin_subsub = .5;  %[km]; lowest value
 zmax_subsub = 1; %[km]; highest value
 
-%%times for a variable that currently isn't actually used
+%%user-defined times for radial profile
 tmean0_usr = 100;    %[day]
 tmeanf_usr = 150;    %[day]
 
@@ -297,7 +297,7 @@ for jj = 1:length(sim_sets_all)
             units = 'm s^{-1}';
 
             subdirs_set = {
-%{
+
               %%Tsst
                 'CTRLv0qrhSATqdz5000_nx3072_SST275.00K' %-- large rmax oscillation
                 'CTRLv0qrhSATqdz5000_nx3072_SST285.00K' %-- medium rmax oscillation
@@ -312,10 +312,10 @@ for jj = 1:length(sim_sets_all)
                 %%Ttpp
                 'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K'
                 'CTRLv0qrhSATqdz5000_nx3072_Tthresh225K'
-                'CTRLv0qrhSATqdz5000_nx3072'
+                %'CTRLv0qrhSATqdz5000_nx3072'
                 'CTRLv0qrhSATqdz5000_nx3072_Tthresh175K'
                 'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K'
-%{           
+           
                 %%usfc
                 'CTRLv0qrhSATqdz5000_nx3072_usfc.5'
                 'CTRLv0qrhSATqdz5000_nx3072_usfc1'
@@ -331,7 +331,7 @@ for jj = 1:length(sim_sets_all)
                 %'CTRLv0qrhSATqdz5000_nx3072'
                 'CTRLv0qrhSATqdz5000_nx3072_rad1.0K'
                 'CTRLv0qrhSATqdz5000_nx3072_rad2.0K'
-%}                
+               
             }
             multipliers = ones(length(subdirs_set),1);
         case 'nondim'
@@ -431,7 +431,7 @@ for jj = 1:length(sim_sets_all)
         [junk] = TC_stats_plot(run_type,T_mean,equil_dynamic,dt_final,tf,dt_final_dynamic,rmin_plot,rmax_plot,CTRL_val,units,multipliers,subdirs_set,sim_set,dir_home);
         
         %%most stable equilibrium period
-        if(run_TC_stats_dynamicequil == 1)
+        if(run_TC_stats_plot_dynamicequil == 1)
             equil_dynamic = 1;
             [junk] = TC_stats_plot(run_type,T_mean,equil_dynamic,dt_final,tf,dt_final_dynamic,rmin_plot,rmax_plot,CTRL_val,units,multipliers,subdirs_set,sim_set,dir_home);
         end

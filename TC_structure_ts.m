@@ -6,6 +6,10 @@
 %simulation
 
 function [junk] = TC_structure_ts(run_type,T_mean,dt_final,t0,tf,dt_final_dynamic,subdir,dir_home);
+
+%%Write out to screen whats going on
+sprintf('TC_structure_ts for: %s',subdir)
+
 junk='junk';
 %clear
 %clc
