@@ -1,9 +1,9 @@
-%MPI_collapse_r.m
+%Ld_nocollapse_r.m
 
-%Created: 14 Feb 2012, Dan Chavas
+%Created: 12 Jul 2012, Dan Chavas
 
-%This file is the same as TC_stats_plotdim.m, except that it plots with color-coding the 4 input variables that modulate MPI
-%and displays them all togther based upon their respective mpi values.
+%This file is the same as MPI_collapse_r.m, except sorted by L_d = NH/f
+%instead of Vp.  The purpose is to show how the scaling does not work well
 
 clear all
 %close all

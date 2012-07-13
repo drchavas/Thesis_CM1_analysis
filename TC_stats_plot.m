@@ -185,6 +185,22 @@ for ss=1:numruns
     %% Extract and keep mpi and fcor%%%%%
     mpi_all(ss) = mpi;
     fcor_all(ss) = fcor;
+
+    %% Extract H, tropospheric depth from RCE sounding
+    Ttpp = str2num(subdir(strfind(subdir,'Tthresh')+7:strfind(subdir,'Tthresh')+9));
+    if(isempty(Ttpp))
+        Ttpp = 200;
+    end
+    Htpp = 1000*zz00(find(T00<Ttpp,1)-1)/1000+dz*(T00(find(T00<Ttpp,1)-1)-Ttpp)/(T00(find(T00<Ttpp,1)-1)-T00(find(T00<Ttpp,1)));
+
+    %% Extract mass-weighted N = sqrt((g/th0)*(dtheta/dz)) from RCE sounding
+    th_trop = th00(zz00<=Htpp);
+    zz_trop = zz00(zz00<=Htpp);
+    pp_trop = pp00(zz00<=Htpp);
+    dthdz_trop = (th_trop(2:end)-th_trop(1:end-1))./(zz_trop(2:end)-zz_trop(1:end-1));
+    dp_trop = pp_trop(2:end)-pp_trop(1:end-1);  %mass of each layer
+    dthdz_mean = sum((dthdz_trop.*dp_trop))/sum(dp_trop);
+    
 end
 
 %%Determine output subdirectory pathname for given sim_set
