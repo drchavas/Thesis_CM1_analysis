@@ -776,21 +776,21 @@ for ii=1:i_tf-i_t0+1
     xvals_sub = xvals(i_xvals);
     data_tmean_g=data_tmean_g(i_xvals,:);
 
-    %%Calculate and save instantaneous Vmax time-series
+    %% Calculate and save instantaneous Vmax time-series
     i_temp = round(length(data_sub)/8); %CHECKS ONLY FIRST 1/8 OF DOMAIN
-    Vmax(ii) = max(data_sub(1:i_temp));  %index of max wind speed
+    Vmax_g(ii) = max(data_sub(1:i_temp));  %index of max wind speed
 
-    %%Calculate and save instantaneous rmax time-series
+    %% Calculate and save instantaneous rmax time-series
     xres = dx;
     i_max = find(data_sub(1:i_temp)==max(data_sub(1:i_temp)));  %index of max wind speed
     i_max = i_max(1);
     if(~isempty(i_max))
-        rmax(ii)=xres*i_max-.5*xres;
+        rmax_g(ii)=xres*i_max-.5*xres;
     else
-        rmax(ii)=NaN;
+        rmax_g(ii)=NaN;
     end
 
-    %%Calculate and save instantaneous r[v_usr] time-series
+    %% Calculate and save instantaneous r[v_usr] time-series
     v_usr = v_usr_fracVp*mpi;
     Vmid = v_usr;
     data_sub_temp=smooth(data_sub,10);  %use 10-point smoother on profile to calculate
@@ -808,12 +808,12 @@ for ii=1:i_tf-i_t0+1
     else
         r_usr = NaN;
     end
-    rmid(ii)=r_usr;
+    rmid_g(ii)=r_usr;
     clear i_vusr_out v_out v_in
-
-    %%Calculate and save instantaneous r0 time-series
+ 
+    %% Calculate and save instantaneous r0 time-series
     v_usr = 0;
-    data_sub_temp=smooth(data_sub,30);  %use 30-point smoother on profile to calculate
+    data_sub_temp=smooth(data_sub,10);  %use 10-point smoother on profile to calculate
     temp1=find(data_sub_temp<=v_usr);
     temp2=find(temp1>i_max,1);
     i_vusr_out=temp1(temp2);
@@ -828,10 +828,10 @@ for ii=1:i_tf-i_t0+1
     else
         r_usr = NaN;
     end
-    r0(ii)=r_usr;
+    r0_g(ii)=r_usr;
     clear i_vusr_out v_out v_in i_max
 
-    %%Calculate T-day running mean time-series of rmax and r0
+    %% Calculate T-day running mean time-series of same variables
     nfile_mean = T_mean*(24*60*60/dt)+1;  %corresponding number of files
 
     if(ii==1)
@@ -859,7 +859,7 @@ for ii=1:i_tf-i_t0+1
         end
         rmax_movave_g(ii-floor(nfile_mean/2))=rmax_movave_g_temp;
 
-        %%Calculate and save T-day running mean rmid
+        %%Calculate and save T-day running mean rmid, and calculate r0Lil from rmid
         v_usr = v_usr_fracVp*mpi;
         v_r_mean_temp=smooth(v_r_mean,10);  %use 10-point smoother on profile to calculate
         temp1=find(v_r_mean_temp<=v_usr);
@@ -882,7 +882,6 @@ for ii=1:i_tf-i_t0+1
             V_user = v_usr_fracVp*mpi;
             r_user = rmid_movave_g(ii-floor(nfile_mean/2));
             [r_0_full,res_error,i_error] = r0_calc(r_user,V_user,fcor,Cd_in,wrad);
-            r_0_full/1000
             numerr = numerr+i_error;
             clear junk1 junk2
 
@@ -894,7 +893,7 @@ for ii=1:i_tf-i_t0+1
 
         %%Calculate and save T-day running mean r0
         v_usr = 0;
-        v_r_mean_temp=smooth(v_r_mean,30);  %use 30-point smoother on profile to calculate
+        v_r_mean_temp=smooth(v_r_mean,10);  %use 10-point smoother on profile to calculate
         temp1=find(v_r_mean_temp<=v_usr);
         temp2=find(temp1>i_max,1);
         i_vusr_out=temp1(temp2);
@@ -1065,8 +1064,7 @@ for l=6:numvars     %SKIP THE FULL WIND ONES FOR NOW
     istep = 1;  %steps backwards in time to find disequilibrium point
     t_day_temp = t_day;
     var_movave_temp = var_movave;
-    equil = 0;
-    dt_equil_temp = dt_equil; %30 days
+    dt_equil_temp = dt_equil;
 
     while(dt_equil_temp > T_mean)
         tdat_sub = t_day_temp(istep:ceil(dt_equil_temp/(dt/60/60/24))+istep);
