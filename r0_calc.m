@@ -124,9 +124,7 @@ res_error=0;
 if(res > .1*r_0)    %give error message of the residual is approaching the same order as the solution
     sprintf('WARNING: Large Residual on Lilly numerical solution')
     res_error=1;    %saved in final output All_data.mat
-r_0
-r_0_save
-res
+
 i_error = 1;
 else
 i_error = 0;

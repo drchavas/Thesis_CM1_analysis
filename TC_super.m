@@ -9,15 +9,15 @@ close all
 
 %% Which simulations (or sets) should I run?
 %sim_sets_all = {'Lx' 'dx' 'dz' 'lh' 'lv' 'qro' 'ro' 'fcor' 'Tsst' 'Ttpp' 'usfc' 'Qcool' 'Cd' 'QcoolVpcnst' 'QcoolVplvHcnst' 'mpi' 'nondim' 'transient'};  %name out output subdir (within simsets_Tmean#/PLOTS/[sim_set]/) where plots will be saved
-sim_sets_all = {'lh'};  %name out output subdir (within simsets_Tmean#/PLOTS/[sim_set]/) where plots will be saved
+sim_sets_all = {'single'};  %name out output subdir (within simsets_Tmean#/PLOTS/[sim_set]/) where plots will be saved
     %IF 'single'
     sim_single = 'CTRLv0qrhSATqdz5000_nx3072';    %runs only this simulation
 
 %% Which scripts should I run?
-run_TC_stats = 0;
-    save_file = 0;  %for TC_stats only; note: program will not overwrite old file
-run_TC_stats_dynamicequil = 0;  %overwrites old file automatically
-run_TC_structure_ts = 0;    %overwrites old plot automatically
+run_TC_stats = 1;
+    save_file = 1;  %for TC_stats only; note: program will not overwrite old file
+run_TC_stats_dynamicequil = 1;  %overwrites old file automatically
+run_TC_structure_ts = 1;    %overwrites old plot automatically
 run_TC_stats_plot = 1;  %overwrites old [simset].mat file and plots automatically
     run_TC_stats_plot_dynamicequil = 1; %also run for dynamic equilibrium
 

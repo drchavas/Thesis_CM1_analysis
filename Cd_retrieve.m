@@ -19,7 +19,7 @@ function [Cd] = Cd_retrieve(subdir_full);
 %sample mpi filename: input_sounding_3dRCE_nx48_SST300.00K_Tthresh200K_usfc3_rad1K_mpi
 
 %subdir_full='/Volumes/CHAVAS_CM1/CM1_output/axisym/CTRL_icRCE/CTRLv0qrhSATqdz5000_nx3072_SST295.00K_Tthresh250K_usfc5_fdiv2_lh375/';
-Cd_file = sprintf('%s/namelist.input',subdir_full)
+Cd_file = sprintf('%s/namelist.input',subdir_full);
 
 %%Open namelist.input file
 

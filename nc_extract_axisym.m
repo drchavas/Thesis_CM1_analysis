@@ -24,8 +24,8 @@ function [data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx
 %% CHANGE TO PROPER DIRECTORY
 dir_start=pwd;
 dir_tmp = strcat(dir_in,subdir);
-cd(dir_tmp)
-dir_tmp
+cd(dir_tmp);
+dir_tmp;
 
 %% OPEN FILE AND EXTRACT FILE ID#
 %ncid = netcdf.open(nc_file,'NOWRITE');
@@ -52,53 +52,53 @@ dimid = netcdf.inqDimID(ncid,'nk');
 %MODIFY xf, yf, zf IF SMALLER THAN DIMENSION BOUNDS
 if(x0 < 0)
     x0=0;
-    sprintf('X0 input cannot be negative; reset to 0')
+    sprintf('X0 input cannot be negative; reset to 0');
 end
 if(y0 < 0)
     y0=0;
-    sprintf('Y0 input cannot be negative; reset to 0')
+    sprintf('Y0 input cannot be negative; reset to 0');
 end
 if(z0 < 0)
     z0=0;
-    sprintf('Z0 input cannot be negative; reset to 0')
+    sprintf('Z0 input cannot be negative; reset to 0');
 end
 if(xf < 0)
     xf=0;
-    sprintf('XF input cannot be negative; reset to 0')
+    sprintf('XF input cannot be negative; reset to 0');
 end
 if(yf < 0)
     yf=0;
-    sprintf('YF input cannot be negative; reset to 0')
+    sprintf('YF input cannot be negative; reset to 0');
 end
 if(zf < 0)
     zf=0;
-    sprintf('ZF input cannot be negative; reset to 0')
+    sprintf('ZF input cannot be negative; reset to 0');
 end
 
 %MODIFY xf, yf, zf IF LARGER THAN DIMENSION BOUNDS
 if(xf > nx-1)
     xf=nx-1;
-    sprintf('XF input too large; reset to max = %i',xf)
+    sprintf('XF input too large; reset to max = %i',xf);
 end
 if(yf > ny-1)
     yf=ny-1;
-    sprintf('YF input too large; reset to max = %i',yf)
+    sprintf('YF input too large; reset to max = %i',yf);
 end
 if(zf > nz-1)
     zf=nz-1;
-    sprintf('ZF input too large; reset to max = %i',zf)
+    sprintf('ZF input too large; reset to max = %i',zf);
 end
 if(x0 > nx-1)
     x0=nx-1;
-    sprintf('XF input too large; reset to max = %i',x0)
+    sprintf('XF input too large; reset to max = %i',x0);
 end
 if(y0 > ny-1)
     y0=ny-1;
-    sprintf('YF input too large; reset to max = %i',y0)
+    sprintf('YF input too large; reset to max = %i',y0);
 end
 if(z0 > nz-1)
     z0=nz-1;
-    sprintf('ZF input too large; reset to max = %i',z0)
+    sprintf('ZF input too large; reset to max = %i',z0);
 end
 
 %% GET GLOBAL ATTRIBUTES FOR DATASET
@@ -179,7 +179,6 @@ fcor = netcdf.getVar(ncid,varid);
 %% EXTRACT VARIABLE ID#
 varid = netcdf.inqVarID(ncid,var);
 [varname,xtype,dimids,natts]=netcdf.inqVar(ncid,varid);
-varname
 %length(dimids)
 
 %% EXTRACT VARIABLE INFO
@@ -261,6 +260,6 @@ zmin_sub=v_zmin+dz*z0;
 zmax_sub=v_zmin+dz*zf;
 
 %% RETURN TO ORIGINAL DIRECTORY
-cd(dir_start)
+cd(dir_start);
 
 end

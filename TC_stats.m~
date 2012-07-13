@@ -569,13 +569,14 @@ rmax_movave_g=nan(i_tf-i_t0+1,1);
 rmid_movave_g=nan(i_tf-i_t0+1,1);
 r0_movave_g=nan(i_tf-i_t0+1,1);
 r0Lil_movave_g=nan(i_tf-i_t0+1,1);
+v_r_all=zeros(xf-x0+1,1);
 num_prof = 1;   %initialize iteration of time average profiles
 numerr=0;
 
 clear t_day
 clear rmid r0
 for ii=1:i_tf-i_t0+1
-    fclose('all');
+    fclose('all')
     t_file=i_t0+ii-1;
 
     t_day(ii) = (t_file-1)*dt/(24*60*60);
@@ -608,8 +609,8 @@ for ii=1:i_tf-i_t0+1
 
     if(ii==1)
         dir_tmp = strcat(dir_in,subdir);
-        cd(dir_tmp);
-        nc_file;
+        cd(dir_tmp)
+        nc_file
         ncid = netcdf.open(nc_file,'WRITE');
 
         %NX
@@ -636,7 +637,7 @@ for ii=1:i_tf-i_t0+1
         end
         [junk, nz] = netcdf.inqDim(ncid,dimid);
 
-        cd(dir_home);
+        cd(dir_home)
 
     end
 
@@ -913,13 +914,8 @@ for ii=1:i_tf-i_t0+1
     end
 
 %}  
-    %%Save all radial profile data (i.e. with no averaging) -- need this to
-    %%calculate mean radial profile for dynamic equilibrium
-    if(ii==1)
-        v_r_all = data_sub;
-    else
-        v_r_all = [v_r_all data_sub];
-    end
+    %%Save all radial profile data (i.e. with no averaging)
+    v_r_all = [v_r_all data_sub];
     
     %%CALCULATE days tmean0-tmeanf TIME-AVERAGED xz-cross-section
     if(t_day(ii)>=tmean0_usr & t_day(ii)<=tmeanf_usr)

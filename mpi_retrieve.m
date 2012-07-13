@@ -57,9 +57,9 @@ else
 end
 
 if(isempty(i_rad))
-    mpi_file = sprintf('input_sounding_3dRCE_nx48_SST%sK_Tthresh%sK_usfc%s_mpi',sst_str,tpp_str,usfc_str)
+    mpi_file = sprintf('input_sounding_3dRCE_nx48_SST%sK_Tthresh%sK_usfc%s_mpi',sst_str,tpp_str,usfc_str);
 else
-    mpi_file = sprintf('input_sounding_3dRCE_nx48_SST%sK_Tthresh%sK_usfc%s_rad%sK_mpi',sst_str,tpp_str,usfc_str,rad_str)
+    mpi_file = sprintf('input_sounding_3dRCE_nx48_SST%sK_Tthresh%sK_usfc%s_rad%sK_mpi',sst_str,tpp_str,usfc_str,rad_str);
 end
 
 fid=fopen(mpi_file);
