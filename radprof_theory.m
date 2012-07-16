@@ -93,43 +93,43 @@ t_day_max = 0;
 for ss=1:numruns
 
     %%Load data for given simulation
-    load(sprintf('simdata/%s.mat',subdirs_load{ss}));
+    load(sprintf('../CM1_postproc_data/simdata_Tmean5_dt30_dynamic/%s.mat',subdirs_load{ss}));
     
     %% Equilibrium data %%%%%%%%%%%%%%%%%%%%%%%%
     %variable values
     Vmax_equil(ss) = Vmax_equil_sim;
     rmax_equil(ss) = rmax_equil_sim;
-    r12_equil(ss) = r12_equil_sim;
+    rmid_equil(ss) = rmid_equil_sim;
     r0_equil(ss) = r0_equil_sim;
     r0Lil_equil(ss) = r0Lil_equil_sim;
     Vmax_equil_g(ss) = Vmax_equil_g_sim;
     rmax_equil_g(ss) = rmax_equil_g_sim;
-    r12_equil_g(ss) = r12_equil_g_sim;
+    rmid_equil_g(ss) = rmid_equil_g_sim;
     r0_equil_g(ss) = r0_equil_g_sim;
     r0Lil_equil_g(ss) = r0Lil_equil_g_sim;
     
     %timescales to those values
     Vmax_tau_equil(ss) = Vmax_tau_equil_sim;
     rmax_tau_equil(ss) = rmax_tau_equil_sim;
-    r12_tau_equil(ss) = r12_tau_equil_sim;
+    rmid_tau_equil(ss) = rmid_tau_equil_sim;
     r0_tau_equil(ss) = r0_tau_equil_sim;
     r0Lil_tau_equil(ss) = r0Lil_tau_equil_sim;
     Vmax_tau_equil_g(ss) = Vmax_tau_equil_g_sim;
     rmax_tau_equil_g(ss) = rmax_tau_equil_g_sim;
-    r12_tau_equil_g(ss) = r12_tau_equil_g_sim;
+    rmid_tau_equil_g(ss) = rmid_tau_equil_g_sim;
     r0_tau_equil_g(ss) = r0_tau_equil_g_sim;
     r0Lil_tau_equil_g(ss) = r0Lil_tau_equil_g_sim;
     
     %% Transient data %%%%%
     tau_gen(ss) = tau_gen_sim; %defined using the GRADIENT wind
-    Vmax_gen(ss) = Vmax_gen_sim;
-    rmax_gen(ss) = rmax_gen_sim;
-    r12_gen(ss) = r12_gen_sim;
-    r0_gen(ss) = r0_gen_sim;
-    r0Lil_gen(ss) = r0Lil_gen_sim;
+%    Vmax_gen(ss) = Vmax_gen_sim;
+%    rmax_gen(ss) = rmax_gen_sim;
+%    rmid_gen(ss) = rmid_gen_sim;
+%    r0_gen(ss) = r0_gen_sim;
+%    r0Lil_gen(ss) = r0Lil_gen_sim;
     Vmax_gen_g(ss) = Vmax_gen_g_sim;
     rmax_gen_g(ss) = rmax_gen_g_sim;
-    r12_gen_g(ss) = r12_gen_g_sim;
+    rmid_gen_g(ss) = rmid_gen_g_sim;
     r0_gen_g(ss) = r0_gen_g_sim;
     r0Lil_gen_g(ss) = r0Lil_gen_g_sim;
     
@@ -137,39 +137,39 @@ for ss=1:numruns
     Vmax_max_g(ss) = Vmax_max_g_sim;
     rmax_tau_max_g(ss) = rmax_tau_max_g_sim; %defined using the GRADIENT wind
     rmax_max_g(ss) = rmax_max_g_sim;
-    r12_tau_max_g(ss) = r12_tau_max_g_sim; %defined using the GRADIENT wind
-    r12_max_g(ss) = r12_max_g_sim;
+    rmid_tau_max_g(ss) = rmid_tau_max_g_sim; %defined using the GRADIENT wind
+    rmid_max_g(ss) = rmid_max_g_sim;
     r0_tau_max_g(ss) = r0_tau_max_g_sim; %defined using the GRADIENT wind
     r0_max_g(ss) = r0_max_g_sim;
     r0Lil_tau_max_g(ss) = r0Lil_tau_max_g_sim; %defined using the GRADIENT wind
     r0Lil_max_g(ss) = r0Lil_max_g_sim;
-    Vmax_tau_max(ss) = Vmax_tau_max_sim; %defined using the GRADIENT wind
-    Vmax_max(ss) = Vmax_max_sim;
-    rmax_tau_max(ss) = rmax_tau_max_sim; %defined using the GRADIENT wind
-    rmax_max(ss) = rmax_max_sim;
-    r12_tau_max(ss) = r12_tau_max_sim; %defined using the GRADIENT wind
-    r12_max(ss) = r12_max_sim;
-    r0_tau_max(ss) = r0_tau_max_sim; %defined using the GRADIENT wind
-    r0_max(ss) = r0_max_sim;
-    r0Lil_tau_max(ss) = r0Lil_tau_max_sim; %defined using the GRADIENT wind
-    r0Lil_max(ss) = r0Lil_max_sim;
+%    Vmax_tau_max(ss) = Vmax_tau_max_sim; %defined using the GRADIENT wind
+%    Vmax_max(ss) = Vmax_max_sim;
+%    rmax_tau_max(ss) = rmax_tau_max_sim; %defined using the GRADIENT wind
+%    rmax_max(ss) = rmax_max_sim;
+%    rmid_tau_max(ss) = rmid_tau_max_sim; %defined using the GRADIENT wind
+%    rmid_max(ss) = rmid_max_sim;
+%    r0_tau_max(ss) = r0_tau_max_sim; %defined using the GRADIENT wind
+%    r0_max(ss) = r0_max_sim;
+%    r0Lil_tau_max(ss) = r0Lil_tau_max_sim; %defined using the GRADIENT wind
+%    r0Lil_max(ss) = r0Lil_max_sim;
     
     %% Save data for all simulations
-    Vmax_movave_all(:,ss)=Vmax_movave_sim;
-    rmax_movave_all(:,ss)=rmax_movave_sim;
-    r12_movave_all(:,ss)=r12_movave_sim;
-    r0_movave_all(:,ss)=r0_movave_sim;
-    r0Lil_movave_all(:,ss)=r0Lil_movave_sim;
+%    Vmax_movave_all(:,ss)=Vmax_movave_sim;
+%    rmax_movave_all(:,ss)=rmax_movave_sim;
+%    rmid_movave_all(:,ss)=rmid_movave_sim;
+%    r0_movave_all(:,ss)=r0_movave_sim;
+%    r0Lil_movave_all(:,ss)=r0Lil_movave_sim;
     
     Vmax_movave_g_all(:,ss)=Vmax_movave_g_sim;
     rmax_movave_g_all(:,ss)=rmax_movave_g_sim;
-    r12_movave_g_all(:,ss)=r12_movave_g_sim;
+    rmid_movave_g_all(:,ss)=rmid_movave_g_sim;
     r0_movave_g_all(:,ss)=r0_movave_g_sim;
     r0Lil_movave_g_all(:,ss)=r0Lil_movave_g_sim;
     
     %% User profile %%%%%%%%%%%%%%%%%%%%%%%%
     xvals_sub_all{ss} = xvals_sub_sim;
-    data_tmean_usr_all{ss} = data_tmean_usr_sim;
+%    data_tmean_usr_all{ss} = data_tmean_usr_sim;
     data_tmean_usr_g_all{ss} = data_tmean_usr_g_sim;
 
 

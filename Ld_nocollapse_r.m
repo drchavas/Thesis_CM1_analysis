@@ -58,7 +58,7 @@ end
 
 xvals_pl_all = [];
 rmax_all = [];
-rmid_all = [];
+rrad_all = [];
 r0Lil_all = [];
 
 for m=1:length(sim_sets)
@@ -78,7 +78,7 @@ for m=1:length(sim_sets)
     i_ctrl = find(strcmp(subdirs_set,'CTRLv0qrhSATqdz5000_nx3072')==1,1);
     mpi_ctrl = mpi_all(i_ctrl);
     rmax_equil_g_ctrl = rmax_equil_g(i_ctrl);
-    rmid_equil_g_ctrl = rmid_equil_g(i_ctrl);
+    rrad_equil_g_ctrl = rrad_equil_g(i_ctrl);
     r0Lil_equil_g_ctrl = r0Lil_equil_g(i_ctrl);
 
     [junk i_sort] = sort(mpi_all);
@@ -110,14 +110,14 @@ for m=1:length(sim_sets)
     ax2=axes('position',[0.15    0.43    0.70    0.23]);
     end
     axes(ax2)
-    data_temp = rmid_equil_g(i_sort);
-    data_pl = log2(data_temp./rmid_equil_g_ctrl);
+    data_temp = rrad_equil_g(i_sort);
+    data_pl = log2(data_temp./rrad_equil_g_ctrl);
     dat_max = max(dat_max,max(data_pl));
     dat_min = min(dat_min,min(data_pl));
     scatter(xvals_pl,data_pl,'Marker',pl_shapes{m},'MarkerEdgeColor',pl_clrs{m})
     hold on
     
-    rmid_all = [rmid_all data_pl];
+    rrad_all = [rrad_all data_pl];
    
     if(m==1)
     ax3=axes('position',[0.15    0.13    0.70    0.23]);
@@ -175,7 +175,7 @@ title(input_title)
 axes(ax2)
 axis([-2 2 -2 2])
 ylabel('log_2(Y/Y*)')
-input_title1=sprintf('$r_{mid}$');
+input_title1=sprintf('$r_{rad}$');
 %title(input_title1)
 text3=text(-1.7,1.7,input_title1,'FontSize',17);
 set(text3,'HorizontalAlignment','left','VerticalAlignment','top','Interpreter','Latex');
@@ -186,7 +186,7 @@ box on
 %% Plot a best-fit line to the data
 %options = fitoptions('Method','Smooth','SmoothingParam',0.3)
 %f = fit(xvals_pl_all', data_pl_all', 'smooth',options)
-f = fit(xvals_pl_all', rmid_all', 'poly1')
+f = fit(xvals_pl_all', rrad_all', 'poly1')
 % plot(f, xvals_pl_all, data_pl_all)
 %%Linear model: f(x) = p1*x + p2
  xmin_pl = min(xvals_pl_all);

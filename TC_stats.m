@@ -38,6 +38,11 @@ zmax_subsub = 1;
 
 function [junk] = TC_stats(subdir_pre,ext_hd,run_type,t0,tf,tmean0_usr,tmeanf_usr,v_usr_fracVp,T_mean,dt_equil,dt_final,save_file,subdir,x0,xf,y0,yf,z0,zf,rmin_sub,rmax_sub,zmin_subsub,zmax_subsub,dir_home);
 
+%for calculating the outer radius using control values of the constant parameters
+wrad_ctrl = .0027;   %control run value
+fcor_ctrl = 5e-5;
+Cd_in_ctrl = .0015;
+
 %%Write out to screen whats going on
 sprintf('TC_stats for: %s',subdir)
 
@@ -58,18 +63,13 @@ junk='junk';
 %T_mean = 5; %[days]; averaging time period used to calculate moving time-average radial profile from which rmax and r0 are calculated
 %dt_equil = 30;  %[days]; how long must be quasi-steady to define equilibrium
 %dt_final = 50;  %[days]; length of period from end of simulation over which equilibrium is calculated
-wrad_const = 0; %1 = use CTRL value for wrad
 
 %save_file = 1;
 
 %%CONSTANTS
 Cpd = 1004; %[J/K/kg]
 
-if(wrad_const == 1)
-    file_in = sprintf('../CM1_postproc_data/simdata_Tmean%i_%i_%i_wradconst/ax%s.mat',T_mean,tf-dt_final,tf,subdir);
-else
-    file_in = sprintf('../CM1_postproc_data/simdata_Tmean%i_%i_%i/ax%s.mat',T_mean,tf-dt_final,tf,subdir);
-end
+file_in = sprintf('../CM1_postproc_data/simdata_Tmean%i_%i_%i/ax%s.mat',T_mean,tf-dt_final,tf,subdir);
 
 if(exist(file_in)==2 && save_file == 1)
     sprintf('Data already saved for ax%s',subdir)
@@ -205,10 +205,6 @@ else
 end
 wrad = (Qrad/86400) / dthdz_wrad;
 
-if(wrad_const == 1)
-    wrad = .0027;   %control run value
-end
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%% FULL WIND %%%%%%%
 %{
@@ -220,14 +216,14 @@ data_tmean_usr=zeros(xf-x0+1,1);
 data_tmean=zeros(xf-x0+1,tf-t0);    %1 profile per day
 Vmax_movave=nan(i_tf-i_t0+1,1);
 rmax_movave=nan(i_tf-i_t0+1,1);
-rmid_movave=nan(i_tf-i_t0+1,1);
+rrad_movave=nan(i_tf-i_t0+1,1);
 r0_movave=nan(i_tf-i_t0+1,1);
 r0Lil_movave=nan(i_tf-i_t0+1,1);
 num_prof = 1;   %initialize iteration of time average profiles
 numerr(rr)=0;
 
 clear t_day
-clear rmid r0
+clear rrad r0
 for ii=1:i_tf-i_t0+1
     fclose('all')
     t_file=i_t0+ii-1;
@@ -417,7 +413,7 @@ for ii=1:i_tf-i_t0+1
         rmax(ii)=NaN;
     end
 
-    %%Calculate and save instantaneous rmid time-series
+    %%Calculate and save instantaneous rrad time-series
     v_usr = v_usr_fracVp*mpi;
     data_sub_temp = smooth(data_sub,30);
     temp1=find(data_sub_temp<=v_usr);
@@ -434,7 +430,7 @@ for ii=1:i_tf-i_t0+1
     else
         r_usr = NaN;
     end
-    rmid(ii)=r_usr;
+    rrad(ii)=r_usr;
     clear i_vusr_out v_out v_in
 
     %%Calculate and save instantaneous r0 time-series
@@ -485,7 +481,7 @@ for ii=1:i_tf-i_t0+1
         end
         rmax_movave(ii-floor(nfile_mean/2))=rmax_movave_temp;
 
-        %%Calculate and save T-day running mean rmid
+        %%Calculate and save T-day running mean rrad
         v_usr = v_usr_fracVp*mpi;
         v_r_mean_temp = smooth(v_r_mean,30);
         temp1=find(v_r_mean_temp<=v_usr);
@@ -502,10 +498,10 @@ for ii=1:i_tf-i_t0+1
         else
             r_usr_movave = NaN;
         end
-        rmid_movave(ii-floor(nfile_mean/2)) = r_usr_movave;
+        rrad_movave(ii-floor(nfile_mean/2)) = r_usr_movave;
         if(~isnan(r_usr_movave))
             V_user = v_usr_fracVp*mpi;
-            r_user = rmid_movave(ii-floor(nfile_mean/2));
+            r_user = rrad_movave(ii-floor(nfile_mean/2));
             [r_0_full,res_error,i_error] = r0_calc(r_user,V_user,fcor,Cd_in,wrad);
             r_0_full/1000
             numerr = numerr+i_error;
@@ -562,19 +558,20 @@ var = 'vg';    %'vinterp'=full wind; 'vg'=gradient wind
 
 %%initialize the output vectors
 clear v_df_qv v_units_qv data_tmean_usr_g data_tmean_g
-data_tmean_usr_g=zeros(xf-x0+1,1);
-data_tmean_g=zeros(xf-x0+1,tf-t0);    %1 profile per day
 Vmax_movave_g=nan(i_tf-i_t0+1,1);
 rmax_movave_g=nan(i_tf-i_t0+1,1);
-rmid_movave_g=nan(i_tf-i_t0+1,1);
+rrad_movave_g=nan(i_tf-i_t0+1,1);
 r0_movave_g=nan(i_tf-i_t0+1,1);
 r0Lil_movave_g=nan(i_tf-i_t0+1,1);
+r0Lil_Lilctrl_movave_g=nan(i_tf-i_t0+1,1);
+r0ER11_movave_g=nan(i_tf-i_t0+1,1);
 num_prof = 1;   %initialize iteration of time average profiles
 numerr=0;
 
 clear t_day
-clear rmid r0
+clear rrad r0
 for ii=1:i_tf-i_t0+1
+    ii
     fclose('all');
     t_file=i_t0+ii-1;
 
@@ -637,6 +634,10 @@ for ii=1:i_tf-i_t0+1
         [junk, nz] = netcdf.inqDim(ncid,dimid);
 
         cd(dir_home);
+        
+        data_tmean_usr_g=zeros(nx,1);
+        data_tmean_g=zeros(nx,tf-t0);    %1 profile per day
+        v_r_all = NaN*zeros(nx,i_tf-i_t0+1);
 
     end
 
@@ -792,7 +793,7 @@ for ii=1:i_tf-i_t0+1
 
     %% Calculate and save instantaneous r[v_usr] time-series
     v_usr = v_usr_fracVp*mpi;
-    Vmid = v_usr;
+    Vrad = v_usr;
     data_sub_temp=smooth(data_sub,10);  %use 10-point smoother on profile to calculate
     temp1=find(data_sub_temp<=v_usr);
     temp2=find(temp1>i_max,1);
@@ -802,13 +803,13 @@ for ii=1:i_tf-i_t0+1
         v_out = data_sub_temp(i_vusr_out);   %v at first point where v<=v_usr
         v_in = data_sub_temp(i_vusr_out-1);  %v at last point where v>=v_usr
         r_usr = xres*(i_vusr_out-(v_out-v_usr)/(v_out-v_in)) - .5*xres;   %r=dr/2 @ i=1
-        if(r_usr<0 || r_usr>1000000 || max(data_sub)<Vmid)
+        if(r_usr<0 || r_usr>1000000 || max(data_sub)<Vrad)
             r_usr=NaN;
         end
     else
         r_usr = NaN;
     end
-    rmid_g(ii)=r_usr;
+    rrad_g(ii)=r_usr;
     clear i_vusr_out v_out v_in
  
     %% Calculate and save instantaneous r0 time-series
@@ -822,7 +823,7 @@ for ii=1:i_tf-i_t0+1
         v_out = data_sub_temp(i_vusr_out);   %v at first point where v<=v_usr
         v_in = data_sub_temp(i_vusr_out-1);  %v at last point where v>=v_usr
         r_usr = xres*(i_vusr_out-(v_out-v_usr)/(v_out-v_in)) - .5*xres;   %r=dr/2 @ i=1
-        if(r_usr<0 || r_usr>1000000 || max(data_sub)<Vmid)
+        if(r_usr<0 || r_usr>1000000 || max(data_sub)<Vrad)
             r_usr=NaN;
         end
     else
@@ -859,7 +860,7 @@ for ii=1:i_tf-i_t0+1
         end
         rmax_movave_g(ii-floor(nfile_mean/2))=rmax_movave_g_temp;
 
-        %%Calculate and save T-day running mean rmid, and calculate r0Lil from rmid
+        %%Calculate and save T-day running mean rrad, and calculate r0Lil from rrad
         v_usr = v_usr_fracVp*mpi;
         v_r_mean_temp=smooth(v_r_mean,10);  %use 10-point smoother on profile to calculate
         temp1=find(v_r_mean_temp<=v_usr);
@@ -870,24 +871,30 @@ for ii=1:i_tf-i_t0+1
             v_out = v_r_mean_temp(i_vusr_out);   %v at first point where v<=v_usr
             v_in = v_r_mean_temp(i_vusr_out-1);  %v at last point where v>=v_usr
             r_usr_movave = xres*(i_vusr_out-(v_out-v_usr)/(v_out-v_in)) - .5*xres;   %r=dr/2 @ i=1
-            if(r_usr_movave<0 || r_usr_movave>1000000 || max(v_r_mean)<Vmid)
+            if(r_usr_movave<0 || r_usr_movave>1000000 || max(v_r_mean)<Vrad)
                 r_usr_movave=NaN;
             end
         else
             r_usr_movave = NaN;
         end
 
-        rmid_movave_g(ii-floor(nfile_mean/2)) = r_usr_movave;
+        rrad_movave_g(ii-floor(nfile_mean/2)) = r_usr_movave;
         if(~isnan(r_usr_movave))
             V_user = v_usr_fracVp*mpi;
-            r_user = rmid_movave_g(ii-floor(nfile_mean/2));
+            r_user = rrad_movave_g(ii-floor(nfile_mean/2));
             [r_0_full,res_error,i_error] = r0_calc(r_user,V_user,fcor,Cd_in,wrad);
             numerr = numerr+i_error;
+            [r_0_full_Lilctrl,res_error,i_error] = r0_calc(r_user,V_user,fcor_ctrl,Cd_in_ctrl,wrad_ctrl);
+            [r0ER11] = r0ER11_calc(r_user,v_usr_fracVp,mpi,fcor,Cd_in);    %calculate outer radius using ER11 Eq 36
             clear junk1 junk2
 
             r0Lil_movave_g(ii-floor(nfile_mean/2)) = r_0_full/1000;
+            r0Lil_Lilctrl_movave_g(ii-floor(nfile_mean/2)) = r_0_full_Lilctrl/1000;
+            r0ER11_movave_g(ii-floor(nfile_mean/2)) = r0ER11/1000;
         else
             r0Lil_movave_g(ii-floor(nfile_mean/2)) = NaN;
+            r0Lil_Lilctrl_movave_g(ii-floor(nfile_mean/2)) = NaN;
+            r0ER11_movave_g(ii-floor(nfile_mean/2)) = NaN;
         end
         clear i_vusr_out v_out v_in
 
@@ -902,7 +909,7 @@ for ii=1:i_tf-i_t0+1
             v_out = v_r_mean_temp(i_vusr_out);   %v at first point where v<=v_usr
             v_in = v_r_mean_temp(i_vusr_out-1);  %v at last point where v>=v_usr
             r_usr_movave = xres*(i_vusr_out-(v_out-v_usr)/(v_out-v_in)) - .5*xres;   %r=dr/2 @ i=1
-            if(r_usr_movave<0 || r_usr_movave>1000000 || max(v_r_mean)<Vmid)
+            if(r_usr_movave<0 || r_usr_movave>1000000 || max(v_r_mean)<Vrad)
                 r_usr_movave=NaN;
             end
         else
@@ -915,11 +922,7 @@ for ii=1:i_tf-i_t0+1
 %}  
     %%Save all radial profile data (i.e. with no averaging) -- need this to
     %%calculate mean radial profile for dynamic equilibrium
-    if(ii==1)
-        v_r_all = data_sub;
-    else
-        v_r_all = [v_r_all data_sub];
-    end
+    v_r_all(1:length(data_sub),ii) = data_sub;
     
     %%CALCULATE days tmean0-tmeanf TIME-AVERAGED xz-cross-section
     if(t_day(ii)>=tmean0_usr & t_day(ii)<=tmeanf_usr)
@@ -955,14 +958,16 @@ i_gen = indices(1);
 tau_gen_sim = t_day(i_gen); %defined using the GRADIENT wind
 %Vmax_gen_sim = Vmax_movave(i_gen);
 %rmax_gen_sim = rmax_movave(i_gen);
-%rmid_gen_sim = rmid_movave(i_gen);
+%rrad_gen_sim = rrad_movave(i_gen);
 %r0_gen_sim = r0_movave(i_gen);
 %r0Lil_gen_sim = r0Lil_movave(i_gen);
 Vmax_gen_g_sim = Vmax_movave_g(i_gen);
 rmax_gen_g_sim = rmax_movave_g(i_gen);
-rmid_gen_g_sim = rmid_movave_g(i_gen);
+rrad_gen_g_sim = rrad_movave_g(i_gen);
 r0_gen_g_sim = r0_movave_g(i_gen);
 r0Lil_gen_g_sim = r0Lil_movave_g(i_gen);
+r0Lil_Lilctrl_gen_g_sim = r0Lil_Lilctrl_movave_g(i_gen);
+r0ER11_gen_g_sim = r0ER11_movave_g(i_gen);
 
 %time to peak value and value
 indices = find(Vmax_movave_g(i_gen:end)==max(Vmax_movave_g(i_gen:end)));
@@ -975,10 +980,10 @@ i_peak = i_gen-1+indices(1);
 rmax_tau_max_g_sim = t_day(i_peak); %defined using the GRADIENT wind
 rmax_max_g_sim = rmax_movave_g(i_peak);
 
-indices = find(rmid_movave_g(i_gen:end)==max(rmid_movave_g(i_gen:end)));
+indices = find(rrad_movave_g(i_gen:end)==max(rrad_movave_g(i_gen:end)));
 i_peak = i_gen-1+indices(1);
-rmid_tau_max_g_sim = t_day(i_peak); %defined using the GRADIENT wind
-rmid_max_g_sim = rmid_movave_g(i_peak);
+rrad_tau_max_g_sim = t_day(i_peak); %defined using the GRADIENT wind
+rrad_max_g_sim = rrad_movave_g(i_peak);
 
 indices = find(r0_movave_g(i_gen:end)==max(r0_movave_g(i_gen:end)));
 i_peak = i_gen-1+indices(1);
@@ -989,6 +994,16 @@ indices = find(r0Lil_movave_g(i_gen:end)==max(r0Lil_movave_g(i_gen:end)));
 i_peak = i_gen-1+indices(1);
 r0Lil_tau_max_g_sim = t_day(i_peak); %defined using the GRADIENT wind
 r0Lil_max_g_sim = r0Lil_movave_g(i_peak);
+
+indices = find(r0Lil_Lilctrl_movave_g(i_gen:end)==max(r0Lil_Lilctrl_movave_g(i_gen:end)));
+i_peak = i_gen-1+indices(1);
+r0Lil_Lilctrl_tau_max_g_sim = t_day(i_peak); %defined using the GRADIENT wind
+r0Lil_Lilctrl_max_g_sim = r0Lil_Lilctrl_movave_g(i_peak);
+
+indices = find(r0ER11_movave_g(i_gen:end)==max(r0ER11_movave_g(i_gen:end)));
+i_peak = i_gen-1+indices(1);
+r0ER11_tau_max_g_sim = t_day(i_peak); %defined using the GRADIENT wind
+r0ER11_max_g_sim = r0ER11_movave_g(i_peak);
 
 %{
 indices = find(Vmax_movave(i_gen:end)==max(Vmax_movave(i_gen:end)));
@@ -1001,10 +1016,10 @@ i_peak = i_gen-1+indices(1);
 rmax_tau_max_sim = t_day(i_peak); %defined using the GRADIENT wind
 rmax_max_sim = rmax_movave(i_peak);
 
-indices = find(rmid_movave(i_gen:end)==max(rmid_movave(i_gen:end)));
+indices = find(rrad_movave(i_gen:end)==max(rrad_movave(i_gen:end)));
 i_peak = i_gen-1+indices(1);
-rmid_tau_max_sim = t_day(i_peak); %defined using the GRADIENT wind
-rmid_max_sim = rmid_movave(i_peak);
+rrad_tau_max_sim = t_day(i_peak); %defined using the GRADIENT wind
+rrad_max_sim = rrad_movave(i_peak);
 
 indices = find(r0_movave(i_gen:end)==max(r0_movave(i_gen:end)));
 i_peak = i_gen-1+indices(1);
@@ -1017,7 +1032,7 @@ r0Lil_tau_max_sim = t_day(i_peak); %defined using the GRADIENT wind
 r0Lil_max_sim = r0Lil_movave(i_peak);
 %}
 
-numvars = 10;     %Vmax, rmax, rmid, r0, r0Lil, Vmax_g, rmax_g, rmid_g, r0_g, r0Lil_g
+numvars = 12;     %Vmax, rmax, rrad, r0, r0Lil, Vmax_g, rmax_g, rrad_g, r0_g, r0Lil_g
 for l=6:numvars     %SKIP THE FULL WIND ONES FOR NOW
 
     switch l
@@ -1026,7 +1041,7 @@ for l=6:numvars     %SKIP THE FULL WIND ONES FOR NOW
         case 2
             var_movave = rmax_movave;
         case 3
-            var_movave = rmid_movave;
+            var_movave = rrad_movave;
         case 4
             var_movave = r0_movave;
         case 5
@@ -1036,11 +1051,15 @@ for l=6:numvars     %SKIP THE FULL WIND ONES FOR NOW
         case 7
             var_movave = rmax_movave_g;
         case 8
-            var_movave = rmid_movave_g;
+            var_movave = rrad_movave_g;
         case 9
             var_movave = r0_movave_g;
         case 10
             var_movave = r0Lil_movave_g;
+        case 11
+            var_movave = r0Lil_Lilctrl_movave_g;
+        case 12
+            var_movave = r0ER11_movave_g;
     end
 
     %%Extract data for (dt_final)-day period at end of simulation and calculate its mean
@@ -1117,39 +1136,45 @@ end
 %variable values
 Vmax_equil_sim = var_equil(1);
 rmax_equil_sim = var_equil(2);
-rmid_equil_sim = var_equil(3);
+rrad_equil_sim = var_equil(3);
 r0_equil_sim = var_equil(4);
 r0Lil_equil_sim = var_equil(5);
 Vmax_equil_g_sim = var_equil(6);
 rmax_equil_g_sim = var_equil(7);
-rmid_equil_g_sim = var_equil(8);
+rrad_equil_g_sim = var_equil(8);
 r0_equil_g_sim = var_equil(9);
 r0Lil_equil_g_sim = var_equil(10);
+r0Lil_Lilctrl_equil_g_sim = var_equil(11);
+r0ER11_equil_g_sim = var_equil(12);
 
 %timescales to those values
 Vmax_tau_equil_sim = var_tau_equil(1);
 rmax_tau_equil_sim = var_tau_equil(2);
-rmid_tau_equil_sim = var_tau_equil(3);
+rrad_tau_equil_sim = var_tau_equil(3);
 r0_tau_equil_sim = var_tau_equil(4);
 r0Lil_tau_equil_sim = var_tau_equil(5);
 Vmax_tau_equil_g_sim = var_tau_equil(6);
 rmax_tau_equil_g_sim = var_tau_equil(7);
-rmid_tau_equil_g_sim = var_tau_equil(8);
+rrad_tau_equil_g_sim = var_tau_equil(8);
 r0_tau_equil_g_sim = var_tau_equil(9);
 r0Lil_tau_equil_g_sim = var_tau_equil(10);
+r0Lil_Lilctrl_tau_equil_g_sim = var_tau_equil(11);
+r0ER11_tau_equil_g_sim = var_tau_equil(12);
 
 %% Save data for all simulations
 %Vmax_movave_sim=Vmax_movave;
 %rmax_movave_sim=rmax_movave;
-%rmid_movave_sim=rmid_movave;
+%rrad_movave_sim=rrad_movave;
 %r0_movave_sim=r0_movave;
 %r0Lil_movave_sim=r0Lil_movave;
 
 Vmax_movave_g_sim=Vmax_movave_g;
 rmax_movave_g_sim=rmax_movave_g;
-rmid_movave_g_sim=rmid_movave_g;
+rrad_movave_g_sim=rrad_movave_g;
 r0_movave_g_sim=r0_movave_g;
 r0Lil_movave_g_sim=r0Lil_movave_g;
+r0Lil_Lilctrl_movave_g_sim=r0Lil_Lilctrl_movave_g;
+r0ER11_movave_g_sim=r0ER11_movave_g;
 
 %% User profile %%%%%%%%%%%%%%%%%%%%%%%%
 xvals_sub_sim = xvals_sub;
@@ -1163,12 +1188,7 @@ if(save_file == 1)
     clear l i ii
     save temp.mat
     load tempstuff.mat
-    if(wrad_const == 1)
-        movefile('temp.mat',sprintf('../CM1_postproc_data/simdata_Tmean%i_%i_%i_wradconst/ax%s.mat',T_mean,tf-dt_final,tf,subdir))
-    else
-        movefile('temp.mat',sprintf('../CM1_postproc_data/simdata_Tmean%i_%i_%i/ax%s.mat',T_mean,tf-dt_final,tf,subdir))
-    end
-
+    movefile('temp.mat',sprintf('../CM1_postproc_data/simdata_Tmean%i_%i_%i/ax%s.mat',T_mean,tf-dt_final,tf,subdir))
     
     delete('tempstuff.mat')
 

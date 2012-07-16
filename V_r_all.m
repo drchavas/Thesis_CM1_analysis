@@ -19,10 +19,10 @@ ext_hd = 1; %0=local hard drive; 1=external hard drive
 run_types=ones(1000,1); %[1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]; %1=axisym; 3=3D
 
 t0 = 0;
-V_outerfit = .2;    %fraction of Vp
+V_outerfit = .1;    %fraction of Vp
 
 T_mean = 5; %[days]; averaging time period used to calculate moving time-average radial profile from which rmax and r0 are calculated
-equil_dynamic = 0;  %1 = use dynamic equilibrium
+equil_dynamic = 1;  %1 = use dynamic equilibrium
     %%IF 0:
     dt_final = 50;
     tf = 150;

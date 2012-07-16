@@ -148,7 +148,7 @@ for m=1:length(sim_sets)
     ax3=axes('position',[0.1    0.2    0.35    0.35]);
     end
     axes(ax3)
-    data_temp = rmid_equil_g(i_sort);
+    data_temp = rrad_equil_g(i_sort);
     data_pl = log2(data_temp./data_temp(i_ctrl));
     dat_max = max(dat_max,max(data_pl));
     dat_min = min(dat_min,min(data_pl));
@@ -241,7 +241,7 @@ axes(ax3)
 axis([-3 3 -3 3])
 ylabel('log_2(Y/Y*)')
 xlabel({sprintf('log_2(X/X*)')})
-input_title1=sprintf('$r_{mid}$');
+input_title1=sprintf('$r_{rad}$');
 %title(input_title1)
 text3=text(-2.7,2.7,input_title1,'FontSize',17);3
 set(text3,'HorizontalAlignment','left','VerticalAlignment','top','Interpreter','Latex');

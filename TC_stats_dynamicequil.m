@@ -24,17 +24,12 @@ junk='junk';
 %dt_final = 50;  %[days]; original length of period over which equilibrium is calculated
 %tf = 150;   %[days]; original end day of equilibrium calculation
 %dt_final_dynamic = 30;  %[days]; new length of period over which equilibrium is calculated
-wrad_const = 0; %1 = use CTRL value for wrad
 save_file_dynamicequil = 1;
 
 stop_overwrite = 0;
 if(save_file_dynamicequil==1)
 %check if new subdirectory exists
-if(wrad_const == 1)
-    subdir_dyn = sprintf('../CM1_postproc_data/simdata_Tmean%i_dt%i_dynamic_wradconst',T_mean,dt_final_dynamic);
-else
-    subdir_dyn = sprintf('../CM1_postproc_data/simdata_Tmean%i_dt%i_dynamic',T_mean,dt_final_dynamic);
-end
+subdir_dyn = sprintf('../CM1_postproc_data/simdata_Tmean%i_dt%i_dynamic',T_mean,dt_final_dynamic);
 
 if(exist(subdir_dyn)==7)
 
@@ -47,39 +42,22 @@ if(exist(subdir_dyn)==7)
 
     
 else
-    
-    if(wrad_const == 1)
-        mkdir(sprintf('../CM1_postproc_data/simdata_Tmean%i_dt%i_dynamic_wradconst',T_mean,dt_final_dynamic))
-        mkdir(sprintf('../CM1_postproc_data/simplots_Tmean%i_dt%i_dynamic_wradconst',T_mean,dt_final_dynamic))
-        mkdir(sprintf('../CM1_postproc_data/simsets_Tmean%i_dt%i_dynamic_wradconst',T_mean,dt_final_dynamic))
-        mkdir(sprintf('../CM1_postproc_data/simsets_Tmean%i_dt%i_dynamic_wradconst/PLOTS',T_mean,dt_final_dynamic))
+            
+    mkdir(sprintf('../CM1_postproc_data/simdata_Tmean%i_dt%i_dynamic',T_mean,dt_final_dynamic))
+    mkdir(sprintf('../CM1_postproc_data/simplots_Tmean%i_dt%i_dynamic',T_mean,dt_final_dynamic))
+    mkdir(sprintf('../CM1_postproc_data/simsets_Tmean%i_dt%i_dynamic',T_mean,dt_final_dynamic))
+    mkdir(sprintf('../CM1_postproc_data/simsets_Tmean%i_dt%i_dynamic/PLOTS',T_mean,dt_final_dynamic))
 
-        cd(sprintf('../CM1_postproc_data/simdata_Tmean%i_dt%i_dynamic_wradconst',T_mean,dt_final_dynamic))
-        save NOTANORIGINALTCSTATS.mat T_mean tf dt_final dt_final_dynamic
-        cd(dir_home)
-    else
-        
-        mkdir(sprintf('../CM1_postproc_data/simdata_Tmean%i_dt%i_dynamic',T_mean,dt_final_dynamic))
-        mkdir(sprintf('../CM1_postproc_data/simplots_Tmean%i_dt%i_dynamic',T_mean,dt_final_dynamic))
-        mkdir(sprintf('../CM1_postproc_data/simsets_Tmean%i_dt%i_dynamic',T_mean,dt_final_dynamic))
-        mkdir(sprintf('../CM1_postproc_data/simsets_Tmean%i_dt%i_dynamic/PLOTS',T_mean,dt_final_dynamic))
-
-        cd(sprintf('../CM1_postproc_data/simdata_Tmean%i_dt%i_dynamic',T_mean,dt_final_dynamic))
-        save NOTANORIGINALTCSTATS.mat T_mean tf dt_final dt_final_dynamic
-        cd(dir_home)
-    end
+    cd(sprintf('../CM1_postproc_data/simdata_Tmean%i_dt%i_dynamic',T_mean,dt_final_dynamic))
+    save NOTANORIGINALTCSTATS.mat T_mean tf dt_final dt_final_dynamic
+    cd(dir_home)
     
 end
 end
 
 if(stop_overwrite == 0)
 
-    if(wrad_const == 1)
-        file_in_dyn = sprintf('../CM1_postproc_data/simdata_Tmean%i_%i_%i_wradconst/ax%s.mat',T_mean,tf-dt_final,tf,subdir);
-    else
-        file_in_dyn = sprintf('../CM1_postproc_data/simdata_Tmean%i_%i_%i/ax%s.mat',T_mean,tf-dt_final,tf,subdir);
-    end
-
+    file_in_dyn = sprintf('../CM1_postproc_data/simdata_Tmean%i_%i_%i/ax%s.mat',T_mean,tf-dt_final,tf,subdir);
     
     if(exist(file_in_dyn)==2)
         sprintf('Updating equilibrium values for ax%s',subdir)
@@ -117,7 +95,7 @@ if(stop_overwrite == 0)
         %%Calculate mean radial wind profile during equilibrium period
         data_tmean_usr_g_sim = mean(v_r_all(:,indices_equil),2);
         
-        numvars = 10;     %Vmax, rmax, rmid, r0, r0Lil, Vmax_g, rmax_g, rmid_g, r0_g, r0Lil_g
+        numvars = 11;     %Vmax, rmax, rrad, r0, r0Lil, Vmax_g, rmax_g, rrad_g, r0_g, r0Lil_g
         for l=6:numvars     %SKIP THE FULL WIND ONES FOR NOW
 
             switch l
@@ -126,7 +104,7 @@ if(stop_overwrite == 0)
                 case 2
                     var_movave = rmax_movave;
                 case 3
-                    var_movave = rmid_movave;
+                    var_movave = rrad_movave;
                 case 4
                     var_movave = r0_movave;
                 case 5
@@ -138,14 +116,20 @@ if(stop_overwrite == 0)
                     var_movave = rmax_movave_g;
                     %sprintf('rmax_g')
                 case 8
-                    var_movave = rmid_movave_g;
-                    %sprintf('rmid_g')
+                    var_movave = rrad_movave_g;
+                    %sprintf('rrad_g')
                 case 9
                     var_movave = r0_movave_g;
                     %sprintf('r0_g')
                 case 10
                     var_movave = r0Lil_movave_g;
                     %sprintf('r0Lil_g')
+                case 11
+                    var_movave = r0Lil_Lilctrl_movave_g;
+                    %sprintf('r0Lil_Lilctrl_g')
+                case 12
+                    var_movave = r0ER11_movave_g;
+                    %sprintf('r0ER11_g')
             end
 
             %%Extract data for (dt_final)-day period at end of simulation and calculate its mean
@@ -160,9 +144,11 @@ if(stop_overwrite == 0)
         %variable values
         Vmax_equil_g_sim = var_equil(6);
         rmax_equil_g_sim = var_equil(7);
-        rmid_equil_g_sim = var_equil(8);
+        rrad_equil_g_sim = var_equil(8);
         r0_equil_g_sim = var_equil(9);
         r0Lil_equil_g_sim = var_equil(10);
+        r0Lil_Lilctrl_equil_g_sim = var_equil(11);
+        r0ER11_equil_g_sim = var_equil(12);
 
         %% Save data to file
         if(save_file_dynamicequil == 1)
@@ -171,12 +157,7 @@ if(stop_overwrite == 0)
             save temp.mat
             load tempstuff.mat
             
-            if(wrad_const == 1)
-                movefile('temp.mat',sprintf('../CM1_postproc_data/simdata_Tmean%i_dt%i_dynamic_wradconst/ax%s.mat',T_mean,dt_final_dynamic,subdir))
-            else
-                movefile('temp.mat',sprintf('../CM1_postproc_data/simdata_Tmean%i_dt%i_dynamic/ax%s.mat',T_mean,dt_final_dynamic,subdir))
-            end
-
+            movefile('temp.mat',sprintf('../CM1_postproc_data/simdata_Tmean%i_dt%i_dynamic/ax%s.mat',T_mean,dt_final_dynamic,subdir))
             
             delete('tempstuff.mat')
         end

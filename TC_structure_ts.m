@@ -24,7 +24,6 @@ equil_dynamics = [0 1];  %1 = use dynamic equilibrium
 %    tf = 150;
 %    %%IF 1:
 %    dt_final_dynamic = 30;  %[days]; new length of period over which equilibrium is calculated
-wrad_const = 0; %1 = use CTRL value for wrad
 save_plot = 1;  %will save plot for each simulation in simplots_Tmean#_#_#/
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -52,73 +51,73 @@ for ii = 1:length(equil_dynamics)
     
     %%Load data for given simulation
     if(equil_dynamic==1)
-        if(wrad_const == 1)
-            load(sprintf('../CM1_postproc_data/simdata_Tmean%i_dt%i_dynamic_wradconst/%s.mat',T_mean,dt_final_dynamic,subdir_load));
-        else
-            load(sprintf('../CM1_postproc_data/simdata_Tmean%i_dt%i_dynamic/%s.mat',T_mean,dt_final_dynamic,subdir_load));
-        end
+        load(sprintf('../CM1_postproc_data/simdata_Tmean%i_dt%i_dynamic/%s.mat',T_mean,dt_final_dynamic,subdir_load));
     else
-        if(wrad_const == 1)
-            load(sprintf('../CM1_postproc_data/simdata_Tmean%i_%i_%i_wradconst/%s.mat',T_mean,tf-dt_final,tf,subdir_load));
-        else
-            load(sprintf('../CM1_postproc_data/simdata_Tmean%i_%i_%i/%s.mat',T_mean,tf-dt_final,tf,subdir_load));
-        end
+        load(sprintf('../CM1_postproc_data/simdata_Tmean%i_%i_%i/%s.mat',T_mean,tf-dt_final,tf,subdir_load));
     end
     
     %% Equilibrium data %%%%%%%%%%%%%%%%%%%%%%%%
     %variable values
     Vmax_equil = Vmax_equil_sim;
     rmax_equil = rmax_equil_sim;
-    rmid_equil = rmid_equil_sim;
+    rrad_equil = rrad_equil_sim;
     r0_equil = r0_equil_sim;
     r0Lil_equil = r0Lil_equil_sim;
+    r0Lil_Lilctrl_equil = r0Lil_Lilctrl_equil_sim;
     Vmax_equil_g = Vmax_equil_g_sim;
     rmax_equil_g = rmax_equil_g_sim;
-    rmid_equil_g = rmid_equil_g_sim;
+    rrad_equil_g = rrad_equil_g_sim;
     r0_equil_g = r0_equil_g_sim;
     r0Lil_equil_g = r0Lil_equil_g_sim;
+    r0Lil_Lilctrl_equil_g = r0Lil_Lilctrl_equil_g_sim;
     
     %timescales to those values
     Vmax_tau_equil = Vmax_tau_equil_sim;
     rmax_tau_equil = rmax_tau_equil_sim;
-    rmid_tau_equil = rmid_tau_equil_sim;
+    rrad_tau_equil = rrad_tau_equil_sim;
     r0_tau_equil = r0_tau_equil_sim;
     r0Lil_tau_equil = r0Lil_tau_equil_sim;
+    r0Lil_Lilctrl_tau_equil = r0Lil_Lilctrl_tau_equil_sim;
     Vmax_tau_equil_g = Vmax_tau_equil_g_sim;
     rmax_tau_equil_g = rmax_tau_equil_g_sim;
-    rmid_tau_equil_g = rmid_tau_equil_g_sim;
+    rrad_tau_equil_g = rrad_tau_equil_g_sim;
     r0_tau_equil_g = r0_tau_equil_g_sim;
     r0Lil_tau_equil_g = r0Lil_tau_equil_g_sim;
+    r0Lil_Lilctrl_tau_equil_g = r0Lil_Lilctrl_tau_equil_g_sim;
     
     %% Transient data %%%%%
     tau_gen = tau_gen_sim; %defined using the GRADIENT wind
 %    Vmax_gen = Vmax_gen_sim;
 %    rmax_gen = rmax_gen_sim;
-%    rmid_gen = rmid_gen_sim;
+%    rrad_gen = rrad_gen_sim;
 %    r0_gen = r0_gen_sim;
 %    r0Lil_gen = r0Lil_gen_sim;
     Vmax_gen_g = Vmax_gen_g_sim;
     rmax_gen_g = rmax_gen_g_sim;
-    rmid_gen_g = rmid_gen_g_sim;
+    rrad_gen_g = rrad_gen_g_sim;
     r0_gen_g = r0_gen_g_sim;
     r0Lil_gen_g = r0Lil_gen_g_sim;
+    r0Lil_Lilctrl_gen_g = r0Lil_Lilctrl_gen_g_sim;
     
     Vmax_tau_max_g = Vmax_tau_max_g_sim; %defined using the GRADIENT wind
     Vmax_max_g = Vmax_max_g_sim;
     rmax_tau_max_g = rmax_tau_max_g_sim; %defined using the GRADIENT wind
     rmax_max_g = rmax_max_g_sim;
-    rmid_tau_max_g = rmid_tau_max_g_sim; %defined using the GRADIENT wind
-    rmid_max_g = rmid_max_g_sim;
+    rrad_tau_max_g = rrad_tau_max_g_sim; %defined using the GRADIENT wind
+    rrad_max_g = rrad_max_g_sim;
     r0_tau_max_g = r0_tau_max_g_sim; %defined using the GRADIENT wind
     r0_max_g = r0_max_g_sim;
     r0Lil_tau_max_g = r0Lil_tau_max_g_sim; %defined using the GRADIENT wind
     r0Lil_max_g = r0Lil_max_g_sim;
-%    Vmax_tau_max = Vmax_tau_max_sim; %defined using the GRADIENT wind
+    r0Lil_Lilctrl_tau_max_g = r0Lil_Lilctrl_tau_max_g_sim; %defined using the GRADIENT wind
+    r0Lil_Lilctrl_max_g = r0Lil_Lilctrl_max_g_sim;
+
+    %    Vmax_tau_max = Vmax_tau_max_sim; %defined using the GRADIENT wind
 %    Vmax_max = Vmax_max_sim;
 %    rmax_tau_max = rmax_tau_max_sim; %defined using the GRADIENT wind
 %    rmax_max = rmax_max_sim;
-%    rmid_tau_max = rmid_tau_max_sim; %defined using the GRADIENT wind
-%    rmid_max = rmid_max_sim;
+%    rrad_tau_max = rrad_tau_max_sim; %defined using the GRADIENT wind
+%    rrad_max = rrad_max_sim;
 %    r0_tau_max = r0_tau_max_sim; %defined using the GRADIENT wind
 %    r0_max = r0_max_sim;
 %    r0Lil_tau_max = r0Lil_tau_max_sim; %defined using the GRADIENT wind
@@ -127,15 +126,16 @@ for ii = 1:length(equil_dynamics)
     %% Save data for all simulations
 %    Vmax_movave_all=Vmax_movave_sim;
 %    rmax_movave_all=rmax_movave_sim;
-%    rmid_movave_all=rmid_movave_sim;
+%    rrad_movave_all=rrad_movave_sim;
 %    r0_movave_all=r0_movave_sim;
 %    r0Lil_movave_all=r0Lil_movave_sim;
     
     Vmax_movave_g_all=Vmax_movave_g_sim;
     rmax_movave_g_all=rmax_movave_g_sim;
-    rmid_movave_g_all=rmid_movave_g_sim;
+    rrad_movave_g_all=rrad_movave_g_sim;
     r0_movave_g_all=r0_movave_g_sim;
     r0Lil_movave_g_all=r0Lil_movave_g_sim;
+    r0Lil_Lilctrl_movave_g_all=r0Lil_Lilctrl_movave_g_sim;
     
     %% User profile %%%%%%%%%%%%%%%%%%%%%%%%
     xvals_sub_all = xvals_sub_sim;
@@ -144,7 +144,7 @@ for ii = 1:length(equil_dynamics)
 
     %% PLOTTING %%%%%%%%%%%%%%%%
     set(0,'defaultaxesfontsize',16,'defaultaxesfontweight','bold','defaultlinelinewidth',1)
-    %Single simulation: Plot time-series of Vmax, rmax, rmid, r0 for both V and Vg
+    %Single simulation: Plot time-series of Vmax, rmax, rrad, r0 for both V and Vg
 
     %Plot time series
     h = figure(1);set(gcf,'Visible', 'off'); 
@@ -164,21 +164,21 @@ for ii = 1:length(equil_dynamics)
     %    end
 
     rm_plot = rmax_movave_g_all/rmax_equil_g;
-    plot(ax1,t_day(Vm_plot>.7),rm_plot(Vm_plot>.7),'Color',pl_clrs{2})
+    plot(ax1,t_day(Vm_plot>.5),rm_plot(Vm_plot>.5),'Color',pl_clrs{2})
     %    if(~isnan(rmax_tau_equil_g(i)))
     %        h=plot(t_day(rmax_tau_equil_g(i)/(dt/60/60/24)),rmax_equil_g(i)/max(rmax_movave_g_all(:,i)),'d');
     %        set(h,'markersize',10,'MarkerFaceColor',[.49 1 .63]);
     %    end
 
-    rmid_plot = rmid_movave_g_all/rmid_equil_g;
-    plot(ax1,t_day(Vm_plot>.7),rmid_plot(Vm_plot>.7),'Color',pl_clrs{4})
+    r0ER11_plot = r0ER11_movave_g_all/r0ER11_equil_g;
+    plot(ax1,t_day(Vm_plot>.5),r0ER11_plot(Vm_plot>.5),'Color',pl_clrs{4})
     %    if(~isnan(r0Lil_tau_equil_g(i)))
     %        h=plot(t_day(r0Lil_tau_equil_g(i)/(dt/60/60/24)),r0Lil_equil_g(i)/max(r0Lil_movave_g_all(:,i)),'d');
     %        set(h,'markersize',10,'MarkerFaceColor',.5*[.49 1 .63]);
     %    end
     
     r0_plot = r0Lil_movave_g_all/r0Lil_equil_g;
-    plot(ax1,t_day(Vm_plot>.7),r0_plot(Vm_plot>.7),'Color',pl_clrs{3})
+    plot(ax1,t_day(Vm_plot>.5),r0_plot(Vm_plot>.5),'Color',pl_clrs{3})
     %    if(~isnan(r0Lil_tau_equil_g(i)))
     %        h=plot(t_day(r0Lil_tau_equil_g(i)/(dt/60/60/24)),r0Lil_equil_g(i)/max(r0Lil_movave_g_all(:,i)),'d');
     %        set(h,'markersize',10,'MarkerFaceColor',.5*[.49 1 .63]);
@@ -188,7 +188,7 @@ for ii = 1:length(equil_dynamics)
     plot(ax1,t_day,1.1*ones(length(t_day),1),'k--','LineWidth',1)
     plot(ax1,Vmax_tau_equil_g,0,'x-.','MarkerEdgeColor',pl_clrs{1},'MarkerSize',12)
     plot(ax1,rmax_tau_equil_g,0,'x-.','MarkerEdgeColor',pl_clrs{2},'MarkerSize',12)
-    plot(ax1,rmid_tau_equil_g,0,'x-.','MarkerEdgeColor',pl_clrs{4},'MarkerSize',12)
+    plot(ax1,rrad_tau_equil_g,0,'x-.','MarkerEdgeColor',pl_clrs{4},'MarkerSize',12)
     plot(ax1,r0Lil_tau_equil_g,0,'x-.','MarkerEdgeColor',pl_clrs{3},'MarkerSize',12)
 
     if(equil_dynamic == 1)
@@ -215,7 +215,7 @@ for ii = 1:length(equil_dynamics)
     set(text1,'HorizontalAlignment','left','VerticalAlignment','top','Interpreter','Latex','BackgroundColor','white');
     text2=text(.73*tf,.89*min([ymax 2]),sprintf('$r^*_m = $ %5.1f $km$',rmax_equil_g),'fontweight','bold','FontSize',14,'Color','k');
     set(text2,'HorizontalAlignment','left','VerticalAlignment','top','Interpreter','Latex','BackgroundColor','white');
-    text3=text(.73*tf,.82*min([ymax 2]),sprintf('$r^*_{rad} = $ %5.1f $km$',rmid_equil_g),'fontweight','bold','FontSize',14,'Color','k');
+    text3=text(.73*tf,.82*min([ymax 2]),sprintf('$r^*_{rad} = $ %5.1f $km$',rrad_equil_g),'fontweight','bold','FontSize',14,'Color','k');
     set(text3,'HorizontalAlignment','left','VerticalAlignment','top','Interpreter','Latex','BackgroundColor','white');
     text4=text(.73*tf,.75*min([ymax 2]),sprintf('$r^*_0 = $ %5.1f $km$',r0Lil_equil_g),'fontweight','bold','FontSize',14,'Color','k');
     set(text4,'HorizontalAlignment','left','VerticalAlignment','top','Interpreter','Latex','BackgroundColor','white');
@@ -233,17 +233,9 @@ for ii = 1:length(equil_dynamics)
 
     if(save_plot == 1)
         if(equil_dynamic == 1)
-            if(wrad_const == 1)
-                cd(sprintf('../CM1_postproc_data/simplots_Tmean%i_dt%i_dynamic_wradconst',T_mean,dt_final_dynamic))
-            else
-                cd(sprintf('../CM1_postproc_data/simplots_Tmean%i_dt%i_dynamic',T_mean,dt_final_dynamic))
-            end
+            cd(sprintf('../CM1_postproc_data/simplots_Tmean%i_dt%i_dynamic',T_mean,dt_final_dynamic))
         else
-            if(wrad_const == 1)
-                cd(sprintf('../CM1_postproc_data/simplots_Tmean%i_%i_%i_wradconst',T_mean,tf-dt_final,tf))
-            else
-                cd(sprintf('../CM1_postproc_data/simplots_Tmean%i_%i_%i',T_mean,tf-dt_final,tf))
-            end
+            cd(sprintf('../CM1_postproc_data/simplots_Tmean%i_%i_%i',T_mean,tf-dt_final,tf))
         end
         saveas(gcf,sprintf('%s_structevol.pdf',subdir_load),'pdf')
         cd(dir_home)
