@@ -286,7 +286,7 @@ if(plot_usrprof==1)
     if(equil_dynamic==0)
         input_title = sprintf('Time-mean radial GRADIENT wind profiles: days %i - %i; z=%5.2f %s',tmean0_usr,tmeanf_usr,zvals(i_zvals),zunits);
     else
-        input_title = sprintf('Time-mean radial GRADIENT wind profiles: days %3.1f - %3.1f; z=%5.2f %s',t0_equil,tf_equil,zvals(i_zvals),zunits);
+        input_title = sprintf('Time-mean radial GRADIENT wind profiles: days %i - %i; z=%5.2f %s',t0_equil,tf_equil,zvals(i_zvals),zunits);
     end
     title(input_title)
     xlabel('Radius [km]')
@@ -318,15 +318,15 @@ if(plot_usrprof==1)
         %%DRC
         
         
-        plot(1000*xvals_pl/(mpi_all(i)/fcor_all(i)),data_tmean_usr_g_all{i}(i_xvals_pl)/mpi_all(i),pl_clrs{i},'LineWidth',1)
+        plot(1000*xvals_pl/(mpi_all(i)/fcor),data_tmean_usr_g_all{i}(i_xvals_pl)/mpi_all(i),pl_clrs{i},'LineWidth',1)
         hold on
         
     end
-    plot(0*(.01:.01:xvals_pl(end)/(min(mpi_all(i))/fcor_all(i))),'k')
+    plot(0*(.01:.01:xvals_pl(end)/(min(mpi_all(i))/fcor)),'k')
     if(equil_dynamic==0)
         input_title = sprintf('Time-mean radial GRADIENT wind profiles: days %i - %i; z=%5.2f %s',tmean0_usr,tmeanf_usr,zvals(i_zvals),zunits);
     else
-        input_title = sprintf('Time-mean radial GRADIENT wind profiles: days %3.1f - %3.1f; z=%5.2f %s',t0_equil,tf_equil,zvals(i_zvals),zunits);
+        input_title = sprintf('Time-mean radial GRADIENT wind profiles: days %i - %i; z=%5.2f %s',t0_equil,tf_equil,zvals(i_zvals),zunits);
     end
     title(input_title)
     xlabel('r/(V_p/f)')
@@ -1488,7 +1488,7 @@ if(plot_ts_multi==1)
     input_title=sprintf('r_{mid} / (V_p / f)');
     %title(input_title)
     ylabel(input_title);
-    %xlabel('time [days]')
+    xlabel('time [days]')
     axis([0 tf 0 1.1*max(max(rmid_movave_g_all(20:end,:)/(mpi_all(i)/fcor_all(i)/1000)))])
 
     for i=1:numruns

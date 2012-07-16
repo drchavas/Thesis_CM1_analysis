@@ -115,7 +115,7 @@ if(stop_overwrite == 0)
         tf_equil = t_day(indices_equil(end));
         
         %%Calculate mean radial wind profile during equilibrium period
-        data_tmean_usr_g_sim = mean(v_r_all(indices_equil,:),2);
+        data_tmean_usr_g_sim = mean(v_r_all(:,indices_equil),2);
         
         numvars = 10;     %Vmax, rmax, rmid, r0, r0Lil, Vmax_g, rmax_g, rmid_g, r0_g, r0Lil_g
         for l=6:numvars     %SKIP THE FULL WIND ONES FOR NOW

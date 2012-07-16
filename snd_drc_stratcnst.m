@@ -9,7 +9,7 @@ clc
 clf
 
 %% USER INPUT %%%%%%%%%%%%%%%%%%
-T_sfc_out = 290;    %[K]; T_sfc = T_sfc_out - 3
+T_sfc_out = 287.50;    %[K]; T_sfc = T_sfc_out - 3
 T_tpp = 200;   %[K]; temp set constant at and above height of this temp
 
 p_sfc = 101500; %[Pa]

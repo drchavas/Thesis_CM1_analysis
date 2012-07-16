@@ -9,15 +9,15 @@ close all
 
 %% Which simulations (or sets) should I run?
 %sim_sets_all = {'Lx' 'dx' 'dz' 'lh' 'lv' 'qro' 'ro' 'fcor' 'Tsst' 'Ttpp' 'usfc' 'Qcool' 'Cd' 'QcoolVpcnst' 'QcoolVplvHcnst' 'mpi' 'nondim' 'transient'};  %name out output subdir (within simsets_Tmean#/PLOTS/[sim_set]/) where plots will be saved
-sim_sets_all = {'single'};  %name out output subdir (within simsets_Tmean#/PLOTS/[sim_set]/) where plots will be saved
+sim_sets_all = {'Tsst'};  %name out output subdir (within simsets_Tmean#/PLOTS/[sim_set]/) where plots will be saved
     %IF 'single'
-    sim_single = 'CTRLv0qrhSATqdz5000_nx3072';    %runs only this simulation
+    sim_single = 'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fx4_lh375';    %runs only this simulation
 
 %% Which scripts should I run?
-run_TC_stats = 1;
-    save_file = 1;  %for TC_stats only; note: program will not overwrite old file
-run_TC_stats_dynamicequil = 1;  %overwrites old file automatically
-run_TC_structure_ts = 1;    %overwrites old plot automatically
+run_TC_stats = 0;
+    save_file = 0;  %for TC_stats only; note: program will not overwrite old file
+run_TC_stats_dynamicequil = 0;  %overwrites old file automatically
+run_TC_structure_ts = 0;    %overwrites old plot automatically
 run_TC_stats_plot = 1;  %overwrites old [simset].mat file and plots automatically
     run_TC_stats_plot_dynamicequil = 1; %also run for dynamic equilibrium
 
@@ -59,13 +59,12 @@ rmax_sub = 100000;    %[km]; highest value
 zmin_subsub = .5;  %[km]; lowest value
 zmax_subsub = 1; %[km]; highest value
 
-%%user-defined times for radial profile
-tmean0_usr = 100;    %[day]
-tmeanf_usr = 150;    %[day]
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    
+
+%%user-defined times for radial profile
+tmean0_usr = tf-dt_final;    %[day]
+tmeanf_usr = tf;    %[day]
+
 dir_home = pwd;
 
 for jj = 1:length(sim_sets_all)
@@ -184,10 +183,10 @@ for jj = 1:length(sim_sets_all)
         case 'Tsst'
             CTRL_val = 300; %CTRL value of quantity varied across simulations
             units = 'K';
-            multipliers = log2([275 285 290 295 297.5 300 302.5 305 310]/CTRL_val);
+            multipliers = log2([285 290 295 297.5 300 302.5 305 310]/CTRL_val);
             subdirs_set = {
                 %%Tsst
-                'CTRLv0qrhSATqdz5000_nx3072_SST275.00K' %-- large rmax oscillation
+                %%'CTRLv0qrhSATqdz5000_nx3072_SST275.00K' %behaves differently, perhaps ice is important here
                 'CTRLv0qrhSATqdz5000_nx3072_SST285.00K' %-- medium rmax oscillation
                 'CTRLv0qrhSATqdz5000_nx3072_SST290.00K'
                 'CTRLv0qrhSATqdz5000_nx3072_SST295.00K'
@@ -373,17 +372,17 @@ for jj = 1:length(sim_sets_all)
 
                 %'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fdiv2_lh12000'
                 'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fx4'
-                %'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fdiv2_lh12000'
+                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fdiv2_lh12000'
                 'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fx4'
 
                 %'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_lh12000'
-                %'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fx4_lh3000'
+                'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fx4_lh3000'
                 'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_lh12000'
                 'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fx4_lh3000'
 
                 %'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fx2_lh12000'
                 %'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fx4_lh6000'
-                %'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fx2_lh12000'
+                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fx2_lh12000'
                 'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fx4_lh6000'
             }
             multipliers = ones(length(subdirs_set),1);
@@ -395,6 +394,11 @@ for jj = 1:length(sim_sets_all)
                 'CTRLv0qro100000qrhSATqdz5000_nx3072_Tthresh250K_lh750_75day'
                 'CTRLv0qro100000qrhSATqdz5000_nx3072_fx2_lh750_75day'
                 'CTRLv0qro400000qrhSATqdz5000_nx3072_fdiv2_lh3000_75day'
+                
+                %'CTRLv0qro50000qrhSATqdz5000_nx3072_fx4_75day'
+                %'CTRLv0qro50000qrhSATqdz5000_nx3072_fx4_lh375_75day'
+                %'CTRLv0qro80000qrhSATqdz5000_nx3072_fdiv4_75day'
+                %'CTRLv0qro80000qrhSATqdz5000_nx3072_fdiv4_lh6000_75day'
 }
             multipliers = ones(length(subdirs_set),1);
         case 'single'

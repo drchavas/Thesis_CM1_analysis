@@ -19,8 +19,8 @@ set(0,'defaultaxesfontsize',12,'defaultaxesfontweight','bold','defaultlinelinewi
 %clf(1)
 
 %%variables of interest (sim_set name): 'dx' 'dz' 'domain' 'lh' 'lv' 'H' 'Qrad' 'Vpot' 'cor' 'qro' 'ro' 'rodrmax'
-%sim_sets = {'Tsst' 'Ttpp' 'Qcool' 'usfc'}
-sim_sets = {'Ttpp'}
+sim_sets = {'Tsst' 'Ttpp' 'Qcool' 'usfc'}
+%sim_sets = {'Ttpp'}
 T_mean = 5; %[day]
 equil_dynamic = 1;  %1 = use dynamic equilibrium
     %%IF 0:
@@ -93,7 +93,7 @@ for m=1:length(sim_sets)
     figure(1)
 %    subplot(3,1,2)
     if(m==1)
-    ax1=axes('position',[0.15    0.73    0.70    0.23]);
+    ax1=axes('position',[0.15    0.6    0.70    0.35]);
     end
     axes(ax1)
     data_temp = rmax_equil_g(i_sort);
@@ -105,7 +105,9 @@ for m=1:length(sim_sets)
 
     rmax_all = [rmax_all data_pl];
     
-%    subplot(3,1,3)
+%{
+%%WHOOPS, r_mid IS NOT USEFUL HERE SINCE THIS IS A DIMENSIONAL PLOT
+    %    subplot(3,1,3)
     if(m==1)
     ax2=axes('position',[0.15    0.43    0.70    0.23]);
     end
@@ -118,9 +120,9 @@ for m=1:length(sim_sets)
     hold on
     
     rmid_all = [rmid_all data_pl];
-   
+%}   
     if(m==1)
-    ax3=axes('position',[0.15    0.13    0.70    0.23]);
+    ax3=axes('position',[0.15    0.18    0.70    0.35]);
     end
     axes(ax3)
     data_temp = r0Lil_equil_g(i_sort);
@@ -135,7 +137,7 @@ for m=1:length(sim_sets)
 end
 
 h=figure(1)
-set(h,'Position',[50 0 300 715])
+set(h,'Position',[50 0 400 700])
 
 %subplot(3,1,2)
 axes(ax1)
@@ -171,6 +173,8 @@ else
 end
 title(input_title)
 
+%{
+%%WHOOPS, r_mid IS NOT USEFUL HERE SINCE THIS IS A DIMENSIONAL PLOT
 %subplot(3,1,3)
 axes(ax2)
 axis([-2 2 -2 2])
@@ -196,6 +200,7 @@ f = fit(xvals_pl_all', rmid_all', 'poly1')
  yfit = f.p1.*xfit + f.p2;
  plot(xfit,yfit,'r--')
  
+%}
 
 %subplot(3,1,3)
 axes(ax3)
