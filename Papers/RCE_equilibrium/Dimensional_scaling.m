@@ -142,43 +142,12 @@ for m=1:length(sim_sets)
          yfit = f.p1.*xfit + f.p2;
          plot(xfit,yfit,'r--')
     end
-    
+
 %    subplot(3,1,3)
     if(m==1)
-    ax3=axes('position',[0.1    0.2    0.35    0.35]);
+        ax3=axes('position',[0.1    0.2    0.35    0.35]);
     end
     axes(ax3)
-    data_temp = r0ER11_equil_g(i_sort);
-    data_pl = log2(data_temp./data_temp(i_ctrl));
-    dat_max = max(dat_max,max(data_pl));
-    dat_min = min(dat_min,min(data_pl));
-    if(strcmp(sim_set,'mpi'))    %sort mpi files in ascending order
-        plot(xvals_pl,data_pl,'x','Color',pl_clrs{m})
-    else
-        plot(xvals_pl,data_pl,'x-','Color',pl_clrs{m})
-    end
-    hold on
-    
-    %% Add best fit line for mpi (should look identical to MPI_collapse plots)
-    if(strcmp(sim_set,'mpi'))    %sort mpi files in ascending order
-        %options = fitoptions('Method','Smooth','SmoothingParam',0.3)
-        %f = fit(xvals_pl_all', data_pl_all', 'smooth',options)
-        f = fit(xvals_pl', data_pl', 'poly1')
-        % plot(f, xvals_pl_all, data_pl_all)
-        %%Linear model: f(x) = p1*x + p2
-         xmin_pl = min(xvals_pl);
-         xmax_pl = max(xvals_pl);
-         xdiff_pl = xmax_pl-xmin_pl;
-         xfit = xmin_pl-xdiff_pl/10:xdiff_pl/20:xmax_pl+xdiff_pl/10
-         yfit = f.p1.*xfit + f.p2;
-         plot(xfit,yfit,'r--')
-    end
-    
-%    subplot(3,1,3)
-    if(m==1)
-    ax4=axes('position',[0.55    0.2    0.35    0.35]);
-    end
-    axes(ax4)
     data_temp = r0Lil_equil_g(i_sort);
     data_pl = log2(data_temp./data_temp(i_ctrl));
     dat_max = max(dat_max,max(data_pl));
@@ -204,6 +173,38 @@ for m=1:length(sim_sets)
          yfit = f.p1.*xfit + f.p2;
          plot(xfit,yfit,'r--')
     end
+    
+%    subplot(3,1,3)
+    if(m==1)
+        ax4=axes('position',[0.55    0.2    0.35    0.35]);
+    end
+    axes(ax4)
+    data_temp = r0Lil_Lilctrl_equil_g(i_sort);
+    data_pl = log2(data_temp./data_temp(i_ctrl));
+    dat_max = max(dat_max,max(data_pl));
+    dat_min = min(dat_min,min(data_pl));
+    if(strcmp(sim_set,'mpi'))    %sort mpi files in ascending order
+        plot(xvals_pl,data_pl,'x','Color',pl_clrs{m})
+    else
+        plot(xvals_pl,data_pl,'x-','Color',pl_clrs{m})
+    end
+    hold on
+    
+    %% Add best fit line for mpi (should look identical to MPI_collapse plots)
+    if(strcmp(sim_set,'mpi'))    %sort mpi files in ascending order
+        %options = fitoptions('Method','Smooth','SmoothingParam',0.3)
+        %f = fit(xvals_pl_all', data_pl_all', 'smooth',options)
+        f = fit(xvals_pl', data_pl', 'poly1')
+        % plot(f, xvals_pl_all, data_pl_all)
+        %%Linear model: f(x) = p1*x + p2
+         xmin_pl = min(xvals_pl);
+         xmax_pl = max(xvals_pl);
+         xdiff_pl = xmax_pl-xmin_pl;
+         xfit = xmin_pl-xdiff_pl/10:xdiff_pl/20:xmax_pl+xdiff_pl/10
+         yfit = f.p1.*xfit + f.p2;
+         plot(xfit,yfit,'r--')
+    end
+   
     
 end
 
@@ -241,9 +242,9 @@ axes(ax3)
 axis([-3 3 -3 3])
 ylabel('log_2(Y/Y*)')
 xlabel({sprintf('log_2(X/X*)')})
-input_title1=sprintf('$r_{0 ER11}$');
+input_title1=sprintf('$r_0$');
 %title(input_title1)
-text3=text(-2.7,2.7,input_title1,'FontSize',17);
+text3=text(-2.7,2.7,input_title1,'FontSize',17);3
 set(text3,'HorizontalAlignment','left','VerticalAlignment','top','Interpreter','Latex');
 set(ax3,'YTick',[-3 -2 -1 0 1 2 3],'XTick',[-3 -2 -1 0 1 2 3])
 grid on
@@ -254,9 +255,9 @@ axes(ax4)
 axis([-3 3 -3 3])
 ylabel('log_2(Y/Y*)')
 xlabel({sprintf('log_2(X/X*)')})
-input_title1=sprintf('$r_0$');
+input_title1=sprintf('$r_{0ctrl}$');
 %title(input_title1)
-text3=text(-2.7,2.7,input_title1,'FontSize',17);3
+text3=text(-2.7,2.7,input_title1,'FontSize',17);
 set(text3,'HorizontalAlignment','left','VerticalAlignment','top','Interpreter','Latex');
 set(ax3,'YTick',[-3 -2 -1 0 1 2 3],'XTick',[-3 -2 -1 0 1 2 3])
 grid on

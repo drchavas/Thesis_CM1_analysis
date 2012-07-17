@@ -174,8 +174,8 @@ for ii = 1:length(equil_dynamics)
     %        set(h,'markersize',10,'MarkerFaceColor',[.49 1 .63]);
     %    end
 
-    r0ER11_plot = r0ER11_movave_g_all/r0ER11_equil_g;
-    plot(ax1,t_day(Vm_plot>.5),r0ER11_plot(Vm_plot>.5),'Color',pl_clrs{4})
+    r0Lil_Lilctrl_plot = r0Lil_Lilctrl_movave_g_all/r0Lil_Lilctrl_equil_g;
+    plot(ax1,t_day(Vm_plot>.5),r0Lil_Lilctrl_plot(Vm_plot>.5),'Color',pl_clrs{4})
     %    if(~isnan(r0Lil_tau_equil_g(i)))
     %        h=plot(t_day(r0Lil_tau_equil_g(i)/(dt/60/60/24)),r0Lil_equil_g(i)/max(r0Lil_movave_g_all(:,i)),'d');
     %        set(h,'markersize',10,'MarkerFaceColor',.5*[.49 1 .63]);
@@ -192,7 +192,7 @@ for ii = 1:length(equil_dynamics)
     plot(ax1,t_day,1.1*ones(length(t_day),1),'k--','LineWidth',1)
     plot(ax1,Vmax_tau_equil_g,0,'x-.','MarkerEdgeColor',pl_clrs{1},'MarkerSize',12)
     plot(ax1,rmax_tau_equil_g,0,'x-.','MarkerEdgeColor',pl_clrs{2},'MarkerSize',12)
-    plot(ax1,r0ER11_tau_equil_g,0,'x-.','MarkerEdgeColor',pl_clrs{4},'MarkerSize',12)
+    plot(ax1,r0Lil_Lilctrl_tau_equil_g,0,'x-.','MarkerEdgeColor',pl_clrs{4},'MarkerSize',12)
     plot(ax1,r0Lil_tau_equil_g,0,'x-.','MarkerEdgeColor',pl_clrs{3},'MarkerSize',12)
 
     if(equil_dynamic == 1)
@@ -219,7 +219,7 @@ for ii = 1:length(equil_dynamics)
     set(text1,'HorizontalAlignment','left','VerticalAlignment','top','Interpreter','Latex','BackgroundColor','white');
     text2=text(.73*tf,.89*min([ymax 2]),sprintf('$r^*_m = $ %5.1f $km$',rmax_equil_g),'fontweight','bold','FontSize',14,'Color','k');
     set(text2,'HorizontalAlignment','left','VerticalAlignment','top','Interpreter','Latex','BackgroundColor','white');
-    text3=text(.73*tf,.82*min([ymax 2]),sprintf('$r^*_{0 ER11} = $ %5.1f $km$',r0ER11_equil_g),'fontweight','bold','FontSize',14,'Color','k');
+    text3=text(.73*tf,.82*min([ymax 2]),sprintf('$r^*_{0 ER11} = $ %5.1f $km$',r0Lil_Lilctrl_equil_g),'fontweight','bold','FontSize',14,'Color','k');
     set(text3,'HorizontalAlignment','left','VerticalAlignment','top','Interpreter','Latex','BackgroundColor','white');
     text4=text(.73*tf,.75*min([ymax 2]),sprintf('$r^*_0 = $ %5.1f $km$',r0Lil_equil_g),'fontweight','bold','FontSize',14,'Color','k');
     set(text4,'HorizontalAlignment','left','VerticalAlignment','top','Interpreter','Latex','BackgroundColor','white');
