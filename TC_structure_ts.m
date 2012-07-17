@@ -203,7 +203,7 @@ for ii = 1:length(equil_dynamics)
         plot(ax1,t_equil,ones(length(t_equil),1),'m','LineWidth',2)
     end
     
-    input_legend = {'V_m','r_m','r_0^{ER11}','r_0'};
+    input_legend = {'V_m','r_m','r_{0 ER11}','r_0'};
     legend(input_legend,'Location','SouthEast')
     input_title1=sprintf('Evolution of control storm structure');
     input_title2=sprintf('%s',subdir);
@@ -219,7 +219,7 @@ for ii = 1:length(equil_dynamics)
     set(text1,'HorizontalAlignment','left','VerticalAlignment','top','Interpreter','Latex','BackgroundColor','white');
     text2=text(.73*tf,.89*min([ymax 2]),sprintf('$r^*_m = $ %5.1f $km$',rmax_equil_g),'fontweight','bold','FontSize',14,'Color','k');
     set(text2,'HorizontalAlignment','left','VerticalAlignment','top','Interpreter','Latex','BackgroundColor','white');
-    text3=text(.73*tf,.82*min([ymax 2]),sprintf('$r^*_{rad} = $ %5.1f $km$',rrad_equil_g),'fontweight','bold','FontSize',14,'Color','k');
+    text3=text(.73*tf,.82*min([ymax 2]),sprintf('$r^*_{0 ER11} = $ %5.1f $km$',r0ER11_equil_g),'fontweight','bold','FontSize',14,'Color','k');
     set(text3,'HorizontalAlignment','left','VerticalAlignment','top','Interpreter','Latex','BackgroundColor','white');
     text4=text(.73*tf,.75*min([ymax 2]),sprintf('$r^*_0 = $ %5.1f $km$',r0Lil_equil_g),'fontweight','bold','FontSize',14,'Color','k');
     set(text4,'HorizontalAlignment','left','VerticalAlignment','top','Interpreter','Latex','BackgroundColor','white');

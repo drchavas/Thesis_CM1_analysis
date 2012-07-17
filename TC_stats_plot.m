@@ -86,10 +86,10 @@ end
 %% CALCULATE STEADY STATE RADIAL PROFILE
 t_day_min = 0;
 t_day_max = 0;
-clear Vmax_tau_equil rmax_tau_equil rrad_tau_equil r0_tau_equil r0Lil_tau_equil Vmax_tau_equil_g rmax_tau_equil_g rrad_tau_equil_g r0_tau_equil_g r0Lil_tau_equil_g
-clear tau_gen Vmax_gen_g rmax_gen_g rrad_gen_g r0Lil_gen_g Vmax_tau_max_g Vmax_max_g rmax_tau_max_g rmax_max_g r0_tau_max_g r0_max_g r0Lil_tau_max_g r0Lil_max_g
-clear Vmax_equil rmax_equil rrad_equil r0_equil r0Lil_equil Vmax_equil_g rmax_equil_g rrad_equil_g r0_equil_g r0Lil_equil_g
-clear Vmax_movave_g_all rmax_movave_g_all r0_movave_g_all r0Lil_movave_g_all
+clear Vmax_tau_equil rmax_tau_equil rrad_tau_equil r0_tau_equil r0ER11_tau_equil r0Lil_tau_equil Vmax_tau_equil_g rmax_tau_equil_g rrad_tau_equil_g r0_tau_equil_g r0ER11_tau_equil_g r0Lil_tau_equil_g
+clear tau_gen Vmax_gen_g rmax_gen_g rrad_gen_g r0ER11_gen_g r0Lil_gen_g Vmax_tau_max_g Vmax_max_g rmax_tau_max_g rmax_max_g r0_tau_max_g r0_max_g r0ER11_tau_max_g r0ER11_max_g r0Lil_tau_max_g r0Lil_max_g
+clear Vmax_equil rmax_equil rrad_equil r0_equil r0ER11_equil r0Lil_equil Vmax_equil_g rmax_equil_g rrad_equil_g r0_equil_g r0ER11_equil_g r0Lil_equil_g
+clear Vmax_movave_g_all rmax_movave_g_all rrad_movave_g_all r0_movave_g_all r0ER11_movave_g_all r0Lil_movave_g_all
 clear xvals_sub_all data_tmean_usr_g_all
 clear mpi_all fcor_all
 for ss=1:numruns
@@ -120,7 +120,9 @@ for ss=1:numruns
     rmax_equil_g(ss) = rmax_equil_g_sim;
     rrad_equil_g(ss) = rrad_equil_g_sim;
     r0_equil_g(ss) = r0_equil_g_sim;
+    r0ER11_equil_g(ss) = r0ER11_equil_g_sim;
     r0Lil_equil_g(ss) = r0Lil_equil_g_sim;
+    r0Lil_Lilctrl_equil_g(ss) = r0Lil_Lilctrl_equil_g_sim;
     
     %timescales to those values
     Vmax_tau_equil(ss) = Vmax_tau_equil_sim;
@@ -132,7 +134,9 @@ for ss=1:numruns
     rmax_tau_equil_g(ss) = rmax_tau_equil_g_sim;
     rrad_tau_equil_g(ss) = rrad_tau_equil_g_sim;
     r0_tau_equil_g(ss) = r0_tau_equil_g_sim;
+    r0ER11_tau_equil_g(ss) = r0ER11_tau_equil_g_sim;
     r0Lil_tau_equil_g(ss) = r0Lil_tau_equil_g_sim;
+    r0Lil_Lilctrl_tau_equil_g(ss) = r0Lil_Lilctrl_tau_equil_g_sim;
     
     %% Transient data %%%%%
     tau_gen(ss) = tau_gen_sim; %defined using the GRADIENT wind
@@ -145,7 +149,9 @@ for ss=1:numruns
     rmax_gen_g(ss) = rmax_gen_g_sim;
     rrad_gen_g(ss) = rrad_gen_g_sim;
     r0_gen_g(ss) = r0_gen_g_sim;
+    r0ER11_gen_g(ss) = r0ER11_gen_g_sim;
     r0Lil_gen_g(ss) = r0Lil_gen_g_sim;
+    r0Lil_Lilctrl_gen_g(ss) = r0Lil_Lilctrl_gen_g_sim;
     
     Vmax_tau_max_g(ss) = Vmax_tau_max_g_sim; %defined using the GRADIENT wind
     Vmax_max_g(ss) = Vmax_max_g_sim;
@@ -155,8 +161,12 @@ for ss=1:numruns
     rrad_max_g(ss) = rrad_max_g_sim;
     r0_tau_max_g(ss) = r0_tau_max_g_sim; %defined using the GRADIENT wind
     r0_max_g(ss) = r0_max_g_sim;
+    r0ER11_tau_max_g(ss) = r0ER11_tau_max_g_sim; %defined using the GRADIENT wind
+    r0ER11_max_g(ss) = r0ER11_max_g_sim;
     r0Lil_tau_max_g(ss) = r0Lil_tau_max_g_sim; %defined using the GRADIENT wind
     r0Lil_max_g(ss) = r0Lil_max_g_sim;
+    r0Lil_Lilctrl_tau_max_g(ss) = r0Lil_Lilctrl_tau_max_g_sim; %defined using the GRADIENT wind
+    r0Lil_Lilctrl_max_g(ss) = r0Lil_Lilctrl_max_g_sim;
 %    Vmax_tau_max(ss) = Vmax_tau_max_sim; %defined using the GRADIENT wind
 %    Vmax_max(ss) = Vmax_max_sim;
 %    rmax_tau_max(ss) = rmax_tau_max_sim; %defined using the GRADIENT wind
@@ -179,7 +189,9 @@ for ss=1:numruns
     rmax_movave_g_all(:,ss)=rmax_movave_g_sim;
     rrad_movave_g_all(:,ss)=rrad_movave_g_sim;
     r0_movave_g_all(:,ss)=r0_movave_g_sim;
+    r0ER11_movave_g_all(:,ss)=r0ER11_movave_g_sim;
     r0Lil_movave_g_all(:,ss)=r0Lil_movave_g_sim;
+    r0Lil_Lilctrl_movave_g_all(:,ss)=r0Lil_Lilctrl_movave_g_sim;
     
     %% User profile %%%%%%%%%%%%%%%%%%%%%%%%
     xvals_sub_all{ss} = xvals_sub_sim;
@@ -494,19 +506,21 @@ if(plot_stats==1)
     plot(xvals_pl,data_pl,'bx-')
     hold on
 
-%    data_temp = rrad_equil_g;
-%    data_pl = log2(data_temp./data_temp(i_ctrl));
-%    dat_max = max(dat_max,max(data_pl));
-%    plot(xvals_pl,data_pl,'kx-')
-%    hold on
-
 %    data_temp = r0_equil_g;
 %    data_pl = log2(data_temp./data_temp(i_ctrl));
 %    dat_max = max(dat_max,max(data_pl));
 %    plot(xvals_pl,data_pl,'gx-')
 %    hold on
-
+%{
+%%WHOOPS, NOT GOOD TO USE FOR DIMENSIONAL PLOT!
     data_temp = rrad_equil_g;
+    data_pl = log2(data_temp./data_temp(i_ctrl));
+    dat_max = max(dat_max,max(data_pl));
+    dat_min = min(dat_min,min(data_pl));
+    plot(xvals_pl,data_pl,'cx-')
+    hold on
+%}
+    data_temp = r0ER11_equil_g;
     data_pl = log2(data_temp./data_temp(i_ctrl));
     dat_max = max(dat_max,max(data_pl));
     dat_min = min(dat_min,min(data_pl));
@@ -524,7 +538,7 @@ if(plot_stats==1)
     ylabel('log_2(Y/Y*)')
     xlabel({sprintf('log_2(X/X*)'),sprintf('%s: X* = %5.2f [%s]',sim_set,CTRL_val,units)})
     
-    legend({'Vmax','rmax','rrad','r0Lil'},'Location','SouthEast')
+    legend({'Vmax','rmax','r0ER11','r0Lil'},'Location','SouthEast')
     %%DRCDRC
     if(equil_dynamic==0)
         input_title1=sprintf('GRADIENT Equilibrium storm, day %i - %i: log_2(Y/Y*) vs. %s [%s]',tf-dt_final,tf,sim_set,units);
@@ -533,7 +547,7 @@ if(plot_stats==1)
     end
     
     
-    input_title2=sprintf('Y*: Vmax* = %5.2f m/s; rmax* = %5.2f km; rrad* = %5.2f km; r0Lil* = %5.2f km',Vmax_equil_g(i_ctrl),rmax_equil_g(i_ctrl),rrad_equil_g(i_ctrl),r0Lil_equil_g(i_ctrl));
+    input_title2=sprintf('Y*: Vmax* = %5.2f m/s; rmax* = %5.2f km; r0ER11* = %5.2f km; r0Lil* = %5.2f km',Vmax_equil_g(i_ctrl),rmax_equil_g(i_ctrl),rrad_equil_g(i_ctrl),r0Lil_equil_g(i_ctrl));
     title({input_title1,input_title2})
     grid on
     
@@ -565,25 +579,28 @@ if(plot_stats==1)
     plot(xvals_pl,data_pl,'bx-.')
     hold on
 
-%    data_temp = rrad_tau_equil_g;
-%    data_pl = log2(data_temp./data_temp(i_ctrl));
-%    dat_max = max(dat_max,max(data_pl));
-%    plot(xvals_pl,data_pl,'kx-.')
-%    hold on
-
 %    data_temp = r0_tau_equil_g;
 %    data_pl = log2(data_temp./data_temp(i_ctrl));
 %    dat_max = max(dat_max,max(data_pl));
 %    plot(xvals_pl,data_pl,'gx-.')
 %    hold on
-    
+%{
+%%WHOOPS NOT GOOD TO USE IN A DIMENSIONAL PLOT
     data_temp = rrad_tau_equil_g;
     data_pl = log2(data_temp./data_temp(i_ctrl));
     dat_max = max(dat_max,max(data_pl));
     dat_min = min(dat_min,min(data_pl));
     plot(xvals_pl,data_pl,'cx-.')
     hold on
+%}
     
+    data_temp = r0ER11_tau_equil_g;
+    data_pl = log2(data_temp./data_temp(i_ctrl));
+    dat_max = max(dat_max,max(data_pl));
+    dat_min = min(dat_min,min(data_pl));
+    plot(xvals_pl,data_pl,'cx-.')
+    hold on
+
     data_temp = r0Lil_tau_equil_g;
     data_pl = log2(data_temp./data_temp(i_ctrl));
     dat_max = max(dat_max,max(data_pl));
@@ -595,9 +612,9 @@ if(plot_stats==1)
     ylabel('log_2(Y/Y*)')
     xlabel({sprintf('log_2(X/X*)'),sprintf('%s: X* = %5.2f [%s]',sim_set,CTRL_val,units)})
     
-    legend({'tauvmax','taurmax','taurrad','taur0Lil'},'Location','SouthEast')
+    legend({'tauvmax','taurmax','taur0ER11','taur0Lil'},'Location','SouthEast')
     input_title1=sprintf('GRADIENT Equilibrium storm %i - %i days: log_2(Y/Y*) vs. %s [%s]',tf-dt_final,tf,sim_set,units);
-    input_title3=sprintf('Y*: tauV* = %5.2f d; taurmax* = %5.2f d; taurrad* = %5.2f d; taur0* = %5.2f d',Vmax_tau_equil_g(i_ctrl),rmax_tau_equil_g(i_ctrl),rrad_tau_equil_g(i_ctrl),r0Lil_tau_equil_g(i_ctrl));
+    input_title3=sprintf('Y*: tauV* = %5.2f d; taurmax* = %5.2f d; taur0ER11* = %5.2f d; taur0* = %5.2f d',Vmax_tau_equil_g(i_ctrl),rmax_tau_equil_g(i_ctrl),r0ER11_tau_equil_g(i_ctrl),r0Lil_tau_equil_g(i_ctrl));
     title({input_title1,input_title3})
     grid on
     
@@ -631,14 +648,16 @@ if(plot_stats==1)
     dat_min = min(dat_min,min(data_pl));
     plot(xvals_pl,data_pl,'bx-')
     hold on
-
-%    data_temp = rrad_tau_equil;
-%    data_pl = log2(data_temp./data_temp(i_ctrl));
-%    dat_max = max(dat_max,max(data_pl));
-%    plot(xvals_pl,data_pl,'kx-')
-%    hold on
-
-%    data_temp = r0_tau_equil;
+%{
+%%WHOOPS NOT GOOD TO USE IN A DIMENSIONAL PLOT
+    data_temp = rrad_tau_equil;
+    data_pl = log2(data_temp./data_temp(i_ctrl));
+    dat_max = max(dat_max,max(data_pl));
+    plot(xvals_pl,data_pl,'kx-')
+    hold on
+%}
+    
+%    data_temp = r0ER11_tau_equil;
 %    data_pl = log2(data_temp./data_temp(i_ctrl));
 %    dat_max = max(dat_max,max(data_pl));
 %    plot(xvals_pl,data_pl,'gx-')
@@ -749,19 +768,21 @@ if(plot_stats==1)
     plot(xvals_pl,data_pl,'bx-')
     hold on
 
-%    data_temp = rrad_gen_g;
-%    data_pl = log2(data_temp./data_temp(i_ctrl));
-%    dat_max = max(dat_max,max(data_pl));
-%    plot(xvals_pl,data_pl,'kx-')
-%    hold on
-
 %    data_temp = r0_gen_g;
 %    data_pl = log2(data_temp./data_temp(i_ctrl));
 %    dat_max = max(dat_max,max(data_pl));
 %    plot(xvals_pl,data_pl,'gx-')
 %    hold on
-
+%{
+%%WHOOPS NOT GOOD TO USE IN A DIMENSIONAL PLOT
     data_temp = rrad_gen_g;
+    data_pl = log2(data_temp./data_temp(i_ctrl));
+    dat_max = max(dat_max,max(data_pl));
+    dat_min = min(dat_min,min(data_pl));
+    plot(xvals_pl,data_pl,'cx-')
+    hold on
+%}
+    data_temp = r0ER11_gen_g;
     data_pl = log2(data_temp./data_temp(i_ctrl));
     dat_max = max(dat_max,max(data_pl));
     dat_min = min(dat_min,min(data_pl));
@@ -775,12 +796,6 @@ if(plot_stats==1)
     plot(xvals_pl,data_pl,'gx-')
     hold on
     
-%    data_temp = r0Lil_gen_g;
-%    data_pl = log2(data_temp./data_temp(i_ctrl));
-%    dat_max = max(dat_max,max(data_pl));
-%    plot(xvals_pl,data_pl,'mx-')
-%    hold on
-
     data_temp = tau_gen;
     data_pl = log2(data_temp./data_temp(i_ctrl));
     dat_max = max(dat_max,max(data_pl));
@@ -793,9 +808,9 @@ if(plot_stats==1)
     xlabel({sprintf('log_2(X/X*)'),sprintf('%s: X* = %5.2f [%s]',sim_set,CTRL_val,units)})
     
 %    legend({'Vmax_g','rmax_g','r0_g','r0Lil_g'},'Location','SouthEast')
-    legend({'Vmax','rmax','rrad','r0Lil','taugen'},'Location','SouthEast')
+    legend({'Vmax','rmax','r0ER11','r0Lil','taugen'},'Location','SouthEast')
     input_title1=sprintf('GRADIENT storm at Genesis: log_2(Y/Y*) vs. %s [%s]',sim_set,units);
-    input_title2=sprintf('Y*: Vmax* = %5.2f m/s; rmax* = %5.2f km; rrad* = %5.2f km; r0Lil* = %5.2f km',Vmax_gen_g(i_ctrl),rmax_gen_g(i_ctrl),rrad_gen_g(i_ctrl),r0Lil_gen_g(i_ctrl));
+    input_title2=sprintf('Y*: Vmax* = %5.2f m/s; rmax* = %5.2f km; r0ER11* = %5.2f km; r0Lil* = %5.2f km',Vmax_gen_g(i_ctrl),rmax_gen_g(i_ctrl),r0ER11_gen_g(i_ctrl),r0Lil_gen_g(i_ctrl));
     input_title3=sprintf('Y*: taugen* = %5.2f',tau_gen(i_ctrl));
     title({input_title1,input_title2,input_title3})
     grid on
@@ -914,8 +929,17 @@ if(plot_stats==1)
     dat_min = min(dat_min,min(data_pl));
     plot(xvals_pl,data_pl,'bx-')
     hold on
-
+%{
+%%WHOOPS NOT GOOD TO USE IN A DIMENSIONAL PLOT
     data_temp = rrad_max_g;
+    data_pl = log2(data_temp./data_temp(i_ctrl));
+    dat_max = max(dat_max,max(data_pl));
+    dat_min = min(dat_min,min(data_pl));
+    plot(xvals_pl,data_pl,'cx-')
+    hold on
+%}
+    
+    data_temp = r0ER11_max_g;
     data_pl = log2(data_temp./data_temp(i_ctrl));
     dat_max = max(dat_max,max(data_pl));
     dat_min = min(dat_min,min(data_pl));
@@ -934,9 +958,9 @@ if(plot_stats==1)
     xlabel({sprintf('log_2(X/X*)'),sprintf('%s: X* = %5.2f [%s]',sim_set,CTRL_val,units)})
     
 %    legend({'Vmax_g','rmax_g','r0_g','r0Lil_g'},'Location','SouthEast')
-    legend({'Vmaxmax','rmaxmax','rradmax','r0Lilmax'},'Location','SouthEast')
+    legend({'Vmaxmax','rmaxmax','r0ER11max','r0Lilmax'},'Location','SouthEast')
     input_title1=sprintf('GRADIENT Maximum values: log_2(Y/Y*) vs. %s [%s]',sim_set,units);
-    input_title2=sprintf('Y*: Vmax* = %5.2f m/s; rmax* = %5.2f km; rrad* = %5.2f km; r0Lil* = %5.2f km',Vmax_max_g(i_ctrl),rmax_max_g(i_ctrl),rrad_max_g(i_ctrl),r0Lil_max_g(i_ctrl));
+    input_title2=sprintf('Y*: Vmax* = %5.2f m/s; rmax* = %5.2f km; r0ER11* = %5.2f km; r0Lil* = %5.2f km',Vmax_max_g(i_ctrl),rmax_max_g(i_ctrl),r0ER11_max_g(i_ctrl),r0Lil_max_g(i_ctrl));
     title({input_title1,input_title2})
     grid on
     
@@ -966,14 +990,23 @@ if(plot_stats==1)
     dat_min = min(dat_min,min(data_pl));
     plot(xvals_pl,data_pl,'bx-.')
     hold on
-    
+%{
+%%WHOOPS NOT GOOD TO USE IN A DIMENSIONAL PLOT    
     data_temp = rrad_tau_max_g;
     data_pl = log2(data_temp./data_temp(i_ctrl));
     dat_max = max(dat_max,max(data_pl));
     dat_min = min(dat_min,min(data_pl));
     plot(xvals_pl,data_pl,'cx-.')
     hold on
+%}
     
+    data_temp = r0ER11_tau_max_g;
+    data_pl = log2(data_temp./data_temp(i_ctrl));
+    dat_max = max(dat_max,max(data_pl));
+    dat_min = min(dat_min,min(data_pl));
+    plot(xvals_pl,data_pl,'cx-.')
+    hold on
+
     data_temp = r0Lil_tau_max_g;
     data_pl = log2(data_temp./data_temp(i_ctrl));
     dat_max = max(dat_max,max(data_pl));
@@ -986,9 +1019,9 @@ if(plot_stats==1)
     xlabel({sprintf('log_2(X/X*)'),sprintf('%s: X* = %5.2f [%s]',sim_set,CTRL_val,units)})
     
 %    legend({'Vmax_g','rmax_g','r0_g','r0Lil_g'},'Location','SouthEast')
-    legend({'tauVmax','taurmax','taurrad','taur0Lil'},'Location','SouthEast')
+    legend({'tauVmax','taurmax','taur0ER11','taur0Lil'},'Location','SouthEast')
     input_title1=sprintf('GRADIENT Maximum values: log_2(Y/Y*) vs. %s [%s]',sim_set,units);
-    input_title3=sprintf('Y*: tauV* = %5.2f d; taurmax* = %5.2f d; taurrad* = %5.2f d; taur0* = %5.2f d',Vmax_tau_max_g(i_ctrl),rmax_tau_max_g(i_ctrl),rrad_tau_max_g(i_ctrl),r0Lil_tau_max_g(i_ctrl));
+    input_title3=sprintf('Y*: tauV* = %5.2f d; taurmax* = %5.2f d; taur0ER11* = %5.2f d; taur0* = %5.2f d',Vmax_tau_max_g(i_ctrl),rmax_tau_max_g(i_ctrl),r0ER11_tau_max_g(i_ctrl),r0Lil_tau_max_g(i_ctrl));
     title({input_title1,input_title3})
     grid on
     
@@ -1089,6 +1122,7 @@ if(plot_ts_multi==1)
     end
     
 %{
+%%WHOOPS NOT GOOD TO USE IN A DIMENSIONAL PLOT
     %rrad
     for i=1:numruns
         
@@ -1320,6 +1354,8 @@ if(plot_ts_multi==1)
         end
     end
     
+%{
+%%WHOOPS NOT GOOD TO USE IN A DIMENSIONAL PLOT
     %rrad
     for i=1:numruns
         
@@ -1350,6 +1386,38 @@ if(plot_ts_multi==1)
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
     end
+%}
+    %r0ER11
+    for i=1:numruns
+        
+        subplot(4,1,3)
+        plot(t_day,r0ER11_movave_g_all(:,i),pl_clrs{i})
+        hold on
+    end
+    grid on
+    legend(input_legend,'Location','EastOutside')
+    input_title=sprintf('r0ER11 [km]');
+    title(input_title)
+    ylabel(input_title);
+    xlabel('time [days]')
+    axis([0 tf 0 1.1*max(max(r0ER11_movave_g_all(20:end,:)))])
+
+    for i=1:numruns
+        
+        hold on
+        if(~isnan(tau_gen(i)))
+            h=plot(t_day(tau_gen(i)/(dt/60/60/24)),r0ER11_gen_g(i),'d');
+            set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
+        end
+        if(~isnan(r0ER11_tau_max_g(i)))
+            h=plot(t_day(r0ER11_tau_max_g(i)/(dt/60/60/24)),r0ER11_max_g(i),'^');
+            set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
+        end
+        if(~isnan(r0ER11_tau_equil_g(i)))
+            h=plot(t_day(r0ER11_tau_equil_g(i)/(dt/60/60/24)),r0ER11_equil_g(i),'s');
+            set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
+        end
+    end
     
     %r0Lil
     for i=1:numruns
@@ -1377,7 +1445,7 @@ if(plot_ts_multi==1)
             h=plot(t_day(r0Lil_tau_max_g(i)/(dt/60/60/24)),r0Lil_max_g(i),'^');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
-        if(~isnan(r0Lil_tau_equil(i)))
+        if(~isnan(r0Lil_tau_equil_g(i)))
             h=plot(t_day(r0Lil_tau_equil_g(i)/(dt/60/60/24)),r0Lil_equil_g(i),'s');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
@@ -1475,7 +1543,8 @@ if(plot_ts_multi==1)
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
     end
-    
+%{
+%%WHOOPS NOT GOOD TO USE IN A DIMENSIONAL PLOT
     %rrad
     for i=1:numruns
         
@@ -1502,8 +1571,40 @@ if(plot_ts_multi==1)
             h=plot(t_day(rrad_tau_max_g(i)/(dt/60/60/24)),rrad_max_g(i)/(mpi_all(i)/fcor_all(i)/1000),'^');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
-        if(~isnan(rrad_tau_equil(i)))
+        if(~isnan(rrad_tau_equil_g(i)))
             h=plot(t_day(rrad_tau_equil_g(i)/(dt/60/60/24)),rrad_equil_g(i)/(mpi_all(i)/fcor_all(i)/1000),'s');
+            set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
+        end
+    end
+%}
+    %r0ER11
+    for i=1:numruns
+        
+        subplot(4,1,3)
+        plot(t_day,r0ER11_movave_g_all(:,i)/(mpi_all(i)/fcor_all(i)/1000),pl_clrs{i})
+        hold on
+    end
+    grid on
+    legend(input_legend,'Location','EastOutside')
+    input_title=sprintf('r_0 / (V_p / f)');
+    %title(input_title)
+    ylabel(input_title);
+    xlabel('time [days]')
+    axis([0 tf 0 1.1*max(max(r0ER11_movave_g_all(20:end,:)/(mpi_all(i)/fcor_all(i)/1000)))])
+
+    for i=1:numruns
+        
+        hold on
+        if(~isnan(tau_gen(i)))
+            h=plot(t_day(tau_gen(i)/(dt/60/60/24)),r0ER11_gen_g(i)/(mpi_all(i)/fcor_all(i)/1000),'d');
+            set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
+        end
+        if(~isnan(r0ER11_tau_max_g(i)))
+            h=plot(t_day(r0ER11_tau_max_g(i)/(dt/60/60/24)),r0ER11_max_g(i)/(mpi_all(i)/fcor_all(i)/1000),'^');
+            set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
+        end
+        if(~isnan(r0ER11_tau_equil_g(i)))
+            h=plot(t_day(r0ER11_tau_equil_g(i)/(dt/60/60/24)),r0ER11_equil_g(i)/(mpi_all(i)/fcor_all(i)/1000),'s');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
     end
@@ -1534,7 +1635,7 @@ if(plot_ts_multi==1)
             h=plot(t_day(r0Lil_tau_max_g(i)/(dt/60/60/24)),r0Lil_max_g(i)/(mpi_all(i)/fcor_all(i)/1000),'^');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
-        if(~isnan(r0Lil_tau_equil(i)))
+        if(~isnan(r0Lil_tau_equil_g(i)))
             h=plot(t_day(r0Lil_tau_equil_g(i)/(dt/60/60/24)),r0Lil_equil_g(i)/(mpi_all(i)/fcor_all(i)/1000),'s');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end

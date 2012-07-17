@@ -268,8 +268,7 @@ f = fit(xvals_pl_all', r0ER11_all', 'poly1')
 %}
  
 %subplot(3,1,3)
-%axes(ax2)
-axes(ax2)
+%axes(ax3)
 axis([-2 2 -2 2])
 ylabel('log_2(Y/Y*)')
 xlabel({sprintf('log_2(V_p/V^*_p)')})
@@ -286,7 +285,7 @@ axes(ax3)
 axis([-2 2 -2 2])
 ylabel('log_2(Y/Y*)')
 xlabel({sprintf('log_2(V_p/V^*_p)')})
-input_title1=sprintf('$r_{0 ctrl}$');
+input_title1=sprintf('$r_0$');
 %title(input_title1)
 text3=text(-1.7,1.7,input_title1,'FontSize',17);
 set(text3,'HorizontalAlignment','left','VerticalAlignment','top','Interpreter','Latex');

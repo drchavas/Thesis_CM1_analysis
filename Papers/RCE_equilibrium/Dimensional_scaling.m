@@ -20,7 +20,7 @@ set(0,'defaultaxesfontsize',12,'defaultaxesfontweight','bold','defaultlinelinewi
 %sim_sets = {'lh' 'lv' 'fcor' 'qro' 'ro' 'mpi' 'Cd'}
 sim_sets = {'lh' 'lv' 'fcor' 'qro' 'ro' 'mpi'}
 
-T_mean = 5; %[day]
+T_mean = 2; %[day]
 equil_dynamic = 1;  %1 = use dynamic equilibrium
     %%IF 0:
     dt_final = 50;
@@ -148,7 +148,7 @@ for m=1:length(sim_sets)
     ax3=axes('position',[0.1    0.2    0.35    0.35]);
     end
     axes(ax3)
-    data_temp = rrad_equil_g(i_sort);
+    data_temp = r0ER11_equil_g(i_sort);
     data_pl = log2(data_temp./data_temp(i_ctrl));
     dat_max = max(dat_max,max(data_pl));
     dat_min = min(dat_min,min(data_pl));
@@ -241,9 +241,9 @@ axes(ax3)
 axis([-3 3 -3 3])
 ylabel('log_2(Y/Y*)')
 xlabel({sprintf('log_2(X/X*)')})
-input_title1=sprintf('$r_{rad}$');
+input_title1=sprintf('$r_{0 ER11}$');
 %title(input_title1)
-text3=text(-2.7,2.7,input_title1,'FontSize',17);3
+text3=text(-2.7,2.7,input_title1,'FontSize',17);
 set(text3,'HorizontalAlignment','left','VerticalAlignment','top','Interpreter','Latex');
 set(ax3,'YTick',[-3 -2 -1 0 1 2 3],'XTick',[-3 -2 -1 0 1 2 3])
 grid on

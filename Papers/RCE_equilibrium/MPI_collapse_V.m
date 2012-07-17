@@ -21,7 +21,7 @@ set(0,'defaultaxesfontsize',12,'defaultaxesfontweight','bold','defaultlinelinewi
 %%variables of interest (sim_set name): 'dx' 'dz' 'domain' 'lh' 'lv' 'H' 'Qrad' 'Vpot' 'cor' 'qro' 'ro' 'rodrmax'
 sim_sets = {'Tsst' 'Ttpp' 'Qcool' 'usfc'}
 %sim_sets = {'Ttpp'}
-T_mean = 5; %[day]
+T_mean = 2; %[day]
 equil_dynamic = 1;  %1 = use dynamic equilibrium
     %%IF 0:
     dt_final = 50;

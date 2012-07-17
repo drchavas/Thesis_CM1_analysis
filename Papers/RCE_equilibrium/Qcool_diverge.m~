@@ -203,8 +203,8 @@ for ss=1:numruns
     rrad_max_g(ss) = rrad_max_g_sim;
     r0_tau_max_g(ss) = r0_tau_max_g_sim; %defined using the GRADIENT wind
     r0_max_g(ss) = r0_max_g_sim;
-    r0ER11_tau_max_g(ss) = r0ER11_tau_max_g_sim; %defined using the GRADIENT wind
-    r0ER11_max_g(ss) = r0ER11_max_g_sim;
+    r0ER_tau_max_g(ss) = r0Lil_tau_max_g_sim; %defined using the GRADIENT wind
+    r0Lil_max_g(ss) = r0Lil_max_g_sim;
     r0Lil_tau_max_g(ss) = r0Lil_tau_max_g_sim; %defined using the GRADIENT wind
     r0Lil_max_g(ss) = r0Lil_max_g_sim;
 %    Vmax_tau_max(ss) = Vmax_tau_max_sim; %defined using the GRADIENT wind
@@ -229,7 +229,6 @@ for ss=1:numruns
     rmax_movave_g_all(:,ss)=rmax_movave_g_sim;
     rrad_movave_g_all(:,ss)=rrad_movave_g_sim;
     r0_movave_g_all(:,ss)=r0_movave_g_sim;
-    r0ER11_movave_g_all(:,ss)=r0ER11_movave_g_sim;
     r0Lil_movave_g_all(:,ss)=r0Lil_movave_g_sim;
     
     %% User profile %%%%%%%%%%%%%%%%%%%%%%%%

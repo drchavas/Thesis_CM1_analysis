@@ -121,7 +121,8 @@ dat_min = 0;
 pl_edge = max([abs(floor(min(xvals_pl))) abs(ceil(max(xvals_pl))) 3]);
 
 %subplot(3,1,1)
-ax1=axes('position',[0.15    0.70    0.70    0.27]);
+%ax1=axes('position',[0.15    0.70    0.70    0.27]);
+ax1=axes('position',[0.1    0.6    0.35    0.35]);
 axes(ax1)
 data_temp = Vmax_equil_g./mpi_all;
 data_pl = log2(data_temp./data_temp(i_ctrl));
@@ -152,7 +153,8 @@ box on
 VmVp=[list list(isort) xvals_pl(isort)' data_pl(isort)' mpi_all(isort)' fcor_all(isort)'*10^5 lh_all(isort)'/1000];
 
 %subplot(3,1,1)
-ax2=axes('position',[0.15    0.40    0.70    0.27]);
+%ax2=axes('position',[0.15    0.40    0.70    0.27]);
+ax2=axes('position',[0.55    0.6    0.35    0.35]);
 axes(ax2)
 data_temp = rmax_equil_g./(mpi_all./fcor_all);
 data_pl = log2(data_temp./data_temp(i_ctrl));
@@ -181,9 +183,43 @@ box on
 
 rmVpf=[list list(isort) xvals_pl(isort)' data_pl(isort)' mpi_all(isort)' fcor_all(isort)'*10^5 lh_all(isort)'/1000];
 
+
 %subplot(3,1,1)
-ax3=axes('position',[0.15    0.10    0.70    0.27]);
+%ax3=axes('position',[0.15    0.10    0.70    0.27]);
+ax3=axes('position',[0.1    0.2    0.35    0.35]);
 axes(ax3)
+data_temp = r0ER11_equil_g./(mpi_all./fcor_all);
+data_pl = log2(data_temp./data_temp(i_ctrl));
+dat_max = max(dat_max,max(data_pl));
+dat_min = min(dat_min,min(data_pl));
+scatter(xvals_pl,data_pl,'m*')
+stats = regstats(data_pl,xvals_pl,'linear'); %fit to y=beta1+beta2*x
+coefs = stats.beta %coefs(1) = beta1, coefs(2) = beta2
+p3 = stats.tstat.pval   %two-sided t-test: p(1) = p-value of beta1; p(2) = p-value of beta2; p<.025 = value is significantly different from zero at 95% CI (i.e. can reject null hypothesis of value = 0)
+exp_r0Vpf = coefs(2);
+hold on
+xfit = -pl_edge:.1:pl_edge;
+plot(xfit,coefs(1)+coefs(2).*xfit,'r--')
+input_title1=sprintf('$\\frac{r_{0 ER11}}{V_p/f}$');
+text1=text(-4.65,4.4,input_title1,'FontSize',17);
+set(text1,'HorizontalAlignment','left','VerticalAlignment','top','Interpreter','Latex','BackgroundColor','white');
+ylabel('log_2(Y/Y*)')
+xlabel({sprintf('log_2(C/C*)')})
+axis([-pl_edge pl_edge -pl_edge pl_edge])
+grid on
+hold on
+text3=text(1.8,2.5,sprintf('$\\alpha = $ %5.2f (p = %5.2f)',exp_r0Vpf,p3(2)),'fontweight','bold','FontSize',12,'Color','r')
+set(text3,'HorizontalAlignment','center','VerticalAlignment','middle','Interpreter','Latex');
+set(ax3,'YTick',[-4 -3 -2 -1 0 1 2 3 4],'XTick',[-4 -3 -2 -1 0 1 2 3 4])
+box on
+
+r0ER11Vpf=[list list(isort) xvals_pl(isort)' data_pl(isort)' mpi_all(isort)' fcor_all(isort)'*10^5 lh_all(isort)'/1000];
+
+
+%subplot(3,1,1)
+%ax4=axes('position',[0.15    0.10    0.70    0.27]);
+ax4=axes('position',[0.55    0.2    0.35    0.35]);
+axes(ax4)
 data_temp = r0Lil_equil_g./(mpi_all./fcor_all);
 data_pl = log2(data_temp./data_temp(i_ctrl));
 dat_max = max(dat_max,max(data_pl));
@@ -206,7 +242,7 @@ grid on
 hold on
 text3=text(1.8,2.5,sprintf('$\\alpha = $ %5.2f (p = %5.2f)',exp_r0Vpf,p3(2)),'fontweight','bold','FontSize',12,'Color','r')
 set(text3,'HorizontalAlignment','center','VerticalAlignment','middle','Interpreter','Latex');
-set(ax3,'YTick',[-4 -3 -2 -1 0 1 2 3 4],'XTick',[-4 -3 -2 -1 0 1 2 3 4])
+set(ax4,'YTick',[-4 -3 -2 -1 0 1 2 3 4],'XTick',[-4 -3 -2 -1 0 1 2 3 4])
 box on
 
 r0Vpf=[list list(isort) xvals_pl(isort)' data_pl(isort)' mpi_all(isort)' fcor_all(isort)'*10^5 lh_all(isort)'/1000];
