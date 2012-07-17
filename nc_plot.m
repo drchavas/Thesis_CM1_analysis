@@ -13,17 +13,17 @@ figure(1)
 clf(1)
 
 %% USER INPUT %%%%%%%%%%%%%%%%%%
-run_type=1; %1=axisym; 3=3d; 10/30=initial condition test (subdir 'code_test')
+run_type=3; %1=axisym; 3=3d; 10/30=initial condition test (subdir 'code_test')
 
-subdir_pre='CTRL_icRCE/';    %general subdir that includes multiple runs within
+%subdir_pre='CTRL_icRCE/';    %general subdir that includes multiple runs within
 %subdir_pre='TRANSFER/';
-%subdir_pre='RCE/';    %general subdir that includes multiple runs within
+subdir_pre='RCE/';    %general subdir that includes multiple runs within
 ext_hd = 1; %0=local hard drive; 1=external hard drive
 
 
 subdir_axisym = 'DAN'; %name of sub-directory with nc files
 t_file_axisym=327;  %file timestep
-subdir_3d = 'RCE_nx48_SST300.00K_Tthresh200K_usfc3';  %name of sub-directory with nc files
+subdir_3d = 'RCE_nx48_SST292.50K_Tthresh200K_usfc3';  %name of sub-directory with nc files
 t_file_3d=101;  %file timestep
 
 plot_type = 1;  %0=no plotd
@@ -54,7 +54,7 @@ plot_type = 1;  %0=no plotd
     y0=0;   %first y grid point [0,end]
     yf=0;   %last y grid point [0,end]
     z0=0;  %first z grid point [0,end]
-    zf=0;  %last z grid point [0,end]
+    zf=100;  %last z grid point [0,end]
  end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

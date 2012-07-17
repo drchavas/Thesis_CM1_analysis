@@ -63,13 +63,13 @@ for ii = 1:length(equil_dynamics)
     rrad_equil = rrad_equil_sim;
     r0_equil = r0_equil_sim;
     r0Lil_equil = r0Lil_equil_sim;
-    r0Lil_Lilctrl_equil = r0Lil_Lilctrl_equil_sim;
     Vmax_equil_g = Vmax_equil_g_sim;
     rmax_equil_g = rmax_equil_g_sim;
     rrad_equil_g = rrad_equil_g_sim;
     r0_equil_g = r0_equil_g_sim;
     r0Lil_equil_g = r0Lil_equil_g_sim;
     r0Lil_Lilctrl_equil_g = r0Lil_Lilctrl_equil_g_sim;
+    r0ER11_equil_g = r0ER11_equil_g_sim;
     
     %timescales to those values
     Vmax_tau_equil = Vmax_tau_equil_sim;
@@ -77,13 +77,13 @@ for ii = 1:length(equil_dynamics)
     rrad_tau_equil = rrad_tau_equil_sim;
     r0_tau_equil = r0_tau_equil_sim;
     r0Lil_tau_equil = r0Lil_tau_equil_sim;
-    r0Lil_Lilctrl_tau_equil = r0Lil_Lilctrl_tau_equil_sim;
     Vmax_tau_equil_g = Vmax_tau_equil_g_sim;
     rmax_tau_equil_g = rmax_tau_equil_g_sim;
     rrad_tau_equil_g = rrad_tau_equil_g_sim;
     r0_tau_equil_g = r0_tau_equil_g_sim;
     r0Lil_tau_equil_g = r0Lil_tau_equil_g_sim;
     r0Lil_Lilctrl_tau_equil_g = r0Lil_Lilctrl_tau_equil_g_sim;
+    r0ER11_tau_equil_g = r0ER11_tau_equil_g_sim;
     
     %% Transient data %%%%%
     tau_gen = tau_gen_sim; %defined using the GRADIENT wind
@@ -98,6 +98,7 @@ for ii = 1:length(equil_dynamics)
     r0_gen_g = r0_gen_g_sim;
     r0Lil_gen_g = r0Lil_gen_g_sim;
     r0Lil_Lilctrl_gen_g = r0Lil_Lilctrl_gen_g_sim;
+    r0ER11_gen_g = r0ER11_gen_g_sim;
     
     Vmax_tau_max_g = Vmax_tau_max_g_sim; %defined using the GRADIENT wind
     Vmax_max_g = Vmax_max_g_sim;
@@ -111,6 +112,8 @@ for ii = 1:length(equil_dynamics)
     r0Lil_max_g = r0Lil_max_g_sim;
     r0Lil_Lilctrl_tau_max_g = r0Lil_Lilctrl_tau_max_g_sim; %defined using the GRADIENT wind
     r0Lil_Lilctrl_max_g = r0Lil_Lilctrl_max_g_sim;
+    r0ER11_tau_max_g = r0ER11_tau_max_g_sim; %defined using the GRADIENT wind
+    r0ER11_max_g = r0ER11_max_g_sim;
 
     %    Vmax_tau_max = Vmax_tau_max_sim; %defined using the GRADIENT wind
 %    Vmax_max = Vmax_max_sim;
@@ -136,6 +139,7 @@ for ii = 1:length(equil_dynamics)
     r0_movave_g_all=r0_movave_g_sim;
     r0Lil_movave_g_all=r0Lil_movave_g_sim;
     r0Lil_Lilctrl_movave_g_all=r0Lil_Lilctrl_movave_g_sim;
+    r0ER11_movave_g_all=r0ER11_movave_g_sim;
     
     %% User profile %%%%%%%%%%%%%%%%%%%%%%%%
     xvals_sub_all = xvals_sub_sim;
@@ -188,7 +192,7 @@ for ii = 1:length(equil_dynamics)
     plot(ax1,t_day,1.1*ones(length(t_day),1),'k--','LineWidth',1)
     plot(ax1,Vmax_tau_equil_g,0,'x-.','MarkerEdgeColor',pl_clrs{1},'MarkerSize',12)
     plot(ax1,rmax_tau_equil_g,0,'x-.','MarkerEdgeColor',pl_clrs{2},'MarkerSize',12)
-    plot(ax1,rrad_tau_equil_g,0,'x-.','MarkerEdgeColor',pl_clrs{4},'MarkerSize',12)
+    plot(ax1,r0ER11_tau_equil_g,0,'x-.','MarkerEdgeColor',pl_clrs{4},'MarkerSize',12)
     plot(ax1,r0Lil_tau_equil_g,0,'x-.','MarkerEdgeColor',pl_clrs{3},'MarkerSize',12)
 
     if(equil_dynamic == 1)
@@ -199,7 +203,7 @@ for ii = 1:length(equil_dynamics)
         plot(ax1,t_equil,ones(length(t_equil),1),'m','LineWidth',2)
     end
     
-    input_legend = {'V_m','r_m','r_{rad}','r_0'};
+    input_legend = {'V_m','r_m','r_0^{ER11}','r_0'};
     legend(input_legend,'Location','SouthEast')
     input_title1=sprintf('Evolution of control storm structure');
     input_title2=sprintf('%s',subdir);

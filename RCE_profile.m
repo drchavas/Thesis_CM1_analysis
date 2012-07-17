@@ -15,20 +15,20 @@ subdir_pre='RCE/';
 %subdir_pre='CTRL_icRCE/';
 ext_hd = 1; %0=local hard drive; 1=external hard drive
 
-SST = 300.00;  %[K]; used to calculate RCE th_sfc (=SST-2K) and qv_sfc (80% RH from saturation at SST)
+SST = 292.50;  %[K]; used to calculate RCE th_sfc (=SST-2K) and qv_sfc (80% RH from saturation at SST)
 RH_sfc = .8;    %air-sea latent disequilibrium
 dT_sfc = 2; %[K]; air-sea thermal disequilibrium
 
 run_types=3*ones(100,1);    %[1 1 1 1 1 1 1 1 1]; %1=axisym; 3=3d
 subdirs = {
-'RCE_nx48_SST300.00K_Tthresh200K_usfc3'
+'RCE_nx48_SST292.50K_Tthresh200K_usfc3'
 %'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_usfc1'
 }; %name of sub-directory with nc files
 
 t0 = 70;    %[day], starting time for averaging
 tf = 100;   %[day], ending time for averaging
 
-save_output_sounding = 0;   %0=no output file created; 1=yes 'input_sounding_[subdir]'
+save_output_sounding = 1;   %0=no output file created; 1=yes 'input_sounding_[subdir]'
 plot_type = 1;  %0=no plot; 1=plots of RCE vertical profiles of qv [g/kg] and theta [K]
     pl_clrs={'b' 'b--' 'r' 'r--' 'g' 'g--' 'c' 'c--' 'k' 'k--' 'y' 'y--'};
     %pl_clrs={'b--' 'r--' 'g--' 'c--' 'k--' 'y--' 'm--' 'b' 'r' 'g' 'c' 'k' 'y' 'm'};

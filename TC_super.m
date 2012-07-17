@@ -7,11 +7,15 @@ clear
 clc
 close all
 
+tic
+
 %% Which simulations (or sets) should I run?
-%sim_sets_all = {'Lx' 'dx' 'dz' 'lh' 'lv' 'qro' 'ro' 'fcor' 'Tsst' 'Ttpp' 'usfc' 'Qcool' 'Cd' 'QcoolVpcnst' 'QcoolVplvHcnst' 'mpi' 'nondim' 'transient'};  %name out output subdir (within simsets_Tmean#/PLOTS/[sim_set]/) where plots will be saved
-sim_sets_all = {'single'};  %name out output subdir (within simsets_Tmean#/PLOTS/[sim_set]/) where plots will be saved
+%name out output subdir (within simsets_Tmean#/PLOTS/[sim_set]/) where plots will be saved
+%sim_sets_all = {'Lx' 'dx' 'dz' 'lh' 'lv' 'qro' 'ro' 'fcor' 'Tsst' 'Ttpp' 'usfc' 'Qcool' 'nondim' 'mpi' 'Cd' 'QcoolVpcnst' 'QcoolVplvHcnst'}; 
+sim_sets_all = {'Qcool' 'nondim' 'mpi' 'Cd' 'QcoolVpcnst' 'QcoolVplvHcnst'};  %name out output subdir (within simsets_Tmean#/PLOTS/[sim_set]/) where plots will be saved
+%sim_sets_all = {'single'};  %name out output subdir (within simsets_Tmean#/PLOTS/[sim_set]/) where plots will be saved
     %IF 'single'
-    sim_single = 'CTRLv0qrhSATqdz5000_nx3072';    %runs only this simulation
+    sim_single = 'CTRLv0qrhSATqdz5000_nx3072_fx8';    %runs only this simulation
 
 %% Which scripts should I run?
 run_TC_stats = 1;
@@ -23,7 +27,7 @@ run_TC_stats_plot = 1;  %overwrites old [simset].mat file and plots automaticall
 
 %% Parameters for scripts
 v_usr_fracVp = .1;  %wind speed as fraction of Vp; beyond this radius, radiative subsidence radial wind profile should apply.
-T_mean = 5; %[days]; averaging time period used to calculate moving time-average radial profile from which rmax and r0 are calculated
+T_mean = 2; %[days]; averaging time period used to calculate moving time-average radial profile from which rmax and r0 are calculated
 dt_equil = 30;  %[days]; how long must be quasi-steady to define equilibrium
     %%For static equilibrium (equil_dynamic = 0):
     dt_final = 50;  %[day]; length of static equilibrium period
@@ -366,7 +370,7 @@ for jj = 1:length(sim_sets_all)
 
                 %'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fdiv4_lh12000'
                 'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fx4_lh750'
-                %'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fdiv4_lh12000'
+                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fdiv4_lh12000'
                 'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fx4_lh750'
 
                 %'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fdiv2_lh12000'
@@ -374,7 +378,7 @@ for jj = 1:length(sim_sets_all)
                 'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fdiv2_lh12000'
                 'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fx4'
 
-                %'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_lh12000'
+                'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_lh12000'
                 'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fx4_lh3000'
                 'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_lh12000'
                 'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fx4_lh3000'
@@ -400,14 +404,37 @@ for jj = 1:length(sim_sets_all)
                 %'CTRLv0qro80000qrhSATqdz5000_nx3072_fdiv4_lh6000_75day'
 }
             multipliers = ones(length(subdirs_set),1);
+%{
+        case 'qroVpf'
+            CTRL_val = .25; %CTRL value of quantity varied across simulations
+            units = 'km';
+            multipliers = [-3 -2 -1 0 1 2 3];
+            subdirs_set = {
+                %%HORIZ SCALE OF MOISTURE PERTURBATION
+                'CTRLv0qrhSATqroVpfdiv128qdz5000_nx3072'
+                'CTRLv0qrhSATqroVpfdiv64qdz5000_nx3072'
+                'CTRLv0qrhSATqroVpfdiv32qdz5000_nx3072'
+                'CTRLv0qrhSATqroVpfdiv16qdz5000_nx3072'
+                'CTRLv0qrhSATqroVpfdiv8qdz5000_nx3072'
+                'CTRLv0qrhSATqroVpfdiv4qdz5000_nx3072'
+                'CTRLv0qrhSATqroVpfdiv2qdz5000_nx3072'                
+                'CTRLv0qrhSATqroVpfqdz5000_nx3072'                
+            }
+%}
         case 'single'
             subdirs_set = {
                 sim_single
             }
+            CTRL_val = 1; %CTRL value of quantity varied across simulations
+            units = '-';
+            multipliers = [1];
         otherwise
             sprintf('Simulation set does not exist!')
     end
 
+    dir_in = sprintf('../CM1_postproc_data/simdata_Tmean%i_%i_%i',T_mean,tf-dt_final,tf);
+    assert(isdir(dir_in),'Output directory doesnt exist!')
+    
     for ii = 1:length(subdirs_set)
         
         subdir = subdirs_set{ii};
@@ -447,3 +474,5 @@ for jj = 1:length(sim_sets_all)
 %Nondimensional_scaling
 
 end
+
+toc
