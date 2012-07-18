@@ -368,7 +368,7 @@ if(plot_stats==1)
 
     if(strcmp(sim_set,'mpi'))
         i_ctrl = find(strcmp(subdirs_set,'CTRLv0qrhSATqdz5000_nx3072')==1,1);
-        CTRL_val = mpi_all(i_ctrl)
+        CTRL_val = mpi_all(i_ctrl);
         multipliers = log2(mpi_all/CTRL_val);  %log2(1.5) = x1.5;
         xvals_pl = multipliers;
     end
