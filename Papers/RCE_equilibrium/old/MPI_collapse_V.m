@@ -1,23 +1,26 @@
-%MPI_collapse_V_poster.m
+%MPI_collapse_V.m
 
-%Created: 24 Jul 2012, Dan Chavas
+%Created: 14 Feb 2012, Dan Chavas
 
-%Purpose: Create poster-ready MPI_collapse plot for Vmax
+%This file is the same as TC_stats_plotdim.m, except that it plots with color-coding the 4 input variables that modulate MPI
+%and displays them all togther based upon their respective mpi values.
 
+clear all
+%close all
 clear
 clc
 figure(1)
 clf(1)
 
-cd /Users/drchavas/Documents/Research/Thesis/CM1/v15/Thesis_CM1_analysis
+cd ../..
 
-%% USER INPUT %%%%%%%%%%%%%%%%%%
-subdir_pre='CTRL_icRCE/';    %general subdir that includes multiple runs within
-ext_hd = 1; %0=local hard drive; 1=external hard drive
+set(0,'defaultaxesfontsize',12,'defaultaxesfontweight','bold','defaultlinelinewidth',1)
 
-sim_sets = {'Tsst' 'usfc' 'Qcool' 'Ttpp'}
-sim_sets_str = {'T_{sst}' 'u_{sfc}' 'Q_{cool}' 'T_{tpp}'};  %make sure this matches!
+%clf(1)
 
+%%variables of interest (sim_set name): 'dx' 'dz' 'domain' 'lh' 'lv' 'H' 'Qrad' 'Vpot' 'cor' 'qro' 'ro' 'rodrmax'
+sim_sets = {'Tsst' 'Ttpp' 'Qcool' 'usfc'}
+%sim_sets = {'Ttpp'}
 T_mean = 2; %[day]
 equil_dynamic = 1;  %1 = use dynamic equilibrium
     %%IF 0:
@@ -25,15 +28,12 @@ equil_dynamic = 1;  %1 = use dynamic equilibrium
     tf = 150;
     %%IF 1:
     dt_final_dynamic = 30;  %[days]; new length of period over which equilibrium is calculated
-wrad_const = 0; %1 = use CTRL value for wrad
+wrad_const = 0; %1 = use CTRL value for wrad -- DOESN"T MATTER FOR Vmax!
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-set(0,'defaultaxesfontsize',36,'defaultaxesfontweight','bold','defaultlinelinewidth',1)
-h=figure(1)
-set(h,'Position',[0 0 575 575])
-ax1=axes('position',[0.20    0.25    0.70    0.70]);
+dat_max=0;
+dat_min=0;
 
 %%Determine output subdirectory pathname for given sim_set
 if(equil_dynamic == 1)
@@ -58,15 +58,13 @@ end
 
 xvals_pl_all = [];
 data_pl_all = [];
-dat_max=0;
-dat_min=0;
 
 for m=1:length(sim_sets)
     
     sim_set = sim_sets{m};  %string
     load(sprintf('%s/%s.mat',subdir_out2,sim_set));
-    pl_clrs={'b' 'c' 'g' 'r' 'k' 'm' 'y' 'b--' 'r--' 'g--' 'c--' 'k--' 'm--' 'y--'};
-    pl_shapes={'o' 's' 'd' 'v'};
+    pl_clrs={'b' 'r' 'g' 'c' 'k' 'm' 'y' 'b--' 'r--' 'g--' 'c--' 'k--' 'm--' 'y--'};
+    pl_shapes={'x' '*' 's' 'd' '+'};
     
     %%Adjust MPI for u_sfc runs only
 %{
@@ -88,12 +86,15 @@ for m=1:length(sim_sets)
     
     figure(1)
 %    subplot(3,1,1)
+    if(m==1)
+    ax1=axes('position',[0.15    0.35    0.70    0.56]);
+    end
     axes(ax1)
     data_temp = Vmax_equil_g(i_sort);
     data_pl = log2(data_temp./Vmax_equil_g_ctrl);
     dat_max = max(dat_max,max(data_pl));
     dat_min = min(dat_min,min(data_pl));
-    plot(xvals_pl,data_pl,pl_shapes{m},'MarkerFaceColor',pl_clrs{m},'MarkerEdgeColor','k','MarkerSize',20)
+    scatter(xvals_pl,data_pl,'Marker',pl_shapes{m},'MarkerEdgeColor',pl_clrs{m})
     hold on
     
     %%need to accumulate all points into single vector for xvals and data
@@ -101,8 +102,6 @@ for m=1:length(sim_sets)
     data_pl_all = [data_pl_all data_pl];
    
 end
-    
-pl_edge = max([abs(floor(min(xvals_pl))) abs(ceil(max(xvals_pl))) 2]);
 
 %% Plot a best-fit line to the data
 %options = fitoptions('Method','Smooth','SmoothingParam',0.3)
@@ -115,22 +114,37 @@ f = fit(xvals_pl_all', data_pl_all', 'poly1')
  xdiff_pl = xmax_pl-xmin_pl;
  xfit = xmin_pl-xdiff_pl/10:xdiff_pl/20:xmax_pl+xdiff_pl/10
  yfit = f.p1.*xfit + f.p2;
- plot(xfit,yfit,'--','Color',[.5 0 0],'LineWidth',3)
+ plot(xfit,yfit,'r--')
+
+ 
+%% Define the size of the figure
+h=figure(1)
+set(h,'Position',[360 278 375 350])
 
 
+%% Plot aesthetics
+%subplot(3,1,1)
+axes(ax1)
+axis([-2 2 -2 2])
+ylabel('log_2(Y/Y*)')
+xlabel({sprintf('log_2(V_p/V^*_p)')})
 input_title1=sprintf('$V_m$');
-text1=text(-1.9,1.9,input_title1,'FontSize',60);
-set(text1,'HorizontalAlignment','left','VerticalAlignment','top','Interpreter','Latex','BackgroundColor','white','EdgeColor','k');
-axis([-pl_edge pl_edge -pl_edge pl_edge])
-ylabel('$\\log_2(V_m/V_m^*)$','Interpreter','Latex')
-xlabel('$\\log_2(V_p/V_p^*)$','Interpreter','Latex')
-xlabh = get(gca,'XLabel');
-set(xlabh,'Position',get(xlabh,'Position') - [0 .1 0])
+text1=text(-1.7,1.7,input_title1,'FontSize',17);
+set(text1,'HorizontalAlignment','left','VerticalAlignment','top','Interpreter','Latex');
+%set(text1,'EdgeColor','k')
+set(ax1,'YTick',[-2 -1 0 1 2],'XTick',[-2 -1 0 1 2])
 grid on
-set(ax1,'YTick',[-4 -3 -2 -1 0 1 2 3 4],'XTick',[-4 -3 -2 -1 0 1 2 3 4])
 box on
-%h=legend(sim_sets_str,'Orientation','horizontal','Position',[0.15    0.08    0.70    0.02],'EdgeColor','white')
+
+h=legend({'T_{sst}' 'T_{tpp}' 'Q_{cool}' 'u_{sfc}'},'Orientation','horizontal','Position',[0.15    0.15    0.70    0.02],'EdgeColor','white')
 grid on
 
-cd Papers/RCE_equilibrium/DOE2012_Poster/
+if(equil_dynamic == 1)
+    input_title = sprintf('Equilibrium: dynamic %i day; T_{mean} = %i; wrad: %s',dt_equil,T_mean,wrad_str);
+else
+    input_title = sprintf('Equilibrium: days %i-%i ; T_{mean} = %i; wrad: %s',tf-dt_final,tf,T_mean,wrad_str);
+end
+title(input_title)
+
+cd Papers/RCE_equilibrium/
 

@@ -1,8 +1,9 @@
-%MPI_collapse_V_poster.m
+%MPI_collapse_legendvertical_poster.m
 
 %Created: 24 Jul 2012, Dan Chavas
 
-%Purpose: Create poster-ready MPI_collapse plot for Vmax
+%Purpose: Create vertical legend for MPI_collapse poster. The plot itself
+%doesn't matter right now.
 
 clear
 clc
@@ -16,7 +17,7 @@ subdir_pre='CTRL_icRCE/';    %general subdir that includes multiple runs within
 ext_hd = 1; %0=local hard drive; 1=external hard drive
 
 sim_sets = {'Tsst' 'usfc' 'Qcool' 'Ttpp'}
-sim_sets_str = {'T_{sst}' 'u_{sfc}' 'Q_{cool}' 'T_{tpp}'};  %make sure this matches!
+sim_sets_str = {'T_{sst}' 'u*' 'Q_{cool}' 'T_{tpp}'};  %make sure this matches!
 
 T_mean = 2; %[day]
 equil_dynamic = 1;  %1 = use dynamic equilibrium
@@ -30,10 +31,10 @@ wrad_const = 0; %1 = use CTRL value for wrad
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-set(0,'defaultaxesfontsize',36,'defaultaxesfontweight','bold','defaultlinelinewidth',1)
+set(0,'defaultaxesfontsize',24,'defaultaxesfontweight','bold','defaultlinelinewidth',1)
 h=figure(1)
 set(h,'Position',[0 0 575 575])
-ax1=axes('position',[0.20    0.25    0.70    0.70]);
+ax1=axes('position',[0.5    0.25    0.70    0.70]);
 
 %%Determine output subdirectory pathname for given sim_set
 if(equil_dynamic == 1)
@@ -78,7 +79,7 @@ for m=1:length(sim_sets)
     
     i_ctrl = find(strcmp(subdirs_set,'CTRLv0qrhSATqdz5000_nx3072')==1,1);
     mpi_ctrl = mpi_all(i_ctrl);
-    Vmax_equil_g_ctrl = Vmax_equil_g(i_ctrl);
+    r0Lil_Lilctrl_equil_g_ctrl = r0Lil_Lilctrl_equil_g(i_ctrl);
 
     [junk i_sort] = sort(mpi_all);
     clear junk
@@ -89,8 +90,8 @@ for m=1:length(sim_sets)
     figure(1)
 %    subplot(3,1,1)
     axes(ax1)
-    data_temp = Vmax_equil_g(i_sort);
-    data_pl = log2(data_temp./Vmax_equil_g_ctrl);
+    data_temp = r0Lil_Lilctrl_equil_g(i_sort);
+    data_pl = log2(data_temp./r0Lil_Lilctrl_equil_g_ctrl);
     dat_max = max(dat_max,max(data_pl));
     dat_min = min(dat_min,min(data_pl));
     plot(xvals_pl,data_pl,pl_shapes{m},'MarkerFaceColor',pl_clrs{m},'MarkerEdgeColor','k','MarkerSize',20)
@@ -118,18 +119,18 @@ f = fit(xvals_pl_all', data_pl_all', 'poly1')
  plot(xfit,yfit,'--','Color',[.5 0 0],'LineWidth',3)
 
 
-input_title1=sprintf('$V_m$');
+input_title1=sprintf('$r_0$');
 text1=text(-1.9,1.9,input_title1,'FontSize',60);
 set(text1,'HorizontalAlignment','left','VerticalAlignment','top','Interpreter','Latex','BackgroundColor','white','EdgeColor','k');
 axis([-pl_edge pl_edge -pl_edge pl_edge])
-ylabel('$\\log_2(V_m/V_m^*)$','Interpreter','Latex')
+ylabel('$\\log_2(r_0/r_0^*)$','Interpreter','Latex')
 xlabel('$\\log_2(V_p/V_p^*)$','Interpreter','Latex')
-xlabh = get(gca,'XLabel');
-set(xlabh,'Position',get(xlabh,'Position') - [0 .1 0])
+%xlabh = get(gca,'XLabel');
+%set(xlabh,'Position',get(xlabh,'Position') - [0 .1 0])
 grid on
 set(ax1,'YTick',[-4 -3 -2 -1 0 1 2 3 4],'XTick',[-4 -3 -2 -1 0 1 2 3 4])
 box on
-%h=legend(sim_sets_str,'Orientation','horizontal','Position',[0.15    0.08    0.70    0.02],'EdgeColor','white')
+h=legend(sim_sets_str,'Orientation','vertical','Position',[0.15    0.2    0.01    0.50],'EdgeColor','white')
 grid on
 
 cd Papers/RCE_equilibrium/DOE2012_Poster/

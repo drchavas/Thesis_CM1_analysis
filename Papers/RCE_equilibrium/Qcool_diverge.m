@@ -8,6 +8,7 @@
 
 clear
 clc
+close all
 figure(1)
 clf(1)
 
@@ -23,7 +24,7 @@ run_types=ones(1000,1); %[1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]; %1=axisym; 3=3D
 
 t0 = 0;
 
-T_mean = 5; %[days]; averaging time period used to calculate moving time-average radial profile from which rmax and r0 are calculated
+T_mean = 2; %[days]; averaging time period used to calculate moving time-average radial profile from which rmax and r0 are calculated
 equil_dynamic = 0;  %1 = use dynamic equilibrium
     %%IF 0:
     dt_final = 50;
@@ -31,7 +32,6 @@ equil_dynamic = 0;  %1 = use dynamic equilibrium
     %%IF 1:
     dt_final_dynamic = 30;  %[days]; new length of period over which equilibrium is calculated
 wrad_const = 0; %1 = use CTRL value for wrad
-Cd_in = 1.5e-3; %only used to calculate r0_Lilly
 
 %Plotting domain
 rmin_plot = 0;  %[km]
@@ -42,210 +42,84 @@ datamin_plot = -5000;   %minimum data value plotted
 datamax_plot = 5000;   %minimum data value plotted
 
 %%Simulations
-sim_sets_all = {'Qcool'};  %name out output subdir (within simsets_Tmean#/PLOTS/[sim_set]/) where plots will be saved
+sim_sets = {'Qcool'};  %name out output subdir (within simsets_Tmean#/PLOTS/[sim_set]/) where plots will be saved
 
-for jj = 1:length(sim_sets_all)
-
-sim_set = sim_sets_all{jj};
-    
-switch sim_set
-
-    case 'Qcool'
-        CTRL_val = 1; %CTRL value of quantity varied across simulations
-        units = 'K day^{-1}';
-        multipliers = [-2 -1 0 1];
-        subdirs_set = {
-            %%Qcool
-            'CTRLv0qrhSATqdz5000_nx3072_rad0.125K'
-            'CTRLv0qrhSATqdz5000_nx3072_rad0.25K'
-            'CTRLv0qrhSATqdz5000_nx3072'
-            'CTRLv0qrhSATqdz5000_nx3072_rad1.0K'
-            %'CTRLv0qrhSATqdz5000_nx3072_rad2.0K'
-        }
-    case 'QcoolVpcnst'
-        CTRL_val = 1; %CTRL value of quantity varied across simulations
-        units = 'K day^{-1}';
-        multipliers = [-1 0 1 2 3 4 5];
-        subdirs_set = {
-            %%Qcool at constant Vp (can't get Vp ~ 92 m/s with rad0.125)
-            'CTRLv0qrhSATqdz5000_nx3072_Tthresh175K_rad0.25K'
-            'CTRLv0qrhSATqdz5000_nx3072'
-            'CTRLv0qrhSATqdz5000_nx3072_Tthresh220K_rad1.0K'
-            'CTRLv0qrhSATqdz5000_nx3072_Tthresh237K_rad2.0K'
-            'CTRLv0qrhSATqdz5000_nx3072_Tthresh247K_rad4.0K'
-            'CTRLv0qrhSATqdz5000_nx3072_Tthresh255K_rad8.0K'
-            'CTRLv0qrhSATqdz5000_nx3072_Tthresh257K_rad16.0K'
-        }
-    case 'QcoolVplvHcnst'
-        CTRL_val = 1; %CTRL value of quantity varied across simulations
-        units = 'K day^{-1}';
-        %multipliers = [-1 0 1 2 3 4 5];
-        multipliers = [-1 0 1 2];
-        subdirs_set = {
-            %%Q_rad at constant Vp, lv/H constant (can't get Vp ~ 92 m/s with rad0.125)
-            'CTRLv0qrhSATqdz5000_nx3072_Tthresh175K_rad0.25K_lv121'
-            'CTRLv0qrhSATqdz5000_nx3072'
-            'CTRLv0qrhSATqdz5000_nx3072_Tthresh220K_rad1.0K_lv81'
-            'CTRLv0qrhSATqdz5000_nx3072_Tthresh237K_rad2.0K_lv60'
-            %'CTRLv0qrhSATqdz5000_nx3072_Tthresh247K_rad4.0K_lv44'
-            %'CTRLv0qrhSATqdz5000_nx3072_Tthresh255K_rad8.0K_lv26'
-            %'CTRLv0qrhSATqdz5000_nx3072_Tthresh257K_rad16.0K_lv19'
-        }
-end
-        
-    
-%pl_clrs={'b' 'b--' 'r' 'r--' 'g' 'g--' 'c' 'c--' 'k' 'k--' 'y' 'y--'};
-pl_clrs={'b' 'r' 'g' 'c' 'k' 'y' 'm' 'b--' 'r--' 'g--' 'c--' 'k--' 'y--' 'm--'};
-    
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-numruns=length(subdirs_set);  %total number of runs you want to plot (taken from below)
-
-%%Define grid of points to extract (i.e. all of them, will subset afterwards)
-x0=0;   %first x grid point [0,end]
-xf=100000;   %first y grid point [0,end]
-y0=0;   %first y grid point [0,end]
-yf=0;   %last y grid point [0,end]
-z0=0;  %first z grid point [0,end]
-zf=100;  %last z grid point [0,end]
-
-%%Define subset of points for analysis
-rmin_sub = 0;  %[km]; lowest value plotted
-rmax_sub = 10000;    %[km]; highest value plotted
-zmin_subsub = .5;  %[km]; lowest value plotted
-zmax_subsub = 1; %[km]; highest value plotted
-
-%%Append ax or 3d to subdir names for plot
-for i=1:length(subdirs_set)
-    if(run_types(i)==1) %ax
-        subdirs_load{i}=sprintf('ax%s',subdirs_set{i});
-    else    %3d
-        subdirs_load{i}=sprintf('3d%s',subdirs_set{i});
-    end
-end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-%% CALCULATE STEADY STATE RADIAL PROFILE
-t_day_min = 0;
-t_day_max = 0;
-clear Vmax_tau_equil rmax_tau_equil rrad_tau_equil r0_tau_equil r0ER11_tau_equil r0Lil_tau_equil Vmax_tau_equil_g rmax_tau_equil_g rrad_tau_equil_g r0_tau_equil_g r0ER11_tau_equil_g r0Lil_tau_equil_g
-clear tau_gen Vmax_gen_g rmax_gen_g rrad_gen_g r0ER11_gen_g r0Lil_gen_g Vmax_tau_max_g Vmax_max_g rmax_tau_max_g rmax_max_g r0_tau_max_g r0_max_g r0ER11_tau_max_g r0ER11_max_g r0Lil_tau_max_g r0Lil_max_g
-clear Vmax_equil rmax_equil rrad_equil r0_equil r0ER11_equil r0Lil_equil Vmax_equil_g rmax_equil_g rrad_equil_g r0_equil_g r0ER11_equil_g r0Lil_equil_g
-clear Vmax_movave_g_all rmax_movave_g_all rrad_movave_g_all r0_movave_g_all r0ER11_movave_g_all r0Lil_movave_g_all
-clear xvals_sub_all data_tmean_usr_g_all
-clear mpi_all
-for ss=1:numruns
-
-    %%Load data for given simulation
-    if(equil_dynamic==1)
-        if(wrad_const == 1)
-            load(sprintf('../CM1_postproc_data/simdata_Tmean%i_dt%i_dynamic_wradconst/%s.mat',T_mean,dt_final_dynamic,subdirs_load{ss}));
-        else
-            load(sprintf('../CM1_postproc_data/simdata_Tmean%i_dt%i_dynamic/%s.mat',T_mean,dt_final_dynamic,subdirs_load{ss}));
-        end
+%%Determine output subdirectory pathname for given sim_set
+if(equil_dynamic == 1)
+    if(wrad_const == 1)
+        subdir_out = sprintf('../CM1_postproc_data/simsets_Tmean%i_dt%i_dynamic_wradconst',T_mean,dt_final_dynamic);
     else
-        if(wrad_const == 1)
-            load(sprintf('../CM1_postproc_data/simdata_Tmean%i_%i_%i_wradconst/%s.mat',T_mean,tf-dt_final,tf,subdirs_load{ss}));
+        subdir_out = sprintf('../CM1_postproc_data/simsets_Tmean%i_dt%i_dynamic',T_mean,dt_final_dynamic);
+    end
+else
+    if(wrad_const == 1)
+        subdir_out = sprintf('../CM1_postproc_data/simsets_Tmean%i_%i_%i_wradconst',T_mean,tf-dt_final,tf);
+    else
+        subdir_out = sprintf('../CM1_postproc_data/simsets_Tmean%i_%i_%i',T_mean,tf-dt_final,tf);
+    end
+end
+
+if(wrad_const == 1)
+    wrad_str = 'ctrl';
+else
+    wrad_str = 'rce';
+end
+
+xvals_pl = nan(1000,2);
+data_pl = nan(1000,2);
+
+for m=1:length(sim_sets)
+
+    sim_set = sim_sets{m};  %string
+    load(sprintf('%s/%s.mat',subdir_out,sim_set));
+    pl_clrs={'b' 'r' 'g' 'c' 'k' 'm' 'y' 'b--' 'r--' 'g--' 'c--' 'k--' 'm--' 'y--'};
+    numruns = length(subdirs_set);
+    
+    clear fcor_all lh_all mpi_all
+    for ss=1:numruns
+
+        subdir = subdirs_set{ss};
+        %%Determine output subdirectory pathname for given sim_set
+        if(equil_dynamic == 1)
+            if(wrad_const == 1)
+                subdir_out2 = sprintf('../CM1_postproc_data/simdata_Tmean%i_dt%i_dynamic_wradconst',T_mean,dt_final_dynamic);
+            else
+                subdir_out2 = sprintf('../CM1_postproc_data/simdata_Tmean%i_dt%i_dynamic',T_mean,dt_final_dynamic);
+            end
         else
-            load(sprintf('../CM1_postproc_data/simdata_Tmean%i_%i_%i/%s.mat',T_mean,tf-dt_final,tf,subdirs_load{ss}));
+            if(wrad_const == 1)
+                subdir_out2 = sprintf('../CM1_postproc_data/simdata_Tmean%i_%i_%i_wradconst',T_mean,tf-dt_final,tf);
+            else
+                subdir_out2 = sprintf('../CM1_postproc_data/simdata_Tmean%i_%i_%i',T_mean,tf-dt_final,tf);
+            end
         end
+
+        if(wrad_const == 1)
+            wrad_str = 'ctrl';
+        else
+            wrad_str = 'rce';
+        end
+        %%Load data for given simulation
+        load(sprintf('%s/ax%s.mat',subdir_out2,subdir));
+
+        %% Other
+        fcor_all(ss) = fcor;
+        mpi_all(ss) = mpi;
+        lh_all(ss) = lh;
+
     end
     
-    %% Equilibrium data %%%%%%%%%%%%%%%%%%%%%%%%
-    %variable values
-    Vmax_equil(ss) = Vmax_equil_sim;
-    rmax_equil(ss) = rmax_equil_sim;
-    rrad_equil(ss) = rrad_equil_sim;
-    r0_equil(ss) = r0_equil_sim;
-    r0ER11_equil(ss) = r0ER11_equil_sim;
-    r0Lil_equil(ss) = r0Lil_equil_sim;
-    Vmax_equil_g(ss) = Vmax_equil_g_sim;
-    rmax_equil_g(ss) = rmax_equil_g_sim;
-    rrad_equil_g(ss) = rrad_equil_g_sim;
-    r0_equil_g(ss) = r0_equil_g_sim;
-    r0ER11_equil_g(ss) = r0ER11_equil_g_sim;
-    r0Lil_equil_g(ss) = r0Lil_equil_g_sim;
-    
-    %timescales to those values
-    Vmax_tau_equil(ss) = Vmax_tau_equil_sim;
-    rmax_tau_equil(ss) = rmax_tau_equil_sim;
-    rrad_tau_equil(ss) = rrad_tau_equil_sim;
-    r0_tau_equil(ss) = r0_tau_equil_sim;
-    r0ER11_tau_equil(ss) = r0ER11_tau_equil_sim;
-    r0Lil_tau_equil(ss) = r0Lil_tau_equil_sim;
-    Vmax_tau_equil_g(ss) = Vmax_tau_equil_g_sim;
-    rmax_tau_equil_g(ss) = rmax_tau_equil_g_sim;
-    rrad_tau_equil_g(ss) = rrad_tau_equil_g_sim;
-    r0_tau_equil_g(ss) = r0_tau_equil_g_sim;
-    r0ER11_tau_equil_g(ss) = r0ER11_tau_equil_g_sim;
-    r0Lil_tau_equil_g(ss) = r0Lil_tau_equil_g_sim;
-    
-    %% Transient data %%%%%
-    tau_gen(ss) = tau_gen_sim; %defined using the GRADIENT wind
-%    Vmax_gen(ss) = Vmax_gen_sim;
-%    rmax_gen(ss) = rmax_gen_sim;
-%    rrad_gen(ss) = rrad_gen_sim;
-%    r0_gen(ss) = r0_gen_sim;
-%    r0Lil_gen(ss) = r0Lil_gen_sim;
-    Vmax_gen_g(ss) = Vmax_gen_g_sim;
-    rmax_gen_g(ss) = rmax_gen_g_sim;
-    rrad_gen_g(ss) = rrad_gen_g_sim;
-    r0_gen_g(ss) = r0_gen_g_sim;
-    r0ER11_gen_g(ss) = r0ER11_gen_g_sim;
-    r0Lil_gen_g(ss) = r0Lil_gen_g_sim;
-    
-    Vmax_tau_max_g(ss) = Vmax_tau_max_g_sim; %defined using the GRADIENT wind
-    Vmax_max_g(ss) = Vmax_max_g_sim;
-    rmax_tau_max_g(ss) = rmax_tau_max_g_sim; %defined using the GRADIENT wind
-    rmax_max_g(ss) = rmax_max_g_sim;
-    rrad_tau_max_g(ss) = rrad_tau_max_g_sim; %defined using the GRADIENT wind
-    rrad_max_g(ss) = rrad_max_g_sim;
-    r0_tau_max_g(ss) = r0_tau_max_g_sim; %defined using the GRADIENT wind
-    r0_max_g(ss) = r0_max_g_sim;
-    r0ER11_tau_max_g(ss) = r0ER11_tau_max_g_sim; %defined using the GRADIENT wind
-    r0ER11_max_g(ss) = r0ER11_max_g_sim;
-    r0Lil_tau_max_g(ss) = r0Lil_tau_max_g_sim; %defined using the GRADIENT wind
-    r0Lil_max_g(ss) = r0Lil_max_g_sim;
-%    Vmax_tau_max(ss) = Vmax_tau_max_sim; %defined using the GRADIENT wind
-%    Vmax_max(ss) = Vmax_max_sim;
-%    rmax_tau_max(ss) = rmax_tau_max_sim; %defined using the GRADIENT wind
-%    rmax_max(ss) = rmax_max_sim;
-%    rrad_tau_max(ss) = rrad_tau_max_sim; %defined using the GRADIENT wind
-%    rrad_max(ss) = rrad_max_sim;
-%    r0_tau_max(ss) = r0_tau_max_sim; %defined using the GRADIENT wind
-%    r0_max(ss) = r0_max_sim;
-%    r0Lil_tau_max(ss) = r0Lil_tau_max_sim; %defined using the GRADIENT wind
-%    r0Lil_max(ss) = r0Lil_max_sim;
-    
-    %% Save data for all simulations
-%    Vmax_movave_all(:,ss)=Vmax_movave_sim;
-%    rmax_movave_all(:,ss)=rmax_movave_sim;
-%    rrad_movave_all(:,ss)=rrad_movave_sim;
-%    r0_movave_all(:,ss)=r0_movave_sim;
-%    r0Lil_movave_all(:,ss)=r0Lil_movave_sim;
-
-    Vmax_movave_g_all(:,ss)=Vmax_movave_g_sim;
-    rmax_movave_g_all(:,ss)=rmax_movave_g_sim;
-    rrad_movave_g_all(:,ss)=rrad_movave_g_sim;
-    r0_movave_g_all(:,ss)=r0_movave_g_sim;
-    r0ER11_movave_g_all(:,ss)=r0ER11_movave_g_sim;
-    r0Lil_movave_g_all(:,ss)=r0Lil_movave_g_sim;
-    
-    %% User profile %%%%%%%%%%%%%%%%%%%%%%%%
-    xvals_sub_all{ss} = xvals_sub_sim;
-%    data_tmean_usr_all{ss} = data_tmean_usr_sim;
-    data_tmean_usr_g_all{ss} = data_tmean_usr_g_sim;
-
-    %% Extract and keep mpi %%%%%
-    mpi_all(ss) = mpi;
 end
 
 %% PLOTTING %%%%%%%%%%%%%%%%
 %Single/Multi simulation: Plot user-defined radial wind profiles
 
 hold off
-for i=1:numruns
+for i=1:numruns-1
     i_xvals_pl = find(xvals_sub_all{i}>=rmin_plot & xvals_sub_all{i}<=rmax_plot);
     xvals_pl = xvals_sub_all{i}(i_xvals_pl);
 
@@ -270,15 +144,17 @@ for i=1:numruns
     
 end
 plot(mean(r_div),.1,'o','MarkerEdgeColor','k','MarkerFaceColor','m','MarkerSize',12)
-input_title = sprintf('Time-mean radial GRADIENT wind profiles: days %i - %i; z=%5.2f %s',tmean0_usr,tmeanf_usr,zvals(i_zvals),zunits);
+if(equil_dynamic == 0)
+    input_title = sprintf('Time-mean radial GRADIENT wind profiles: days %i - %i; z=%5.2f %s',tmean0_usr,tmeanf_usr,zvals(i_zvals),zunits);
+else
+    input_title = sprintf('Time-mean radial GRADIENT wind profiles: dynamic; z=%5.2f %s',zvals(i_zvals),zunits);
+end
 title(input_title)
 xlabel('r / (V_p/f)')
 ylabel('V_g / V_p')
+%legend({'0.25 K day^{-1}' '0.5 K day^{-1}' '1 K day^{-1}' '2 K day^{-1}' '4 K day^{-1}'})
 legend({'0.25 K day^{-1}' '0.5 K day^{-1}' '1 K day^{-1}' '2 K day^{-1}'})
 grid on
-
-
-end
 
 
 cd Papers/RCE_equilibrium/
