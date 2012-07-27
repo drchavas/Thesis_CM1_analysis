@@ -178,5 +178,5 @@ VmVp=[list list(isort) xvals_pl(isort,m) data_pl(isort,m) mpi_all(isort)' fcor_a
 
 end
 
-cd Papers/RCE_equilibrium/DOE2012_Poster/
+cd Papers/RCE_equilibrium/
 

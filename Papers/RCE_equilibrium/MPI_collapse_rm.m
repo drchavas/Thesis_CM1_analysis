@@ -15,8 +15,8 @@ cd /Users/drchavas/Documents/Research/Thesis/CM1/v15/Thesis_CM1_analysis
 subdir_pre='CTRL_icRCE/';    %general subdir that includes multiple runs within
 ext_hd = 1; %0=local hard drive; 1=external hard drive
 
-sim_sets = {'Tsst' 'usfc' 'Qcool' 'Ttpp'}
-sim_sets_str = {'T_{sst}' 'u_{sfc}' 'Q_{cool}' 'T_{tpp}'};  %make sure this matches!
+sim_sets = {'Tsst' 'usfc_drag' 'Qcool' 'Ttpp'}
+sim_sets_str = {'T_{sst}' 'u_{sfc_drag}' 'Q_{cool}' 'T_{tpp}'};  %make sure this matches!
 
 T_mean = 2; %[day]
 equil_dynamic = 1;  %1 = use dynamic equilibrium
@@ -77,6 +77,9 @@ for m=1:length(sim_sets)
 %}
     
     i_ctrl = find(strcmp(subdirs_set,'CTRLv0qrhSATqdz5000_nx3072')==1,1);
+    if(strcmp(sim_set,'usfc_drag')==1)
+        i_ctrl = find(strcmp(subdirs_set,'CTRLv0qrhSATqdz5000_nx3072_drag')==1,1);
+    end
     mpi_ctrl = mpi_all(i_ctrl);
     rmax_equil_g_ctrl = rmax_equil_g(i_ctrl);
 
@@ -129,8 +132,8 @@ set(xlabh,'Position',get(xlabh,'Position') - [0 .1 0])
 grid on
 set(ax1,'YTick',[-4 -3 -2 -1 0 1 2 3 4],'XTick',[-4 -3 -2 -1 0 1 2 3 4])
 box on
-%h=legend(sim_sets_str,'Orientation','horizontal','Position',[0.15    0.08    0.70    0.02],'EdgeColor','white')
+h=legend(sim_sets_str,'Orientation','vertical','Position',[0.85    0.5    0.02    0.20],'EdgeColor','white')
 grid on
 
-cd Papers/RCE_equilibrium/DOE2012_Poster/
+cd Papers/RCE_equilibrium/
 
