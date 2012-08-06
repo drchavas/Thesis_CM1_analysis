@@ -12,10 +12,11 @@ tic
 %% Which simulations (or sets) should I run?
 %name out output subdir (within simsets_Tmean#/PLOTS/[sim_set]/) where plots will be saved
 %sim_sets_all = {'Lx' 'dx' 'dz' 'lh' 'lv' 'qro' 'ro' 'fcor' 'Tsst' 'Ttpp' 'usfc' 'usfc_drag' 'Qcool' 'nondim' 'nondim1.5' 'nondim2' 'mpi' 'Cd' 'QcoolVpcnst' 'QcoolVplvHcnst'}; 
-sim_sets_all = {'nondim1.5'}; 
+sim_sets_all = {'dry'}; 
     %IF 'single'
     sim_single = 'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fdiv4_lh12000';    %runs only this simulation
-
+moist = 0;  %1 = moist; else = dry
+    
 %% Which scripts should I run?
 run_TC_stats = 1;
     save_file = 1;  %for TC_stats only; note: program will not overwrite old file
@@ -75,6 +76,13 @@ for jj = 1:length(sim_sets_all)
     run_type = run_types(jj);
 
     switch sim_set
+        case 'dry'
+            CTRL_val = 1
+            units = '-';
+            subdirs_set = {
+                'CTRLv0qrhSATqdz5000_nx3072_DRYdrc'
+            }
+            multipliers = ones(length(subdirs_set),1);
         case 'test'
             CTRL_val = 1; %CTRL value of quantity varied across simulations
             units = '-';
@@ -504,7 +512,7 @@ for jj = 1:length(sim_sets_all)
         subdir = subdirs_set{ii};
         
         if(run_TC_stats == 1)
-            [junk] = TC_stats(subdir_pre,ext_hd,run_type,t0,tf,tmean0_usr,tmeanf_usr,v_usr_fracVp,T_mean,dt_equil,dt_final,save_file,subdir,x0,xf,y0,yf,z0,zf,rmin_sub,rmax_sub,zmin_subsub,zmax_subsub,dir_home);
+            [junk] = TC_stats(subdir_pre,ext_hd,run_type,t0,tf,tmean0_usr,tmeanf_usr,v_usr_fracVp,T_mean,dt_equil,dt_final,save_file,subdir,x0,xf,y0,yf,z0,zf,rmin_sub,rmax_sub,zmin_subsub,zmax_subsub,dir_home,moist);
         end
         
         if(run_TC_stats_dynamicequil == 1)

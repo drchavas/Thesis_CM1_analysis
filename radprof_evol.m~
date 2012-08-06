@@ -18,7 +18,6 @@ subdir_pre='CTRL_icRCE/';    %general subdir that includes multiple runs within
 ext_hd = 1; %0=local hard drive; 1=external hard drive
 
 run_type=1; %1=axisym; 3=3D
-moist = 0;  %1 = moist; else = dry
 
 subdir = 'CTRLv0qrhSATqdz5000_nx3072_DRYdrc'; %name of sub-directory with nc files
 
@@ -135,7 +134,7 @@ end
 clear t_day
 clear r_usr
 for ii=1:i_tf-i_t0+1
-    fclose('all');
+    fclose('all')
     t_file=i_t0+ii-1;
 
     t_day(ii) = (t_file-1)*dt/(24*60*60);
@@ -170,7 +169,7 @@ for ii=1:i_tf-i_t0+1
         dir_start=pwd;
         dir_tmp = strcat(dir_in,subdir);
         cd(dir_tmp)
-        first_file = nc_file
+        nc_file
         ncid = netcdf.open(nc_file,'WRITE');
 
         %NX
@@ -242,13 +241,13 @@ for ii=1:i_tf-i_t0+1
         var_temp = 'qg';
         [data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units] = nc_extract(dir_in,subdir,nc_file,var_temp,x0,xf,y0,yf,z0,zf);
         qg_pert = squeeze(data);
-    else    %DRY
+    else
         qv_pert = 0;
         qc_pert = 0;
         qr_pert = 0;
         qi_pert = 0;
-        qs_pert = 0;
-        qg_pert = 0;
+        qv_pert = 0;
+        qv_pert = 0;
     end
     
     %%ql_pert
@@ -271,17 +270,11 @@ for ii=1:i_tf-i_t0+1
     th = repmat(th00(z0+1:z0+nz_sub),nx_sub,1) + th_pert;
 
     %%calculate water vapor mixing ratio
-    if(moist == 1)
-        qv = repmat(qv00(z0+1:z0+nz_sub),nx_sub,1) + qv_pert;    %[kg/kg]
+    qv = repmat(qv00(z0+1:z0+nz_sub),nx_sub,1) + qv_pert;    %[kg/kg]
 
-        %%calculate liquid water mixing ratio
-        ql = ql_pert;    %[kg/kg]
+    %%calculate liquid water mixing ratio
+    ql = ql_pert;    %[kg/kg]
 
-    else    %DRY
-        qv = 0;
-        ql = 0;
-    end
-        
     %%calculate T, Tv, rho, rh
     [T rho rh the s s_sat gam_m thv] = thermo(p,th,qv,ql);
     

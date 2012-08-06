@@ -49,7 +49,7 @@ plot_type = 1;  %0=no plot
 %    pl_clrs={'b' 'r' 'g' 'c' 'k' 'y' 'b--' 'r--' 'g--' 'c--' 'k--' 'y--' 'm--'};
     %pl_clrs={'b' 'k' 'r' 'g' 'c' 'y' 'm' 'b--' 'k--' 'r--' 'g--' 'c--' 'y--' 'm--'};
     use_stats = 1;  %0=extract from original data; 1=use cm1out_stats.nc
-    var = 'vmax';  %variable of interest    
+    var = 'tmass';  %variable of interest    
     v_scale = 1; %scale the y-axis variable by this value (note: units will be wrong)
     use_smooth = 1; %0=raw data; 1=smoothed (N-pt moving average)
         numpt_sm = 50;  %smoother uses this number of points
