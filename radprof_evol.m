@@ -19,11 +19,11 @@ ext_hd = 1; %0=local hard drive; 1=external hard drive
 
 run_type=1; %1=axisym; 3=3D
 
-subdir = 'CTRLv0qrhSATqdz5000_nx3072_fx8'; %name of sub-directory with nc files
+subdir = 'CTRLv0qrhSATqdz5000_nx3072_DRYdrc'; %name of sub-directory with nc files
 
-t0a = 10;
-tfa = 50;
-dt_mean = 5;   %[day]
+t0a = 70;
+tfa = 150;
+dt_mean = 10;   %[day]
 
 %pl_clrs={'b' 'r' 'g' 'c' 'k' 'y' 'm' 'b--' 'r--' 'g--' 'c--' 'k--' 'y--' 'm--'};
 vars = {'vg2'}%'vinterp' 'Ri'};
@@ -87,7 +87,7 @@ end
 subdir_full=sprintf('%s%s',dir_in,subdir)
 
 %%EXTRACT TIMESTEP SIZE
-var_dt = 'qvpert'; %doesn't matter, just need any variable
+var_dt = 'vinterp'; %doesn't matter, just need any variable
 clear data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units
 if(run_type==3)
     numfiles=length(dir(sprintf('%s/cm1out_t*.nc',subdir_full)));
@@ -212,34 +212,43 @@ for ii=1:i_tf-i_t0+1
     th_pert = squeeze(data);
 
     %%load qvpert
-    var_temp = 'qvpert';
-    [data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units] = nc_extract(dir_in,subdir,nc_file,var_temp,x0,xf,y0,yf,z0,zf);
-    qv_pert = squeeze(data);
+    if(moist == 1)
+        var_temp = 'qvpert';
+        [data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units] = nc_extract(dir_in,subdir,nc_file,var_temp,x0,xf,y0,yf,z0,zf);
+        qv_pert = squeeze(data);
 
-    %%load qcpert
-    var_temp = 'qc';
-    [data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units] = nc_extract(dir_in,subdir,nc_file,var_temp,x0,xf,y0,yf,z0,zf);
-    qc_pert = squeeze(data);
+        %%load qcpert
+        var_temp = 'qc';
+        [data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units] = nc_extract(dir_in,subdir,nc_file,var_temp,x0,xf,y0,yf,z0,zf);
+        qc_pert = squeeze(data);
 
-    %%load qrpert
-    var_temp = 'qr';
-    [data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units] = nc_extract(dir_in,subdir,nc_file,var_temp,x0,xf,y0,yf,z0,zf);
-    qr_pert = squeeze(data);
+        %%load qrpert
+        var_temp = 'qr';
+        [data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units] = nc_extract(dir_in,subdir,nc_file,var_temp,x0,xf,y0,yf,z0,zf);
+        qr_pert = squeeze(data);
 
-    %%load qipert
-    var_temp = 'qi';
-    [data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units] = nc_extract(dir_in,subdir,nc_file,var_temp,x0,xf,y0,yf,z0,zf);
-    qi_pert = squeeze(data);
+        %%load qipert
+        var_temp = 'qi';
+        [data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units] = nc_extract(dir_in,subdir,nc_file,var_temp,x0,xf,y0,yf,z0,zf);
+        qi_pert = squeeze(data);
 
-    %%load qspert
-    var_temp = 'qs';
-    [data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units] = nc_extract(dir_in,subdir,nc_file,var_temp,x0,xf,y0,yf,z0,zf);
-    qs_pert = squeeze(data);
+        %%load qspert
+        var_temp = 'qs';
+        [data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units] = nc_extract(dir_in,subdir,nc_file,var_temp,x0,xf,y0,yf,z0,zf);
+        qs_pert = squeeze(data);
 
-    %%load qgpert
-    var_temp = 'qg';
-    [data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units] = nc_extract(dir_in,subdir,nc_file,var_temp,x0,xf,y0,yf,z0,zf);
-    qg_pert = squeeze(data);
+        %%load qgpert
+        var_temp = 'qg';
+        [data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units] = nc_extract(dir_in,subdir,nc_file,var_temp,x0,xf,y0,yf,z0,zf);
+        qg_pert = squeeze(data);
+    else
+        qv_pert = 0;
+        qc_pert = 0;
+        qv_pert = 0;
+        qv_pert = 0;
+        qv_pert = 0;
+        qv_pert = 0;
+    end
     
     %%ql_pert
     ql_pert = qc_pert + qr_pert + qi_pert + qs_pert + qg_pert;

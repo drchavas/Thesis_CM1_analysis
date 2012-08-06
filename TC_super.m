@@ -11,17 +11,16 @@ tic
 
 %% Which simulations (or sets) should I run?
 %name out output subdir (within simsets_Tmean#/PLOTS/[sim_set]/) where plots will be saved
-%sim_sets_all = {'Lx' 'dx' 'dz' 'lh' 'lv' 'qro' 'ro' 'fcor' 'Tsst' 'Ttpp' 'usfc' 'Qcool' 'nondim' 'mpi' 'Cd' 'QcoolVpcnst' 'QcoolVplvHcnst'}; 
-%sim_sets_all = {'Cd' 'QcoolVpcnst' 'QcoolVplvHcnst'};  %name out output subdir (within simsets_Tmean#/PLOTS/[sim_set]/) where plots will be saved
-sim_sets_all = {'nondim2'};  %name out output subdir (within simsets_Tmean#/PLOTS/[sim_set]/) where plots will be saved
+%sim_sets_all = {'Lx' 'dx' 'dz' 'lh' 'lv' 'qro' 'ro' 'fcor' 'Tsst' 'Ttpp' 'usfc' 'usfc_drag' 'Qcool' 'nondim' 'nondim1.5' 'nondim2' 'mpi' 'Cd' 'QcoolVpcnst' 'QcoolVplvHcnst'}; 
+sim_sets_all = {'nondim1.5'}; 
     %IF 'single'
     sim_single = 'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fdiv4_lh12000';    %runs only this simulation
 
 %% Which scripts should I run?
-run_TC_stats = 0;
-    save_file = 0;  %for TC_stats only; note: program will not overwrite old file
-run_TC_stats_dynamicequil = 0;  %overwrites old file automatically
-run_TC_structure_ts = 0;    %overwrites old plot automatically
+run_TC_stats = 1;
+    save_file = 1;  %for TC_stats only; note: program will not overwrite old file
+run_TC_stats_dynamicequil = 1;  %overwrites old file automatically
+run_TC_structure_ts = 1;    %overwrites old plot automatically
 run_TC_stats_plot = 1;  %overwrites old [simset].mat file and plots automatically
     run_TC_stats_plot_dynamicequil = 1; %also run for dynamic equilibrium
 
@@ -184,7 +183,7 @@ for jj = 1:length(sim_sets_all)
             multipliers = [-2 -1 0 1 2 3];
             subdirs_set = {
                 %%CORIOLIS
-                %%'CTRLv0qrhSATqdz5000_nx3072_fdiv8' -- HITS DOMAIN WALL
+                %'CTRLv0qrhSATqdz5000_nx3072_fdiv8' %-- HITS DOMAIN WALL
                 'CTRLv0qrhSATqdz5000_nx3072_fdiv4'
                 'CTRLv0qrhSATqdz5000_nx3072_fdiv2'
                 'CTRLv0qrhSATqdz5000_nx3072'
@@ -195,12 +194,14 @@ for jj = 1:length(sim_sets_all)
         case 'Tsst'
             CTRL_val = 300; %CTRL value of quantity varied across simulations
             units = 'K';
-            multipliers = log2([285 290 295 297.5 300 302.5 305 310]/CTRL_val);
+            multipliers = log2([285 287.5 290 292.5 295 297.5 300 302.5 305 310]/CTRL_val);
             subdirs_set = {
                 %%Tsst
                 %%'CTRLv0qrhSATqdz5000_nx3072_SST275.00K' %behaves differently, perhaps ice is important here
                 'CTRLv0qrhSATqdz5000_nx3072_SST285.00K' %-- medium rmax oscillation
+                'CTRLv0qrhSATqdz5000_nx3072_SST287.50K'
                 'CTRLv0qrhSATqdz5000_nx3072_SST290.00K'
+                'CTRLv0qrhSATqdz5000_nx3072_SST292.50K'
                 'CTRLv0qrhSATqdz5000_nx3072_SST295.00K'
                 'CTRLv0qrhSATqdz5000_nx3072_SST297.50K'
                 'CTRLv0qrhSATqdz5000_nx3072'
@@ -312,7 +313,9 @@ for jj = 1:length(sim_sets_all)
               %%Tsst
                 %'CTRLv0qrhSATqdz5000_nx3072_SST275.00K' %-- large rmax oscillation
                 'CTRLv0qrhSATqdz5000_nx3072_SST285.00K' %-- medium rmax oscillation
+                'CTRLv0qrhSATqdz5000_nx3072_SST287.50K'
                 'CTRLv0qrhSATqdz5000_nx3072_SST290.00K'
+                'CTRLv0qrhSATqdz5000_nx3072_SST292.50K'
                 'CTRLv0qrhSATqdz5000_nx3072_SST295.00K'
                 'CTRLv0qrhSATqdz5000_nx3072_SST297.50K'
                 'CTRLv0qrhSATqdz5000_nx3072'
@@ -377,12 +380,12 @@ for jj = 1:length(sim_sets_all)
                 'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fdiv4_lh6000'
                 'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fx4_lh375'
 
-                %'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fdiv4_lh12000'
+                'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fdiv4_lh12000'
                 %%bad'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fx4_lh750'
                 %%bad'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fdiv4_lh12000'
                 'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fx4_lh750'
 
-                %'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fdiv2_lh12000'
+                'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fdiv2_lh12000'
                 'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fx4'
                 'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fdiv2_lh12000'
                 'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fx4'
@@ -392,8 +395,8 @@ for jj = 1:length(sim_sets_all)
                 'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_lh12000'
                 'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fx4_lh3000'
 
-                %'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fx2_lh12000'
-                %'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fx4_lh6000'
+                'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fx2_lh12000'
+                'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fx4_lh6000'
                 'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fx2_lh12000'
                 'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fx4_lh6000'
                 
@@ -433,7 +436,23 @@ for jj = 1:length(sim_sets_all)
                 'CTRLv0qrhSATqdz5000_nx3072_lh12000'
             }
             multipliers = ones(length(subdirs_set),1);
+        case 'nondim1.5'
+            CTRL_val = 1; %CTRL value of quantity varied across simulations
+            units = '-';
 
+            subdirs_set = {
+            'CTRLv0qrhSATqdz5000_nx3072'
+            'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fdiv2'
+            'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fx2_lh3000'
+            'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fdiv2_lh750'
+            'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_lh3000'
+            'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_lh750'
+            'CTRLv0qrhSATqdz5000_nx3072_fdiv2_lh750'
+            'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fx2'
+            'CTRLv0qrhSATqdz5000_nx3072_fx2_lh3000'
+            }
+            multipliers = ones(length(subdirs_set),1);
+            
         case 'transient'
             CTRL_val = 1; %CTRL value of quantity varied across simulations
             units = '-';

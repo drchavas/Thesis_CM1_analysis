@@ -14,21 +14,22 @@ clc
 subdir_pre='RCE/';
 %subdir_pre='CTRL_icRCE/';
 ext_hd = 1; %0=local hard drive; 1=external hard drive
+moist = 0;  %1 = moist; 0 = dry
 
-SST = 292.50;  %[K]; used to calculate RCE th_sfc (=SST-2K) and qv_sfc (80% RH from saturation at SST)
+SST = 300.00;  %[K]; used to calculate RCE th_sfc (=SST-2K) and qv_sfc (80% RH from saturation at SST)
 RH_sfc = .8;    %air-sea latent disequilibrium
 dT_sfc = 2; %[K]; air-sea thermal disequilibrium
 
 run_types=3*ones(100,1);    %[1 1 1 1 1 1 1 1 1]; %1=axisym; 3=3d
 subdirs = {
-'RCE_nx48_SST292.50K_Tthresh200K_usfc3'
+'RCE_nx48_SST300.00K_Tthresh200K_usfc3_DRY'
 %'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_usfc1'
 }; %name of sub-directory with nc files
 
 t0 = 70;    %[day], starting time for averaging
 tf = 100;   %[day], ending time for averaging
 
-save_output_sounding = 1;   %0=no output file created; 1=yes 'input_sounding_[subdir]'
+save_output_sounding = 0;   %0=no output file created; 1=yes 'input_sounding_[subdir]'
 plot_type = 1;  %0=no plot; 1=plots of RCE vertical profiles of qv [g/kg] and theta [K]
     pl_clrs={'b' 'b--' 'r' 'r--' 'g' 'g--' 'c' 'c--' 'k' 'k--' 'y' 'y--'};
     %pl_clrs={'b--' 'r--' 'g--' 'c--' 'k--' 'y--' 'm--' 'b' 'r' 'g' 'c' 'k' 'y' 'm'};
@@ -94,7 +95,7 @@ for rr=1:numruns
     %% EXTRACT DATA FROM ORIGINAL nc DATA
 
     %%EXTRACT TIMESTEP SIZE
-    var = 'qvpert'; %doesn't matter, just need any variable
+    var = 'thpert'; %doesn't matter, just need any variable
     clear data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units
     if(run_type==3)
         numfiles=length(dir(sprintf('%s/cm1out_*.nc',subdir_full)));
@@ -148,23 +149,25 @@ for rr=1:numruns
         end
 
         %%EXTRACT qv DATA: note that qvpert is in [kg/kg]
-        var = 'qvpert'
-        clear data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units
-        [data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units] = nc_extract(dir_in,subdir,nc_file,var,x0,xf,y0,yf,z0,zf);
+        if(moist == 1)
+            var = 'qvpert'
+            clear data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units
+            [data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units] = nc_extract(dir_in,subdir,nc_file,var,x0,xf,y0,yf,z0,zf);
 
-        %%CALCULATE HORIZONTALLY-AVERAGED VERTICAL PROFILE
-        v_def_qv = v_def;
-        v_units_qv = v_units;
-        data_hmean_qv=data_hmean_qv(1:nz_sub);   %NOTE qvpert IS IN [kg/kg]!!!
-        if(run_type==3)
-            vert_prof_temp_qv=squeeze(mean(mean(data,1),2));   %horiz-averaged vertical profile
-        elseif(run_type==1)
-            xvals = xmin_sub:dx:xmax_sub;
-            data=squeeze(data);
-            vert_prof_temp_qv = ((xvals*data)/sum(xvals))';  %cylindrical integral--sum weighted by radius
+            %%CALCULATE HORIZONTALLY-AVERAGED VERTICAL PROFILE
+            v_def_qv = v_def;
+            v_units_qv = v_units;
+            data_hmean_qv=data_hmean_qv(1:nz_sub);   %NOTE qvpert IS IN [kg/kg]!!!
+            if(run_type==3)
+                vert_prof_temp_qv=squeeze(mean(mean(data,1),2));   %horiz-averaged vertical profile
+            elseif(run_type==1)
+                xvals = xmin_sub:dx:xmax_sub;
+                data=squeeze(data);
+                vert_prof_temp_qv = ((xvals*data)/sum(xvals))';  %cylindrical integral--sum weighted by radius
+            end
+            data_hmean_qv=data_hmean_qv+vert_prof_temp_qv/(i_tf-i_t0+1); %[kg/kg]
         end
-        data_hmean_qv=data_hmean_qv+vert_prof_temp_qv/(i_tf-i_t0+1); %[kg/kg]
-        
+            
         %%EXTRACT theta DATA
         var = 'thpert'
         clear data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units
@@ -249,11 +252,13 @@ for rr=1:numruns
 %    p200_RCE{rr} = 100000*(data_hmean_pi(z0+1:z0+vec_length)).^(1004/287);
     
     %%Fix any vertical instabilities in th00_RCE (just set value to mean of levels it lies between)
+%{
     for j = 2:length(th00_RCE{rr})-1
         if(th00_RCE{rr}(j)<th00_RCE{rr}(j-1))
             th00_RCE{rr}(j)=mean([th00_RCE{rr}(j-1) th00_RCE{rr}(j+1)]);
         end
     end
+%}
     
     %%Recalculate sfc theta (=SST-2K) and qv_sfc (80% RH from saturation at SST)
     Rd=287;  %[J/kg/K]
@@ -375,20 +380,22 @@ if(plot_type~=0)
 
 
     figure(1)
-    subplot(1,2,1)
-    set(gca,'fontweight','bold','fontsize',11)
-    axis([0 1000*max(cellfun(@(x) max(x(:)),qv00_RCE)) 0 zz00(end)/1000])
-    input_xlabel=sprintf('water vapor mixing ratio [g/kg]',v_def_qv);
-    xlabel(input_xlabel);
-    input_ylabel=sprintf('Height AGL [km]');
-    ylabel(input_ylabel);
-    input_legend=strrep([subdirs_plot],'_','\_');
-    legend(input_legend)
-    input_title=strrep(sprintf('water vapor mixing ratio [g/kg]'),'_','\_');
-    title(input_title)
+    if(moist == 1)
+        subplot(1,2,1)
+        set(gca,'fontweight','bold','fontsize',11)
+        axis([0 1000*max(cellfun(@(x) max(x(:)),qv00_RCE)) 0 zz00(end)/1000])
+        input_xlabel=sprintf('water vapor mixing ratio [g/kg]',v_def_qv);
+        xlabel(input_xlabel);
+        input_ylabel=sprintf('Height AGL [km]');
+        ylabel(input_ylabel);
+        input_legend=strrep([subdirs_plot],'_','\_');
+        legend(input_legend)
+        input_title=strrep(sprintf('water vapor mixing ratio [g/kg]'),'_','\_');
+        title(input_title)
 
-    figure(1)
-    subplot(1,2,2)
+        figure(1)
+        subplot(1,2,2)
+    end
     set(gca,'fontweight','bold','fontsize',11)
     axis([min(min(cellfun(@(x) min(x(:)),th00_RCE))) max(max(cellfun(@(x) max(x(:)),th00_RCE))) 0 zz00(end)/1000])
     input_xlabel=sprintf('potential temperature [%s]',v_units_th);

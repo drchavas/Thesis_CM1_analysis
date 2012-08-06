@@ -13,16 +13,16 @@ figure(1)
 clf(1)
 
 %% USER INPUT %%%%%%%%%%%%%%%%%%
-run_type=3; %1=axisym; 3=3d; 10/30=initial condition test (subdir 'code_test')
+run_type=1; %1=axisym; 3=3d; 10/30=initial condition test (subdir 'code_test')
 
-%subdir_pre='CTRL_icRCE/';    %general subdir that includes multiple runs within
+subdir_pre='CTRL_icRCE/';    %general subdir that includes multiple runs within
 %subdir_pre='TRANSFER/';
-subdir_pre='RCE/';    %general subdir that includes multiple runs within
+%subdir_pre='RCE/';    %general subdir that includes multiple runs within
 ext_hd = 1; %0=local hard drive; 1=external hard drive
 
 
-subdir_axisym = 'DAN'; %name of sub-directory with nc files
-t_file_axisym=327;  %file timestep
+subdir_axisym = 'CTRLv0qrhSATqdz5000_nx3072_DRYdrc'; %name of sub-directory with nc files
+t_file_axisym=400;  %file timestep
 subdir_3d = 'RCE_nx48_SST292.50K_Tthresh200K_usfc3';  %name of sub-directory with nc files
 t_file_3d=101;  %file timestep
 

@@ -15,8 +15,8 @@ cd /Users/drchavas/Documents/Research/Thesis/CM1/v15/Thesis_CM1_analysis
 subdir_pre='CTRL_icRCE/';    %general subdir that includes multiple runs within
 ext_hd = 1; %0=local hard drive; 1=external hard drive
 
-sim_sets = {'Tsst' 'usfc_drag' 'Qcool' 'Ttpp'}
-sim_sets_str = {'T_{sst}' 'u_{sfc_drag}' 'Q_{cool}' 'T_{tpp}'};  %make sure this matches!
+sim_sets = {'Tsst' 'usfc' 'Qcool' 'Ttpp'}
+sim_sets_str = {'T_{sst}' 'u_{sfc}' 'Q_{cool}' 'T_{tpp}'};  %make sure this matches!
 
 T_mean = 2; %[day]
 equil_dynamic = 1;  %1 = use dynamic equilibrium

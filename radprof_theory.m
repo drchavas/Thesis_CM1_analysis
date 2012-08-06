@@ -19,7 +19,7 @@ run_types=ones(1000,1); %[1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]; %1=axisym; 3=3D
 tmean0_usr = 70;    %[day]
 tmeanf_usr = 100;    %[day]
 
-T_mean = 5; %[days]; averaging time period used to calculate moving time-average radial profile from which rmax and r0 are calculated
+T_mean = 2; %[days]; averaging time period used to calculate moving time-average radial profile from which rmax and r0 are calculated
 dt_equil = 30;  %[days]; how long must be quasi-steady to define equilibrium
 Cd_in = 1.5e-3; %only used to calculate r0_Lilly
 
@@ -93,30 +93,30 @@ t_day_max = 0;
 for ss=1:numruns
 
     %%Load data for given simulation
-    load(sprintf('../CM1_postproc_data/simdata_Tmean5_dt30_dynamic/%s.mat',subdirs_load{ss}));
+    load(sprintf('../CM1_postproc_data/simdata_Tmean2_dt30_dynamic/%s.mat',subdirs_load{ss}));
     
     %% Equilibrium data %%%%%%%%%%%%%%%%%%%%%%%%
     %variable values
     Vmax_equil(ss) = Vmax_equil_sim;
     rmax_equil(ss) = rmax_equil_sim;
-    rmid_equil(ss) = rmid_equil_sim;
+    rrad_equil(ss) = rrad_equil_sim;
     r0_equil(ss) = r0_equil_sim;
     r0Lil_equil(ss) = r0Lil_equil_sim;
     Vmax_equil_g(ss) = Vmax_equil_g_sim;
     rmax_equil_g(ss) = rmax_equil_g_sim;
-    rmid_equil_g(ss) = rmid_equil_g_sim;
+    rrad_equil_g(ss) = rrad_equil_g_sim;
     r0_equil_g(ss) = r0_equil_g_sim;
     r0Lil_equil_g(ss) = r0Lil_equil_g_sim;
     
     %timescales to those values
     Vmax_tau_equil(ss) = Vmax_tau_equil_sim;
     rmax_tau_equil(ss) = rmax_tau_equil_sim;
-    rmid_tau_equil(ss) = rmid_tau_equil_sim;
+    rrad_tau_equil(ss) = rrad_tau_equil_sim;
     r0_tau_equil(ss) = r0_tau_equil_sim;
     r0Lil_tau_equil(ss) = r0Lil_tau_equil_sim;
     Vmax_tau_equil_g(ss) = Vmax_tau_equil_g_sim;
     rmax_tau_equil_g(ss) = rmax_tau_equil_g_sim;
-    rmid_tau_equil_g(ss) = rmid_tau_equil_g_sim;
+    rrad_tau_equil_g(ss) = rrad_tau_equil_g_sim;
     r0_tau_equil_g(ss) = r0_tau_equil_g_sim;
     r0Lil_tau_equil_g(ss) = r0Lil_tau_equil_g_sim;
     
@@ -124,12 +124,12 @@ for ss=1:numruns
     tau_gen(ss) = tau_gen_sim; %defined using the GRADIENT wind
 %    Vmax_gen(ss) = Vmax_gen_sim;
 %    rmax_gen(ss) = rmax_gen_sim;
-%    rmid_gen(ss) = rmid_gen_sim;
+%    rrad_gen(ss) = rrad_gen_sim;
 %    r0_gen(ss) = r0_gen_sim;
 %    r0Lil_gen(ss) = r0Lil_gen_sim;
     Vmax_gen_g(ss) = Vmax_gen_g_sim;
     rmax_gen_g(ss) = rmax_gen_g_sim;
-    rmid_gen_g(ss) = rmid_gen_g_sim;
+    rrad_gen_g(ss) = rrad_gen_g_sim;
     r0_gen_g(ss) = r0_gen_g_sim;
     r0Lil_gen_g(ss) = r0Lil_gen_g_sim;
     
@@ -137,8 +137,8 @@ for ss=1:numruns
     Vmax_max_g(ss) = Vmax_max_g_sim;
     rmax_tau_max_g(ss) = rmax_tau_max_g_sim; %defined using the GRADIENT wind
     rmax_max_g(ss) = rmax_max_g_sim;
-    rmid_tau_max_g(ss) = rmid_tau_max_g_sim; %defined using the GRADIENT wind
-    rmid_max_g(ss) = rmid_max_g_sim;
+    rrad_tau_max_g(ss) = rrad_tau_max_g_sim; %defined using the GRADIENT wind
+    rrad_max_g(ss) = rrad_max_g_sim;
     r0_tau_max_g(ss) = r0_tau_max_g_sim; %defined using the GRADIENT wind
     r0_max_g(ss) = r0_max_g_sim;
     r0Lil_tau_max_g(ss) = r0Lil_tau_max_g_sim; %defined using the GRADIENT wind
@@ -147,8 +147,8 @@ for ss=1:numruns
 %    Vmax_max(ss) = Vmax_max_sim;
 %    rmax_tau_max(ss) = rmax_tau_max_sim; %defined using the GRADIENT wind
 %    rmax_max(ss) = rmax_max_sim;
-%    rmid_tau_max(ss) = rmid_tau_max_sim; %defined using the GRADIENT wind
-%    rmid_max(ss) = rmid_max_sim;
+%    rrad_tau_max(ss) = rrad_tau_max_sim; %defined using the GRADIENT wind
+%    rrad_max(ss) = rrad_max_sim;
 %    r0_tau_max(ss) = r0_tau_max_sim; %defined using the GRADIENT wind
 %    r0_max(ss) = r0_max_sim;
 %    r0Lil_tau_max(ss) = r0Lil_tau_max_sim; %defined using the GRADIENT wind
@@ -157,13 +157,13 @@ for ss=1:numruns
     %% Save data for all simulations
 %    Vmax_movave_all(:,ss)=Vmax_movave_sim;
 %    rmax_movave_all(:,ss)=rmax_movave_sim;
-%    rmid_movave_all(:,ss)=rmid_movave_sim;
+%    rrad_movave_all(:,ss)=rrad_movave_sim;
 %    r0_movave_all(:,ss)=r0_movave_sim;
 %    r0Lil_movave_all(:,ss)=r0Lil_movave_sim;
     
     Vmax_movave_g_all(:,ss)=Vmax_movave_g_sim;
     rmax_movave_g_all(:,ss)=rmax_movave_g_sim;
-    rmid_movave_g_all(:,ss)=rmid_movave_g_sim;
+    rrad_movave_g_all(:,ss)=rrad_movave_g_sim;
     r0_movave_g_all(:,ss)=r0_movave_g_sim;
     r0Lil_movave_g_all(:,ss)=r0Lil_movave_g_sim;
     
@@ -177,7 +177,7 @@ end
 
 
 %% PLOTTING %%%%%%%%%%%%%%%%
-set(0,'defaultaxesfontsize',12,'defaultaxesfontweight','bold','defaultlinelinewidth',1)
+set(0,'defaultaxesfontsize',12,'defaultaxesfontweight','bold','defaultlinelinewidth',2)
 
 %Single/Multi simulation: Plot user-defined radial wind profiles
 
@@ -203,3 +203,4 @@ title(input_title)
 xlabel('Radius [km]')
 ylabel('Azimuthal gradient wind speed [m/s], z=1 km')
 grid on
+

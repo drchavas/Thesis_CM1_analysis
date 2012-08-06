@@ -40,8 +40,8 @@ function [junk] = TC_stats(subdir_pre,ext_hd,run_type,t0,tf,tmean0_usr,tmeanf_us
 
 %for calculating the outer radius using control values of the constant parameters
 wrad_ctrl = .0027;   %control run value
-fcor_ctrl = 5e-5;
 Cd_in_ctrl = .0015;
+fcor_ctrl = 5e-5;   %%THIS IS NO LONGER USED IN CALCULATION OF r0Lil_Lilctrl* !!
 
 %%Write out to screen whats going on
 sprintf('TC_stats for: %s',subdir)
@@ -884,7 +884,7 @@ for ii=1:i_tf-i_t0+1
             r_user = rrad_movave_g(ii-floor(nfile_mean/2));
             [r_0_full,res_error,i_error] = r0_calc(r_user,V_user,fcor,Cd_in,wrad);
             numerr = numerr+i_error;
-            [r_0_full_Lilctrl,res_error,i_error] = r0_calc(r_user,V_user,fcor_ctrl,Cd_in_ctrl,wrad_ctrl);
+            [r_0_full_Lilctrl,res_error,i_error] = r0_calc(r_user,V_user,fcor,Cd_in_ctrl,wrad_ctrl);
             [r0ER11] = r0ER11_calc(r_user,v_usr_fracVp,mpi,fcor,Cd_in);    %calculate outer radius using ER11 Eq 36
             clear junk1 junk2
 

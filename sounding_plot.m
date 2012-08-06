@@ -23,7 +23,7 @@ epsilon=Rd/Rv;
 g=9.81; %[m/s2]
 
 snd_files = {
-%'input_sounding_3dRCE_nx48_SST300.00K_Tthresh200K_usfc3'
+'input_sounding_3dRCE_nx48_SST300.00K_Tthresh200K_usfc3_DRY'
 }
 
 pl_clrs={'b' 'r' 'g' 'c' 'k' 'y' 'm' 'm.' 'y.'};
