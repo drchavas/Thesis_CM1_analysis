@@ -23,14 +23,15 @@ figure(1)
 subdir_pre='CTRL_icRCE/';    %general subdir that includes multiple runs within
 ext_hd = 1; %0=local hard drive; 1=external hard drive
 run_type=1; %1=axisym; 3=3D
+moist = 0;  %1 = moist; else = dry
 
-subdir = 'CTRLv0qrhSATqdz5000_nx3072'; %name of sub-directory with nc files
+subdir = 'CTRLv0qrhSATqdz5000_nx3072_DRYdrc'; %name of sub-directory with nc files
 
 t0a = 145;
 tfa = 150;
 dt_mean = 5;   %[day]
 
-var_clr = 'winterp';
+var_clr = 'vinterp';
 var_cntr = 'angmom';
 
 %%Define grid of points to extract (i.e. all of them, will subset afterwards)
@@ -43,9 +44,9 @@ zf=100;  %last z grid point [0,end]
 
 %%Define subset of points to plot
 rmin_plot = 0;  %[km]; lowest value plotted
-rmax_plot = 400;    %[km]; highest value plotted
-zmin_plot = 2;  %[km]; lowest value plotted
-zmax_plot = 6; %[km]; highest value plotted
+rmax_plot = 20000;    %[km]; highest value plotted
+zmin_plot = 0;  %[km]; lowest value plotted
+zmax_plot = 20; %[km]; highest value plotted
 datamin_plot = -5000;   %minimum data value plotted
 datamax_plot = 5000;   %minimum data value plotted
 
@@ -95,7 +96,7 @@ end
 subdir_full=sprintf('%s%s',dir_in,subdir)
 
 %%EXTRACT TIMESTEP SIZE
-var_dt = 'qvpert'; %doesn't matter, just need any variable
+var_dt = 'vinterp'; %doesn't matter, just need any variable
 clear data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units
 if(run_type==3)
     numfiles=length(dir(sprintf('%s/cm1out_t*.nc',subdir_full)));
@@ -145,7 +146,7 @@ end
 clear t_day
 clear r_usr
 for ii=1:i_tf-i_t0+1
-    fclose('all')
+    fclose('all');
     t_file=i_t0+ii-1;
 
     t_day(ii) = (t_file-1)*dt/(24*60*60);
@@ -222,35 +223,44 @@ for ii=1:i_tf-i_t0+1
     [data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units] = nc_extract(dir_in,subdir,nc_file,var_temp,x0,xf,y0,yf,z0,zf);
     th_pert = squeeze(data);
 
-    %%load qvpert
-    var_temp = 'qvpert';
-    [data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units] = nc_extract(dir_in,subdir,nc_file,var_temp,x0,xf,y0,yf,z0,zf);
-    qv_pert = squeeze(data);
+    if(moist == 1)
+        %%load qvpert
+        var_temp = 'qvpert';
+        [data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units] = nc_extract(dir_in,subdir,nc_file,var_temp,x0,xf,y0,yf,z0,zf);
+        qv_pert = squeeze(data);
 
-    %%load qcpert
-    var_temp = 'qc';
-    [data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units] = nc_extract(dir_in,subdir,nc_file,var_temp,x0,xf,y0,yf,z0,zf);
-    qc_pert = squeeze(data);
+        %%load qcpert
+        var_temp = 'qc';
+        [data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units] = nc_extract(dir_in,subdir,nc_file,var_temp,x0,xf,y0,yf,z0,zf);
+        qc_pert = squeeze(data);
 
-    %%load qrpert
-    var_temp = 'qr';
-    [data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units] = nc_extract(dir_in,subdir,nc_file,var_temp,x0,xf,y0,yf,z0,zf);
-    qr_pert = squeeze(data);
+        %%load qrpert
+        var_temp = 'qr';
+        [data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units] = nc_extract(dir_in,subdir,nc_file,var_temp,x0,xf,y0,yf,z0,zf);
+        qr_pert = squeeze(data);
 
-    %%load qipert
-    var_temp = 'qi';
-    [data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units] = nc_extract(dir_in,subdir,nc_file,var_temp,x0,xf,y0,yf,z0,zf);
-    qi_pert = squeeze(data);
+        %%load qipert
+        var_temp = 'qi';
+        [data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units] = nc_extract(dir_in,subdir,nc_file,var_temp,x0,xf,y0,yf,z0,zf);
+        qi_pert = squeeze(data);
 
-    %%load qspert
-    var_temp = 'qs';
-    [data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units] = nc_extract(dir_in,subdir,nc_file,var_temp,x0,xf,y0,yf,z0,zf);
-    qs_pert = squeeze(data);
+        %%load qspert
+        var_temp = 'qs';
+        [data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units] = nc_extract(dir_in,subdir,nc_file,var_temp,x0,xf,y0,yf,z0,zf);
+        qs_pert = squeeze(data);
 
-    %%load qgpert
-    var_temp = 'qg';
-    [data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units] = nc_extract(dir_in,subdir,nc_file,var_temp,x0,xf,y0,yf,z0,zf);
-    qg_pert = squeeze(data);
+        %%load qgpert
+        var_temp = 'qg';
+        [data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units] = nc_extract(dir_in,subdir,nc_file,var_temp,x0,xf,y0,yf,z0,zf);
+        qg_pert = squeeze(data);
+    else    %DRY
+        qv_pert = 0;
+        qc_pert = 0;
+        qr_pert = 0;
+        qi_pert = 0;
+        qs_pert = 0;
+        qg_pert = 0;
+    end
     
     %%ql_pert
     ql_pert = qc_pert + qr_pert + qi_pert + qs_pert + qg_pert;
@@ -277,7 +287,16 @@ for ii=1:i_tf-i_t0+1
     th = repmat(th00(z0+1:z0+nz_sub),nx_sub,1) + th_pert;
 
     %%calculate water vapor mixing ratio
-    qv = repmat(qv00(z0+1:z0+nz_sub),nx_sub,1) + qv_pert;    %[kg/kg]
+    if(moist == 1)
+        qv = repmat(qv00(z0+1:z0+nz_sub),nx_sub,1) + qv_pert;    %[kg/kg]
+
+        %%calculate liquid water mixing ratio
+        ql = ql_pert;    %[kg/kg]
+
+    else    %DRY
+        qv = 0;
+        ql = 0;
+    end
 
     %%calculate liquid water mixing ratio
     ql = ql_pert;    %[kg/kg]

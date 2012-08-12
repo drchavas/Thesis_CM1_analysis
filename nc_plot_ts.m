@@ -17,7 +17,8 @@ clf(1)     %clear figures without closing them
 subdir_pre='CTRL_icRCE/';
 %subdir_pre='TRANSFER/';
 %subdir_pre='RCE/';    %general subdir that includes multiple runs within
-ext_hd = 1; %0=local hard drive; 1=external hard drive
+subdir_pre='';
+ext_hd = 0; %0=local hard drive; 1=external hard drive
 
 run_types= [1 1 1]; %1=axisym; 3=3D
 %    toax = 1.688/1.326;
@@ -27,7 +28,7 @@ run_types= [1 1 1]; %1=axisym; 3=3D
     div_dat_by=ones(30,1);
 subdirs = {
 
-'CTRLv0qrhSATqdz5000_nx3072_DRYdrc'
+'CTRLv0qrhSATqdz5000_nx3072_tap1hr'
 
 }; %name of sub-directory with nc files
 
@@ -49,7 +50,7 @@ plot_type = 1;  %0=no plot
 %    pl_clrs={'b' 'r' 'g' 'c' 'k' 'y' 'b--' 'r--' 'g--' 'c--' 'k--' 'y--' 'm--'};
     %pl_clrs={'b' 'k' 'r' 'g' 'c' 'y' 'm' 'b--' 'k--' 'r--' 'g--' 'c--' 'y--' 'm--'};
     use_stats = 1;  %0=extract from original data; 1=use cm1out_stats.nc
-    var = 'tmass';  %variable of interest    
+    var = 'svmax';  %variable of interest    
     v_scale = 1; %scale the y-axis variable by this value (note: units will be wrong)
     use_smooth = 1; %0=raw data; 1=smoothed (N-pt moving average)
         numpt_sm = 50;  %smoother uses this number of points

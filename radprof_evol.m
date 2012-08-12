@@ -212,8 +212,8 @@ for ii=1:i_tf-i_t0+1
     [data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units] = nc_extract(dir_in,subdir,nc_file,var_temp,x0,xf,y0,yf,z0,zf);
     th_pert = squeeze(data);
 
-    %%load qvpert
     if(moist == 1)
+        %%load qvpert
         var_temp = 'qvpert';
         [data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units] = nc_extract(dir_in,subdir,nc_file,var_temp,x0,xf,y0,yf,z0,zf);
         qv_pert = squeeze(data);

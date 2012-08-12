@@ -22,7 +22,7 @@ dT_sfc = 2; %[K]; air-sea thermal disequilibrium
 
 run_types=3*ones(100,1);    %[1 1 1 1 1 1 1 1 1]; %1=axisym; 3=3d
 subdirs = {
-'RCE_nx48_SST300.00K_Tthresh200K_usfc3_DRY'
+'RCE_nx48_SST300.00K_Tthresh250K_usfc3_DRY'
 %'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_usfc1'
 }; %name of sub-directory with nc files
 
@@ -252,13 +252,15 @@ for rr=1:numruns
 %    p200_RCE{rr} = 100000*(data_hmean_pi(z0+1:z0+vec_length)).^(1004/287);
     
     %%Fix any vertical instabilities in th00_RCE (just set value to mean of levels it lies between)
-%{
-    for j = 2:length(th00_RCE{rr})-1
-        if(th00_RCE{rr}(j)<th00_RCE{rr}(j-1))
-            th00_RCE{rr}(j)=mean([th00_RCE{rr}(j-1) th00_RCE{rr}(j+1)]);
+    %%MOIST ONLY! For dry case, this needs to be updated since dth/dz<0 in lowest several model levels
+    if(moist==1)
+        for j = 2:length(th00_RCE{rr})-1
+            if(th00_RCE{rr}(j)<th00_RCE{rr}(j-1))
+                th00_RCE{rr}(j)=mean([th00_RCE{rr}(j-1) th00_RCE{rr}(j+1)]);
+            end
         end
     end
-%}
+
     
     %%Recalculate sfc theta (=SST-2K) and qv_sfc (80% RH from saturation at SST)
     Rd=287;  %[J/kg/K]

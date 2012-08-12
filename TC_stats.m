@@ -162,7 +162,7 @@ if(run_type==3)
     numfiles=length(dir(sprintf('%s/cm1out_t*.nc',subdir_full)));
     [data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units fcor] = nc_extract(dir_in,subdir,'cm1out_t0002.nc',var_dt,x0,xf,y0,yf,z0,zf);
 elseif(run_type==1)
-    numfiles=length(dir(sprintf('%s/cm1out_0*.nc',subdir_full)));
+    numfiles=length(dir(sprintf('%s/cm1out_*.nc',subdir_full)));
     [data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units fcor] = nc_extract(dir_in,subdir,'cm1out_0002.nc',var_dt,x0,xf,y0,yf,z0,zf);
 end
 

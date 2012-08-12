@@ -12,10 +12,10 @@ tic
 %% Which simulations (or sets) should I run?
 %name out output subdir (within simsets_Tmean#/PLOTS/[sim_set]/) where plots will be saved
 %sim_sets_all = {'Lx' 'dx' 'dz' 'lh' 'lv' 'qro' 'ro' 'fcor' 'Tsst' 'Ttpp' 'usfc' 'usfc_drag' 'Qcool' 'nondim' 'nondim1.5' 'nondim2' 'mpi' 'Cd' 'QcoolVpcnst' 'QcoolVplvHcnst'}; 
-sim_sets_all = {'dry'}; 
+sim_sets_all = {'single'}; 
     %IF 'single'
-    sim_single = 'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fdiv4_lh12000';    %runs only this simulation
-moist = 0;  %1 = moist; else = dry
+    sim_single = 'CTRLv0qrhSATqdz5000_nx3072_tap1hr';    %runs only this simulation
+moist = 1;  %1 = moist; else = dry
     
 %% Which scripts should I run?
 run_TC_stats = 1;
@@ -41,8 +41,9 @@ rmax_plot = 1500;    %[km]
 
 
 %% Basic crap
-subdir_pre='CTRL_icRCE/';    %general subdir that includes multiple runs within
-ext_hd = 1; %0=local hard drive; 1=external hard drive
+%subdir_pre='CTRL_icRCE/';    %general subdir that includes multiple runs within
+subdir_pre='';    %general subdir that includes multiple runs within
+ext_hd = 0; %0=local hard drive; 1=external hard drive
 run_types=ones(1000,1); %[1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]; %1=axisym; 3=3D
 
 %%Data time range (want data for entire simulation)
