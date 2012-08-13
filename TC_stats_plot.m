@@ -45,7 +45,7 @@ sim_set = 'nondim';
 multipliers = ones(length(subdirs_set),1);
 
 %}
-function [junk] = TC_stats_plot(run_type,T_mean,equil_dynamic,dt_final,tf,dt_final_dynamic,rmin_plot,rmax_plot,CTRL_val,units,multipliers,subdirs_set,sim_set,dir_home);
+function [junk] = TC_stats_plot(run_type,T_mean,equil_dynamic,dt_final,tf,dt_final_dynamic,rmin_plot,rmax_plot,CTRL_val,units,multipliers,subdirs_set,sim_set,dir_home,dir_in_dat,dir_in_dat_dyn,dir_in_set,dir_in_set_dyn);
 
 %%Write out to screen whats going on
 sprintf('TC_stats_plot for: %s',sim_set)
@@ -97,15 +97,15 @@ for ss=1:numruns
     %%Load data for given simulation
     if(equil_dynamic==1)
         if(wrad_const == 1)
-            load(sprintf('../CM1_postproc_data/simdata_Tmean%i_dt%i_dynamic_wradconst/%s.mat',T_mean,dt_final_dynamic,subdirs_load{ss}));
+            load(sprintf('%s_wradconst/%s.mat',dir_in_dat_dyn,subdirs_load{ss}));
         else
-            load(sprintf('../CM1_postproc_data/simdata_Tmean%i_dt%i_dynamic/%s.mat',T_mean,dt_final_dynamic,subdirs_load{ss}));
+            load(sprintf('%s/%s.mat',dir_in_dat_dyn,subdirs_load{ss}));
         end
     else
         if(wrad_const == 1)
-            load(sprintf('../CM1_postproc_data/simdata_Tmean%i_%i_%i_wradconst/%s.mat',T_mean,tf-dt_final,tf,subdirs_load{ss}));
+            load(sprintf('%s_wradconst/%s.mat',dir_in_dat,subdirs_load{ss}));
         else
-            load(sprintf('../CM1_postproc_data/simdata_Tmean%i_%i_%i/%s.mat',T_mean,tf-dt_final,tf,subdirs_load{ss}));
+            load(sprintf('%s/%s.mat',dir_in_dat,subdirs_load{ss}));
         end
     end
     
@@ -222,15 +222,15 @@ end
 %%Determine output subdirectory pathname for given sim_set
 if(equil_dynamic == 1)
     if(wrad_const == 1)
-        subdir_out = sprintf('../CM1_postproc_data/simsets_Tmean%i_dt%i_dynamic_wradconst',T_mean,dt_final_dynamic);
+        subdir_out = sprintf('%s_wradconst',dir_in_set_dyn);
     else
-        subdir_out = sprintf('../CM1_postproc_data/simsets_Tmean%i_dt%i_dynamic',T_mean,dt_final_dynamic);
+        subdir_out = sprintf('%s',dir_in_set_dyn);
     end
 else
     if(wrad_const == 1)
-        subdir_out = sprintf('../CM1_postproc_data/simsets_Tmean%i_%i_%i_wradconst',T_mean,tf-dt_final,tf);
+        subdir_out = sprintf('%s_wradconst',dir_in_set);
     else
-        subdir_out = sprintf('../CM1_postproc_data/simsets_Tmean%i_%i_%i',T_mean,tf-dt_final,tf);
+        subdir_out = sprintf('%s',dir_in_set);
     end
 end
 
@@ -1076,15 +1076,15 @@ if(plot_ts_multi==1)
         subplot(3,1,1)
         hold on
         if(~isnan(tau_gen(i)))
-            h=plot(t_day(tau_gen(i)/(dt/60/60/24)),Vmax_gen(i),'d');
+            h=plot(t_day(round(tau_gen(i)/(dt/60/60/24))),Vmax_gen(i),'d');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
         if(~isnan(Vmax_tau_max(i)))
-            h=plot(t_day(Vmax_tau_max(i)/(dt/60/60/24)),Vmax_max(i),'^');
+            h=plot(t_day(round(Vmax_tau_max(i)/(dt/60/60/24))),Vmax_max(i),'^');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
         if(~isnan(Vmax_tau_equil(i)))
-            h=plot(t_day(Vmax_tau_equil(i)/(dt/60/60/24)),Vmax_equil(i),'s');
+            h=plot(t_day(round(Vmax_tau_equil(i)/(dt/60/60/24))),Vmax_equil(i),'s');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
     end
@@ -1108,15 +1108,15 @@ if(plot_ts_multi==1)
         
         hold on
         if(~isnan(tau_gen(i)))
-            h=plot(t_day(tau_gen(i)/(dt/60/60/24)),rmax_gen(i),'d');
+            h=plot(t_day(round(tau_gen(i)/(dt/60/60/24))),rmax_gen(i),'d');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
         if(~isnan(rmax_tau_max(i)))
-            h=plot(t_day(rmax_tau_max(i)/(dt/60/60/24)),rmax_max(i),'^');
+            h=plot(t_day(round(rmax_tau_max(i)/(dt/60/60/24))),rmax_max(i),'^');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
         if(~isnan(rmax_tau_equil(i)))
-            h=plot(t_day(rmax_tau_equil(i)/(dt/60/60/24)),rmax_equil(i),'s');
+            h=plot(t_day(round(rmax_tau_equil(i)/(dt/60/60/24))),rmax_equil(i),'s');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
     end
@@ -1130,7 +1130,7 @@ if(plot_ts_multi==1)
         plot(t_day,rrad_movave_all(:,i),pl_clrs{i})
         hold on
         if(~isnan(rrad_tau_equil(i)))
-            h=plot(t_day(rrad_tau_equil(i)/(dt/60/60/24)),rrad_equil(i),'s');
+            h=plot(t_day(round(rrad_tau_equil(i)/(dt/60/60/24))),rrad_equil(i),'s');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
     end
@@ -1147,7 +1147,7 @@ if(plot_ts_multi==1)
         plot(t_day,r0_movave_all(:,i),pl_clrs{i})
         hold on
         if(~isnan(r0_tau_equil(i)))
-            h=plot(t_day(r0_tau_equil(i)/(dt/60/60/24)),r0_equil(i),'s');
+            h=plot(t_day(round(r0_tau_equil(i)/(dt/60/60/24))),r0_equil(i),'s');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
     end
@@ -1175,15 +1175,15 @@ if(plot_ts_multi==1)
         
         hold on
         if(~isnan(tau_gen(i)))
-            h=plot(t_day(tau_gen(i)/(dt/60/60/24)),r0Lil_gen(i),'d');
+            h=plot(t_day(round(tau_gen(i)/(dt/60/60/24))),r0Lil_gen(i),'d');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
         if(~isnan(r0Lil_tau_max(i)))
-            h=plot(t_day(r0Lil_tau_max(i)/(dt/60/60/24)),r0Lil_max(i),'^');
+            h=plot(t_day(round(r0Lil_tau_max(i)/(dt/60/60/24))),r0Lil_max(i),'^');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
         if(~isnan(r0Lil_tau_equil(i)))
-            h=plot(t_day(r0Lil_tau_equil(i)/(dt/60/60/24)),r0Lil_equil(i),'s');
+            h=plot(t_day(round(r0Lil_tau_equil(i)/(dt/60/60/24))),r0Lil_equil(i),'s');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
     end
@@ -1309,15 +1309,15 @@ if(plot_ts_multi==1)
         subplot(4,1,1)
         hold on
         if(~isnan(tau_gen(i)))
-            h=plot(t_day(tau_gen(i)/(dt/60/60/24)),Vmax_gen_g(i),'d');
+            h=plot(t_day(round(tau_gen(i)/(dt/60/60/24))),Vmax_gen_g(i),'d');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
         if(~isnan(Vmax_tau_max_g(i)))
-            h=plot(t_day(Vmax_tau_max_g(i)/(dt/60/60/24)),Vmax_max_g(i),'^');
+            h=plot(t_day(round(Vmax_tau_max_g(i)/(dt/60/60/24))),Vmax_max_g(i),'^');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
         if(~isnan(Vmax_tau_equil_g(i)))
-            h=plot(t_day(Vmax_tau_equil_g(i)/(dt/60/60/24)),Vmax_equil_g(i),'s');
+            h=plot(t_day(round(Vmax_tau_equil_g(i)/(dt/60/60/24))),Vmax_equil_g(i),'s');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
     end
@@ -1341,15 +1341,15 @@ if(plot_ts_multi==1)
         
         hold on
         if(~isnan(tau_gen(i)))
-            h=plot(t_day(tau_gen(i)/(dt/60/60/24)),rmax_gen_g(i),'d');
+            h=plot(t_day(round(tau_gen(i)/(dt/60/60/24))),rmax_gen_g(i),'d');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
         if(~isnan(rmax_tau_max_g(i)))
-            h=plot(t_day(rmax_tau_max_g(i)/(dt/60/60/24)),rmax_max_g(i),'^');
+            h=plot(t_day(round(rmax_tau_max_g(i)/(dt/60/60/24))),rmax_max_g(i),'^');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
         if(~isnan(rmax_tau_equil_g(i)))
-            h=plot(t_day(rmax_tau_equil_g(i)/(dt/60/60/24)),rmax_equil_g(i),'s');
+            h=plot(t_day(round(rmax_tau_equil_g(i)/(dt/60/60/24))),rmax_equil_g(i),'s');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
     end
@@ -1374,15 +1374,15 @@ if(plot_ts_multi==1)
         
         hold on
         if(~isnan(tau_gen(i)))
-            h=plot(t_day(tau_gen(i)/(dt/60/60/24)),rrad_gen_g(i),'d');
+            h=plot(t_day(round(tau_gen(i)/(dt/60/60/24))),rrad_gen_g(i),'d');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
         if(~isnan(rrad_tau_max_g(i)))
-            h=plot(t_day(rrad_tau_max_g(i)/(dt/60/60/24)),rrad_max_g(i),'^');
+            h=plot(t_day(round(rrad_tau_max_g(i)/(dt/60/60/24))),rrad_max_g(i),'^');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
         if(~isnan(rrad_tau_equil(i)))
-            h=plot(t_day(rrad_tau_equil_g(i)/(dt/60/60/24)),rrad_equil_g(i),'s');
+            h=plot(t_day(round(rrad_tau_equil_g(i)/(dt/60/60/24))),rrad_equil_g(i),'s');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
     end
@@ -1406,15 +1406,15 @@ if(plot_ts_multi==1)
         
         hold on
         if(~isnan(tau_gen(i)))
-            h=plot(t_day(tau_gen(i)/(dt/60/60/24)),r0Lil_Lilctrl_gen_g(i),'d');
+            h=plot(t_day(round(tau_gen(i)/(dt/60/60/24))),r0Lil_Lilctrl_gen_g(i),'d');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
         if(~isnan(r0Lil_Lilctrl_tau_max_g(i)))
-            h=plot(t_day(r0Lil_Lilctrl_tau_max_g(i)/(dt/60/60/24)),r0Lil_Lilctrl_max_g(i),'^');
+            h=plot(t_day(round(r0Lil_Lilctrl_tau_max_g(i)/(dt/60/60/24))),r0Lil_Lilctrl_max_g(i),'^');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
         if(~isnan(r0Lil_Lilctrl_tau_equil_g(i)))
-            h=plot(t_day(r0Lil_Lilctrl_tau_equil_g(i)/(dt/60/60/24)),r0Lil_Lilctrl_equil_g(i),'s');
+            h=plot(t_day(round(r0Lil_Lilctrl_tau_equil_g(i)/(dt/60/60/24))),r0Lil_Lilctrl_equil_g(i),'s');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
     end
@@ -1438,15 +1438,15 @@ if(plot_ts_multi==1)
         
         hold on
         if(~isnan(tau_gen(i)))
-            h=plot(t_day(tau_gen(i)/(dt/60/60/24)),r0Lil_gen_g(i),'d');
+            h=plot(t_day(round(tau_gen(i)/(dt/60/60/24))),r0Lil_gen_g(i),'d');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
         if(~isnan(r0Lil_tau_max_g(i)))
-            h=plot(t_day(r0Lil_tau_max_g(i)/(dt/60/60/24)),r0Lil_max_g(i),'^');
+            h=plot(t_day(round(r0Lil_tau_max_g(i)/(dt/60/60/24))),r0Lil_max_g(i),'^');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
         if(~isnan(r0Lil_tau_equil_g(i)))
-            h=plot(t_day(r0Lil_tau_equil_g(i)/(dt/60/60/24)),r0Lil_equil_g(i),'s');
+            h=plot(t_day(round(r0Lil_tau_equil_g(i)/(dt/60/60/24))),r0Lil_equil_g(i),'s');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
     end
@@ -1499,15 +1499,15 @@ if(plot_ts_multi==1)
         subplot(4,1,1)
         hold on
         if(~isnan(tau_gen(i)))
-            h=plot(t_day(tau_gen(i)/(dt/60/60/24)),Vmax_gen_g(i)/mpi_all(i),'d');
+            h=plot(t_day(round(tau_gen(i)/(dt/60/60/24))),Vmax_gen_g(i)/mpi_all(i),'d');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
         if(~isnan(Vmax_tau_max_g(i)))
-            h=plot(t_day(Vmax_tau_max_g(i)/(dt/60/60/24)),Vmax_max_g(i)/mpi_all(i),'^');
+            h=plot(t_day(round(Vmax_tau_max_g(i)/(dt/60/60/24))),Vmax_max_g(i)/mpi_all(i),'^');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
         if(~isnan(Vmax_tau_equil_g(i)))
-            h=plot(t_day(Vmax_tau_equil_g(i)/(dt/60/60/24)),Vmax_equil_g(i)/mpi_all(i),'s');
+            h=plot(t_day(round(Vmax_tau_equil_g(i)/(dt/60/60/24))),Vmax_equil_g(i)/mpi_all(i),'s');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
     end
@@ -1531,15 +1531,15 @@ if(plot_ts_multi==1)
         
         hold on
         if(~isnan(tau_gen(i)))
-            h=plot(t_day(tau_gen(i)/(dt/60/60/24)),rmax_gen_g(i)/(mpi_all(i)/fcor_all(i)/1000),'d');
+            h=plot(t_day(round(tau_gen(i)/(dt/60/60/24))),rmax_gen_g(i)/(mpi_all(i)/fcor_all(i)/1000),'d');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
         if(~isnan(rmax_tau_max_g(i)))
-            h=plot(t_day(rmax_tau_max_g(i)/(dt/60/60/24)),rmax_max_g(i)/(mpi_all(i)/fcor_all(i)/1000),'^');
+            h=plot(t_day(round(rmax_tau_max_g(i)/(dt/60/60/24))),rmax_max_g(i)/(mpi_all(i)/fcor_all(i)/1000),'^');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
         if(~isnan(rmax_tau_equil_g(i)))
-            h=plot(t_day(rmax_tau_equil_g(i)/(dt/60/60/24)),rmax_equil_g(i)/(mpi_all(i)/fcor_all(i)/1000),'s');
+            h=plot(t_day(round(rmax_tau_equil_g(i)/(dt/60/60/24))),rmax_equil_g(i)/(mpi_all(i)/fcor_all(i)/1000),'s');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
     end
@@ -1564,15 +1564,15 @@ if(plot_ts_multi==1)
         
         hold on
         if(~isnan(tau_gen(i)))
-            h=plot(t_day(tau_gen(i)/(dt/60/60/24)),rrad_gen_g(i)/(mpi_all(i)/fcor_all(i)/1000),'d');
+            h=plot(t_day(round(tau_gen(i)/(dt/60/60/24))),rrad_gen_g(i)/(mpi_all(i)/fcor_all(i)/1000),'d');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
         if(~isnan(rrad_tau_max_g(i)))
-            h=plot(t_day(rrad_tau_max_g(i)/(dt/60/60/24)),rrad_max_g(i)/(mpi_all(i)/fcor_all(i)/1000),'^');
+            h=plot(t_day(round(rrad_tau_max_g(i)/(dt/60/60/24))),rrad_max_g(i)/(mpi_all(i)/fcor_all(i)/1000),'^');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
         if(~isnan(rrad_tau_equil_g(i)))
-            h=plot(t_day(rrad_tau_equil_g(i)/(dt/60/60/24)),rrad_equil_g(i)/(mpi_all(i)/fcor_all(i)/1000),'s');
+            h=plot(t_day(round(rrad_tau_equil_g(i)/(dt/60/60/24))),rrad_equil_g(i)/(mpi_all(i)/fcor_all(i)/1000),'s');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
     end
@@ -1596,15 +1596,15 @@ if(plot_ts_multi==1)
         
         hold on
         if(~isnan(tau_gen(i)))
-            h=plot(t_day(tau_gen(i)/(dt/60/60/24)),r0Lil_Lilctrl_gen_g(i)/(mpi_all(i)/fcor_all(i)/1000),'d');
+            h=plot(t_day(round(tau_gen(i)/(dt/60/60/24))),r0Lil_Lilctrl_gen_g(i)/(mpi_all(i)/fcor_all(i)/1000),'d');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
         if(~isnan(r0Lil_Lilctrl_tau_max_g(i)))
-            h=plot(t_day(r0Lil_Lilctrl_tau_max_g(i)/(dt/60/60/24)),r0Lil_Lilctrl_max_g(i)/(mpi_all(i)/fcor_all(i)/1000),'^');
+            h=plot(t_day(round(r0Lil_Lilctrl_tau_max_g(i)/(dt/60/60/24))),r0Lil_Lilctrl_max_g(i)/(mpi_all(i)/fcor_all(i)/1000),'^');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
         if(~isnan(r0Lil_Lilctrl_tau_equil_g(i)))
-            h=plot(t_day(r0Lil_Lilctrl_tau_equil_g(i)/(dt/60/60/24)),r0Lil_Lilctrl_equil_g(i)/(mpi_all(i)/fcor_all(i)/1000),'s');
+            h=plot(t_day(round(r0Lil_Lilctrl_tau_equil_g(i)/(dt/60/60/24))),r0Lil_Lilctrl_equil_g(i)/(mpi_all(i)/fcor_all(i)/1000),'s');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
     end
@@ -1628,15 +1628,15 @@ if(plot_ts_multi==1)
         
         hold on
         if(~isnan(tau_gen(i)))
-            h=plot(t_day(tau_gen(i)/(dt/60/60/24)),r0Lil_gen_g(i)/(mpi_all(i)/fcor_all(i)/1000),'d');
+            h=plot(t_day(round(tau_gen(i)/(dt/60/60/24))),r0Lil_gen_g(i)/(mpi_all(i)/fcor_all(i)/1000),'d');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
         if(~isnan(r0Lil_tau_max_g(i)))
-            h=plot(t_day(r0Lil_tau_max_g(i)/(dt/60/60/24)),r0Lil_max_g(i)/(mpi_all(i)/fcor_all(i)/1000),'^');
+            h=plot(t_day(round(r0Lil_tau_max_g(i)/(dt/60/60/24))),r0Lil_max_g(i)/(mpi_all(i)/fcor_all(i)/1000),'^');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
         if(~isnan(r0Lil_tau_equil_g(i)))
-            h=plot(t_day(r0Lil_tau_equil_g(i)/(dt/60/60/24)),r0Lil_equil_g(i)/(mpi_all(i)/fcor_all(i)/1000),'s');
+            h=plot(t_day(round(r0Lil_tau_equil_g(i)/(dt/60/60/24))),r0Lil_equil_g(i)/(mpi_all(i)/fcor_all(i)/1000),'s');
             set(h,'markersize',10,'MarkerFaceColor',pl_clrs{i}(1));
         end
     end

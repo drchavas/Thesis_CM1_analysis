@@ -36,7 +36,7 @@ zmin_subsub = 0.5000;
 zmax_subsub = 1;
 %}
 
-function [junk] = TC_stats(subdir_pre,ext_hd,run_type,t0,tf,tmean0_usr,tmeanf_usr,v_usr_fracVp,T_mean,dt_equil,dt_final,save_file,subdir,x0,xf,y0,yf,z0,zf,rmin_sub,rmax_sub,zmin_subsub,zmax_subsub,dir_home,moist);
+function [junk] = TC_stats(subdir_pre,ext_hd,run_type,t0,tf,tmean0_usr,tmeanf_usr,v_usr_fracVp,T_mean,dt_equil,dt_final,save_file,subdir,x0,xf,y0,yf,z0,zf,rmin_sub,rmax_sub,zmin_subsub,zmax_subsub,dir_home,moist,dir_in_dat);
 
 %for calculating the outer radius using control values of the constant parameters
 wrad_ctrl = .0027;   %control run value
@@ -69,7 +69,8 @@ junk='junk';
 %%CONSTANTS
 Cpd = 1004; %[J/K/kg]
 
-file_in = sprintf('../CM1_postproc_data/simdata_Tmean%i_%i_%i/ax%s.mat',T_mean,tf-dt_final,tf,subdir);
+file_in = sprintf('%s/ax%s.mat',dir_in_dat,subdir);
+
 
 if(exist(file_in)==2 && save_file == 1)
     sprintf('Data already saved for ax%s',subdir)
@@ -1202,7 +1203,9 @@ if(save_file == 1)
     clear l i ii
     save temp.mat
     load tempstuff.mat
-    movefile('temp.mat',sprintf('../CM1_postproc_data/simdata_Tmean%i_%i_%i/ax%s.mat',T_mean,tf-dt_final,tf,subdir))
+    movefile('temp.mat',sprintf('%s/ax%s.mat',dir_in_dat,subdir))
+
+    
     
     delete('tempstuff.mat')
 

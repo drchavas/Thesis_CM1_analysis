@@ -10,7 +10,7 @@
 
 %NOTE: data at varying x (i.e. zonal cross-sec) = matrix COLUMN in MATLAB!
 
-function [junk] = TC_stats_dynamicequil(tf,T_mean,dt_final,dt_final_dynamic,subdir,dir_home);
+function [junk] = TC_stats_dynamicequil(tf,T_mean,dt_final,dt_final_dynamic,subdir,dir_home,dir_in_dat,dir_in_dat_dyn);
 
 %%Write out to screen whats going on
 sprintf('TC_stats_dynamicequil for: %s',subdir)
@@ -29,35 +29,36 @@ save_file_dynamicequil = 1;
 stop_overwrite = 0;
 if(save_file_dynamicequil==1)
 %check if new subdirectory exists
-subdir_dyn = sprintf('../CM1_postproc_data/simdata_Tmean%i_dt%i_dynamic',T_mean,dt_final_dynamic);
+subdir_dyn = sprintf('%s',dir_in_dat_dyn);
 
-if(exist(subdir_dyn)==7)
+%if(exist(subdir_dyn)==7)
+assert(exist(subdir_dyn)==7)    %don't let the program go farther if this sub-directory doesn't already exist
 
-    %check to make sure you're not overwriting original TC_stats output
-    if(exist(sprintf('%s/NOTANORIGINALTCSTATS.mat',subdir_dyn))==2)   %TRUE if directory exists but does NOT contain this file
-    else
-        sprintf('You are trying to overwrite original TC_stats output!  Bad.')
-        stop_overwrite = 1;
-    end
-
-    
+%check to make sure you're not overwriting original TC_stats output
+if(exist(sprintf('%s/NOTANORIGINALTCSTATS.mat',subdir_dyn))==2)   %TRUE if directory exists but does NOT contain this file
 else
-            
-    mkdir(sprintf('../CM1_postproc_data/simdata_Tmean%i_dt%i_dynamic',T_mean,dt_final_dynamic))
-    mkdir(sprintf('../CM1_postproc_data/simplots_Tmean%i_dt%i_dynamic',T_mean,dt_final_dynamic))
-    mkdir(sprintf('../CM1_postproc_data/simsets_Tmean%i_dt%i_dynamic',T_mean,dt_final_dynamic))
-    mkdir(sprintf('../CM1_postproc_data/simsets_Tmean%i_dt%i_dynamic/PLOTS',T_mean,dt_final_dynamic))
+    sprintf('You are trying to overwrite original TC_stats output!  Bad.')
+    stop_overwrite = 1;
+end
 
-    cd(sprintf('../CM1_postproc_data/simdata_Tmean%i_dt%i_dynamic',T_mean,dt_final_dynamic))
-    save NOTANORIGINALTCSTATS.mat T_mean tf dt_final dt_final_dynamic
-    cd(dir_home)
     
-end
-end
+%else
+            
+%    mkdir(sprintf('../CM1_postproc_data/simdata_Tmean%i_dt%i_dynamic',T_mean,dt_final_dynamic))
+%    mkdir(sprintf('../CM1_postproc_data/simplots_Tmean%i_dt%i_dynamic',T_mean,dt_final_dynamic))
+%    mkdir(sprintf('../CM1_postproc_data/simsets_Tmean%i_dt%i_dynamic',T_mean,dt_final_dynamic))
+%    mkdir(sprintf('../CM1_postproc_data/simsets_Tmean%i_dt%i_dynamic/PLOTS',T_mean,dt_final_dynamic))
+
+%    cd(sprintf('../CM1_postproc_data/simdata_Tmean%i_dt%i_dynamic',T_mean,dt_final_dynamic))
+%    save NOTANORIGINALTCSTATS.mat T_mean tf dt_final dt_final_dynamic
+%    cd(dir_home)
+    
+%end
+%end
 
 if(stop_overwrite == 0)
 
-    file_in_dyn = sprintf('../CM1_postproc_data/simdata_Tmean%i_%i_%i/ax%s.mat',T_mean,tf-dt_final,tf,subdir);
+    file_in_dyn = sprintf('%s/ax%s.mat',dir_in_dat,subdir);
     
     if(exist(file_in_dyn)==2)
         sprintf('Updating equilibrium values for ax%s',subdir)
@@ -157,8 +158,8 @@ if(stop_overwrite == 0)
             save temp.mat
             load tempstuff.mat
             
-            movefile('temp.mat',sprintf('../CM1_postproc_data/simdata_Tmean%i_dt%i_dynamic/ax%s.mat',T_mean,dt_final_dynamic,subdir))
-            
+            movefile('temp.mat',sprintf('%s/ax%s.mat',dir_in_dat_dyn,subdir))
+
             delete('tempstuff.mat')
         end
         

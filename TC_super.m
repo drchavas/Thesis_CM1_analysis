@@ -27,7 +27,7 @@ run_TC_stats_plot = 1;  %overwrites old [simset].mat file and plots automaticall
 
 %% Parameters for scripts
 v_usr_fracVp = .1;  %wind speed as fraction of Vp; beyond this radius, radiative subsidence radial wind profile should apply.
-T_mean = 2; %[days]; averaging time period used to calculate moving time-average radial profile from which rmax and r0 are calculated
+T_mean = .5; %[days]; averaging time period used to calculate moving time-average radial profile from which rmax and r0 are calculated
 dt_equil = 30;  %[days]; how long must be quasi-steady to define equilibrium
     %%For static equilibrium (equil_dynamic = 0):
     dt_final = 50;  %[day]; length of static equilibrium period
@@ -504,25 +504,38 @@ for jj = 1:length(sim_sets_all)
         otherwise
             sprintf('Simulation set does not exist!')
     end
-
-    dir_in = sprintf('../CM1_postproc_data/simdata_Tmean%i_%i_%i',T_mean,tf-dt_final,tf);
-    assert(isdir(dir_in),'Output directory doesnt exist!')
+    
+    dir_in1 = sprintf('../CM1_postproc_data/sim');
+    if(mod(T_mean,1)>0)
+        dir_in3 = sprintf('Tmean%3.2f_%i_%i',T_mean,tf-dt_final,tf);
+        dir_in3dyn = sprintf('Tmean%3.2f_dt%i_dynamic',T_mean,dt_final_dynamic);
+    else
+        dir_in3 = sprintf('Tmean%i_%i_%i',T_mean,tf-dt_final,tf);
+        dir_in3dyn = sprintf('Tmean%i_dt%i_dynamic',T_mean,dt_final_dynamic);
+    end
+    dir_in_dat = sprintf('%sdata_%s',dir_in1,dir_in3);
+    dir_in_set = sprintf('%ssets_%s',dir_in1,dir_in3);
+    dir_in_plt = sprintf('%splots_%s',dir_in1,dir_in3);
+    dir_in_dat_dyn = sprintf('%sdata_%s',dir_in1,dir_in3dyn);
+    dir_in_set_dyn = sprintf('%ssets_%s',dir_in1,dir_in3dyn);
+    dir_in_plt_dyn = sprintf('%splots_%s',dir_in1,dir_in3dyn);
+    assert(isdir(dir_in_dat),'Output directory doesnt exist!')
     
     for ii = 1:length(subdirs_set)
         
         subdir = subdirs_set{ii};
         
         if(run_TC_stats == 1)
-            [junk] = TC_stats(subdir_pre,ext_hd,run_type,t0,tf,tmean0_usr,tmeanf_usr,v_usr_fracVp,T_mean,dt_equil,dt_final,save_file,subdir,x0,xf,y0,yf,z0,zf,rmin_sub,rmax_sub,zmin_subsub,zmax_subsub,dir_home,moist);
+            [junk] = TC_stats(subdir_pre,ext_hd,run_type,t0,tf,tmean0_usr,tmeanf_usr,v_usr_fracVp,T_mean,dt_equil,dt_final,save_file,subdir,x0,xf,y0,yf,z0,zf,rmin_sub,rmax_sub,zmin_subsub,zmax_subsub,dir_home,moist,dir_in_dat);
         end
         
         if(run_TC_stats_dynamicequil == 1)
-            [junk] = TC_stats_dynamicequil(tf,T_mean,dt_final,dt_final_dynamic,subdir,dir_home);
+            [junk] = TC_stats_dynamicequil(tf,T_mean,dt_final,dt_final_dynamic,subdir,dir_home,dir_in_dat,dir_in_dat_dyn);
         end
         
         if(run_TC_structure_ts == 1)
             %%this subroutine runs for both static and dynamic equilibrium automatically
-            [junk] = TC_structure_ts(run_type,T_mean,dt_final,t0,tf,dt_final_dynamic,subdir,dir_home);
+            [junk] = TC_structure_ts(run_type,T_mean,dt_final,t0,tf,dt_final_dynamic,subdir,dir_home,dir_in_dat,dir_in_dat_dyn,dir_in_plt,dir_in_plt_dyn);
         end
         
 
@@ -532,13 +545,13 @@ for jj = 1:length(sim_sets_all)
         %%fixed equilibrium period
         if(strmatch(sim_set,'nondimall')~=1)
             equil_dynamic = 0;
-            [junk] = TC_stats_plot(run_type,T_mean,equil_dynamic,dt_final,tf,dt_final_dynamic,rmin_plot,rmax_plot,CTRL_val,units,multipliers,subdirs_set,sim_set,dir_home);
+            [junk] = TC_stats_plot(run_type,T_mean,equil_dynamic,dt_final,tf,dt_final_dynamic,rmin_plot,rmax_plot,CTRL_val,units,multipliers,subdirs_set,sim_set,dir_home,dir_in_dat,dir_in_dat_dyn,dir_in_set,dir_in_set_dyn);
         end
         
         %%most stable equilibrium period
         if(run_TC_stats_plot_dynamicequil == 1)
             equil_dynamic = 1;
-            [junk] = TC_stats_plot(run_type,T_mean,equil_dynamic,dt_final,tf,dt_final_dynamic,rmin_plot,rmax_plot,CTRL_val,units,multipliers,subdirs_set,sim_set,dir_home);
+            [junk] = TC_stats_plot(run_type,T_mean,equil_dynamic,dt_final,tf,dt_final_dynamic,rmin_plot,rmax_plot,CTRL_val,units,multipliers,subdirs_set,sim_set,dir_home,dir_in_dat,dir_in_dat_dyn,dir_in_set,dir_in_set_dyn);
         end
     end
     

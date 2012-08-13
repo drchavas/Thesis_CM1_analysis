@@ -5,7 +5,7 @@
 %This file plots and saves the timeseries of Vm, rm, and r0 for each
 %simulation
 
-function [junk] = TC_structure_ts(run_type,T_mean,dt_final,t0,tf,dt_final_dynamic,subdir,dir_home);
+function [junk] = TC_structure_ts(run_type,T_mean,dt_final,t0,tf,dt_final_dynamic,subdir,dir_home,dir_in_dat,dir_in_dat_dyn,dir_in_plt,dir_in_plt_dyn);
 
 %%Write out to screen whats going on
 sprintf('TC_structure_ts for: %s',subdir)
@@ -51,9 +51,9 @@ for ii = 1:length(equil_dynamics)
     
     %%Load data for given simulation
     if(equil_dynamic==1)
-        load(sprintf('../CM1_postproc_data/simdata_Tmean%i_dt%i_dynamic/%s.mat',T_mean,dt_final_dynamic,subdir_load));
+        load(sprintf('%s/%s.mat',dir_in_dat_dyn,subdir_load));
     else
-        load(sprintf('../CM1_postproc_data/simdata_Tmean%i_%i_%i/%s.mat',T_mean,tf-dt_final,tf,subdir_load));
+        load(sprintf('%s/%s.mat',dir_in_dat,subdir_load));
     end
     
     %% Equilibrium data %%%%%%%%%%%%%%%%%%%%%%%%
@@ -237,9 +237,9 @@ for ii = 1:length(equil_dynamics)
 
     if(save_plot == 1)
         if(equil_dynamic == 1)
-            cd(sprintf('../CM1_postproc_data/simplots_Tmean%i_dt%i_dynamic',T_mean,dt_final_dynamic))
+            cd(sprintf('%s',dir_in_plt_dyn))
         else
-            cd(sprintf('../CM1_postproc_data/simplots_Tmean%i_%i_%i',T_mean,tf-dt_final,tf))
+            cd(sprintf('%s',dir_in_plt))
         end
         saveas(gcf,sprintf('%s_structevol.pdf',subdir_load),'pdf')
         cd(dir_home)
