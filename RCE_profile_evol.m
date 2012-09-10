@@ -13,6 +13,7 @@ clc
 %% USER INPUT %%%%%%%%%%%%%%%%%%
 subdir_pre='RCE/';
 %subdir_pre='CTRL_icRCE/';
+subdir_pre='TRANSFER/';
 ext_hd = 1; %0=local hard drive; 1=external hard drive
 
 SST = 300.00;  %[K]; used to calculate RCE th_sfc (=SST-2K) and qv_sfc (80% RH from saturation at SST)
@@ -21,12 +22,12 @@ dT_sfc = 2; %[K]; air-sea thermal disequilibrium
 
 run_types=3*ones(100,1);    %[1 1 1 1 1 1 1 1 1]; %1=axisym; 3=3d
 subdirs = {
-'RCE_nx48_SST300.00K_Tthresh200K_usfc3'
+'RCE_test'
 
 }; %name of sub-directory with nc files
 
-t0a = 90;    %[day], starting time for averaging
-tfa = 100;   %[day], ending time for averaging
+t0a = 0;    %[day], starting time for averaging
+tfa = 10;   %[day], ending time for averaging
 
 save_output_sounding = 0;   %0=no output file created; 1=yes 'input_sounding_[subdir]'
 plot_type = 1;  %0=no plot; 1=plots of RCE vertical profiles of qv [g/kg] and theta [K]
@@ -64,7 +65,7 @@ end
 
 %% DETERMINE IF A QUASI-STEADY STATE EXISTS, AND IF SO, WHEN
 for rr=1:numruns
-ts = t0a:10:tfa;
+ts = t0a:1:tfa;
 for pp=1:length(ts)-1    
     t0 = ts(pp);
     tf = ts(pp+1);

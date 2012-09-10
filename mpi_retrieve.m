@@ -16,6 +16,13 @@ cd input_soundings/
 
 %file_in='CTRLv0qrhSATqdz5000_nx3072_SST295.00K_Tthresh250K_usfc5_fdiv2_lh375_rad1K'
 
+isDRY=strfind(file_in,'DRY');
+if(isempty(isDRY)) 
+    dry_str='';
+else    %dry simulation
+    dry_str='_DRY';
+end
+
 i_sst=strfind(file_in,'SST');
 if(isempty(i_sst))
     sst_str='300.00';
@@ -57,9 +64,9 @@ else
 end
 
 if(isempty(i_rad))
-    mpi_file = sprintf('input_sounding_3dRCE_nx48_SST%sK_Tthresh%sK_usfc%s_mpi',sst_str,tpp_str,usfc_str);
+    mpi_file = sprintf('input_sounding_3dRCE_nx48_SST%sK_Tthresh%sK_usfc%s%s_mpi',sst_str,tpp_str,usfc_str,dry_str);
 else
-    mpi_file = sprintf('input_sounding_3dRCE_nx48_SST%sK_Tthresh%sK_usfc%s_rad%sK_mpi',sst_str,tpp_str,usfc_str,rad_str);
+    mpi_file = sprintf('input_sounding_3dRCE_nx48_SST%sK_Tthresh%sK_usfc%s_rad%sK%s_mpi',sst_str,tpp_str,usfc_str,rad_str,dry_str);
 end
 
 fid=fopen(mpi_file);

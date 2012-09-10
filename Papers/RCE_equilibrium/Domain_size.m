@@ -130,7 +130,7 @@ end
 
 
 %% PLOTTING %%%%%%%%%%%%%%%%
-set(0,'defaultaxesfontsize',12,'defaultaxesfontweight','bold','defaultlinelinewidth',1)
+set(0,'defaultaxesfontsize',14,'defaultaxesfontweight','bold','defaultlinelinewidth',1)
 
 %Single/Multi simulation: Plot user-defined radial wind profiles
 

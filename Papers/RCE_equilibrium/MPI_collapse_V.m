@@ -1,4 +1,4 @@
-%MPI_collapse_V_poster.m
+%Fig3_MPI_collapse_V.m
 
 %Created: 24 Jul 2012, Dan Chavas
 

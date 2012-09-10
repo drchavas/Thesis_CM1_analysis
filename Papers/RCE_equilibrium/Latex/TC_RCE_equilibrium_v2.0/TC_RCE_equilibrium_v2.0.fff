@@ -1,0 +1,76 @@
+\begin{figure*}
+[h!]
+\centering
+%  \noindent\includegraphics[width=19pc,angle=0]{FIGURES/Domain_size.pdf}
+  \noindent\includegraphics[width=15cm,height=10cm]{FIGURES_TC_RCE_equilibrium_v2.0/Fig1_Domain_size.pdf}
+\caption{Equilibrium radial gradient wind profiles as a function of domain width.  Note the convergence beyond $L_{domain} \approx 3000 \; km$.}
+\label{fig:domainsize}
+\end{figure*}
+\efloatseparator
+ 
+\begin{figure*}
+[h!]
+\centering
+%  \noindent\includegraphics[width=19pc,angle=0]{FIGURES/Control_run.pdf}
+  \noindent\includegraphics[width=15cm,height=10cm]{FIGURES_TC_RCE_equilibrium_v2.0/Fig2_Control_run.pdf}
+\caption{For the Control simulation, time evolution of the 2-day running mean $V_m$, $r_m$, and $r_0$ normalized by their respective equilibrium values (upper-right corner). For this simulation, $V^*_p =  93 \; ms^{-1}$ and $f = 5*10^{-5} \; s^{-1}$. Pink line denotes 30-day period used for equilibrium calculation. Markers along the x-axis denote respective time-scales to equilibration, defined as time where the 30-day running mean is within 10\% of the equilibrium value (black dashed lines).}
+\label{fig:timeseries}.
+\end{figure*}
+\efloatseparator
+ 
+\begin{figure*}
+[h!]
+\centering
+%  \noindent\includegraphics[width=19pc,angle=0]{FIGURES/Control_run.pdf}
+  \noindent\includegraphics[width=10cm,height=10cm]{FIGURES_TC_RCE_equilibrium_v2.0/Fig3_MPI_collapse_V.pdf}
+\caption{Scaling of the equilibrium value of $V_m$ (ordinate) with the potential intensity (abscissa). Both quantities are normalized by their respective control values denoted by an asterisk ($*$; $V^*_p = 93 \; ms^{-1}$). Colored shape denotes the input parameter varied from among the four parameters on which the potential intensity depends (Eq. \eqref{eq:vpot3}). Scaling is shown in base-2 log-log space, such that a 1-unit increase (decrease) represents doubling (having).  Thus, a straight line with unit slope indicates that a doubling of $V_p$ is associated with a doubling of $Y$.}
+\label{fig:mpicollapse_V}
+\end{figure*}
+\efloatseparator
+ 
+\begin{figure*}
+[h!]
+\centering
+%  \noindent\includegraphics[width=19pc,angle=0]{FIGURES/Control_run.pdf}
+  \noindent\includegraphics[width=10cm,height=10cm]{FIGURES_TC_RCE_equilibrium_v2.0/Fig4a_MPI_collapse_rm.pdf}
+
+  \noindent\includegraphics[width=10cm,height=10cm]{FIGURES_TC_RCE_equilibrium_v2.0/Fig4b_MPI_collapse_r0.pdf}
+\caption{As in Figure \ref{fig:mpicollapse_V}, but for $r_m$ (top) and $r_{0}$ (bottom).}
+\label{fig:mpicollapse_r}
+\end{figure*}
+\efloatseparator
+ 
+\begin{figure*}
+[h!]
+\centering
+%  \noindent\includegraphics[width=19pc,angle=0]{FIGURES/Control_run.pdf}
+  \noindent\includegraphics[width=9cm,height=10cm]{FIGURES_TC_RCE_equilibrium_v2.0/Fig5_MPI_collapse_r0ctrlwcool.pdf}
+\caption{As in Figure \ref{fig:mpicollapse_r}, but where $r_{0'}$ is $r_0$ calculated from \eqref{eq:radsub} using the control value of $w_{cool}$.}
+\label{fig:mpicollapse_r0ctrlwcool}
+\end{figure*}
+\efloatseparator
+ 
+\begin{figure*}
+[h!]
+\centering
+%  \noindent\includegraphics[width=19pc,angle=0]{FIGURES/Control_run.pdf}
+  \noindent\includegraphics[width=8cm,height=20cm]{FIGURES_TC_RCE_equilibrium_v2.0/Fig6_Dimensional_scaling.pdf}
+\caption{Scaling of the equilibrium value of each structural variable $Y$ (ordinate) with relevant dimensional parameters, $X$ (absicssa). All quantities are normalized by their respective control values denoted by an asterisk ($*$). Plot layout as in Figure \ref{fig:mpicollapse_V}.}
+\label{fig:dimscaling}
+\end{figure*}
+\efloatseparator
+ 
+\begin{figure*}
+[h!]
+\centering
+%  \noindent\includegraphics[width=19pc,angle=0]{FIGURES/Control_run.pdf}
+  \noindent\includegraphics[width=6cm,height=6cm]{FIGURES_TC_RCE_equilibrium_v2.0/Fig7a_Nondimensional_scaling_V.pdf}
+
+  \noindent\includegraphics[width=6cm,height=6cm]{FIGURES_TC_RCE_equilibrium_v2.0/Fig7b_Nondimensional_scaling_rm.pdf}
+
+  \noindent\includegraphics[width=6cm,height=6cm]{FIGURES_TC_RCE_equilibrium_v2.0/Fig7c_Nondimensional_scaling_r0.pdf}
+
+\caption{Scaling of the equilibrium value of each structural variable non-dimensionalized by an appropriate dimensional scale ($V_p$ for $V_m$; $\frac{V_p}{f}$ for $r_m$ and $r_0$), $Y$, with the non-dimensional number $C = \frac{V_p}{fl_h}$ (see text for details). All quantities are normalized by their respective control values denoted by an asterisk ($*$; $C^* = 1240$). Plot layout as in Figure \ref{fig:mpicollapse}.  Linearly-regressed slopes, corresponding to the estimated scaling exponent in \eqref{eq:buckpipowerlaw}, and associated p-values shown in red.}\label{fig:nondimscaling}
+\end{figure*}
+\efloatseparator
+ 

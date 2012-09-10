@@ -15,8 +15,8 @@ cd /Users/drchavas/Documents/Research/Thesis/CM1/v15/Thesis_CM1_analysis
 subdir_pre='CTRL_icRCE/';    %general subdir that includes multiple runs within
 ext_hd = 1; %0=local hard drive; 1=external hard drive
 
-sim_sets = {'nondim1.5' 'nondim'};    %nondim=single-parm; nondim2=extremes
-%sim_sets = {'nondim'};    %nondim=single-parm; nondim2=extremes
+%sim_sets = {'nondim2' 'nondim1.5' 'nondim'};    %nondim=single-parm; nondim2=extremes
+sim_sets = {'nondim_all'};    %nondim=single-parm; nondim2=extremes
 T_mean = 2; %[day]
 equil_dynamic = 1;  %1 = use dynamic equilibrium
     %%IF 0:
@@ -29,7 +29,7 @@ wrad_const = 0; %1 = use CTRL value for wrad
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-set(0,'defaultaxesfontsize',24,'defaultaxesfontweight','bold','defaultlinelinewidth',1)
+set(0,'defaultaxesfontsize',18,'defaultaxesfontweight','bold','defaultlinelinewidth',1)
 h=figure(1)
 set(h,'Position',[0 0 575 575])
 ax1=axes('position',[0.2    0.2    0.70    0.70]);
@@ -144,33 +144,47 @@ exp_VmVp = coefs(2);
 hold on
 xfit = -pl_edge:.1:pl_edge;
 
-if(m==1)
-    plot(xvals_pl(1:numruns,m),data_pl(1:numruns,m),'o','MarkerFaceColor',[0 .75 0],'MarkerEdgeColor',[0 .5 0],'MarkerSize',20)
-    hold on
-    plot(xfit,coefs(1)+coefs(2).*xfit,'--','Color',[0 .5 0],'LineWidth',3)
-else
-    plot(xvals_pl(1:numruns,m),data_pl(1:numruns,m),'o','MarkerFaceColor',[.75 0 0],'MarkerEdgeColor',[.5 0 0],'MarkerSize',20)
-    hold on
-    plot(xfit,coefs(1)+coefs(2).*xfit,'--','Color',[.5 0 0],'LineWidth',3)
+clr3 = [0 0 1];
+clr2 = clr3 + .3*[1 1 0];
+clr1 = clr2 + .3*[1 1 0];
+switch m
+    case 1,
+        plot(xvals_pl(1:numruns,m),data_pl(1:numruns,m),'x','MarkerEdgeColor',clr1,'MarkerSize',20,'LineWidth',2)
+        hold on
+        plot(xfit,coefs(1)+coefs(2).*xfit,'--','Color',clr1,'LineWidth',2)
+        
+        text1=text(1.5,2.5,sprintf('$\\alpha_3 = $ %5.2f',exp_VmVp),'fontweight','bold','FontSize',24,'Color',clr1)
+        set(text1,'HorizontalAlignment','center','VerticalAlignment','middle','Interpreter','Latex');
+
+    case 2,
+        plot(xvals_pl(1:numruns,m),data_pl(1:numruns,m),'x','MarkerEdgeColor',clr2,'MarkerSize',20,'LineWidth',2)
+        hold on
+        plot(xfit,coefs(1)+coefs(2).*xfit,'--','Color',clr2,'LineWidth',2)
+
+        text1=text(1.5,3.1,sprintf('$\\alpha_2 = $ %5.2f',exp_VmVp),'fontweight','bold','FontSize',24,'Color',clr2)
+        set(text1,'HorizontalAlignment','center','VerticalAlignment','middle','Interpreter','Latex');    
+
+    case 3,
+        plot(xvals_pl(1:numruns,m),data_pl(1:numruns,m),'x','MarkerFaceColor',clr3,'MarkerEdgeColor',clr3,'MarkerSize',20,'LineWidth',2)
+        hold on
+        plot(xfit,coefs(1)+coefs(2).*xfit,'--','Color',clr3,'LineWidth',2)
+        
+        text1=text(1.5,3.7,sprintf('$\\alpha_1 = $ %5.2f',exp_VmVp),'fontweight','bold','FontSize',24,'Color',clr3)
+        set(text1,'HorizontalAlignment','center','VerticalAlignment','middle','Interpreter','Latex');    
+
 end
 
 input_title1=sprintf('$\\frac{V_m}{V_p}$');
-text1=text(-4.75,-4.75,input_title1,'FontSize',60);
+text1=text(-4.75,-4.75,input_title1,'FontSize',30);
 set(text1,'HorizontalAlignment','left','VerticalAlignment','bottom','Interpreter','Latex','BackgroundColor','white','EdgeColor','k');
 axis([-pl_edge pl_edge -pl_edge pl_edge])
-ylabel('$\\log_2(\widetilde{V}_m/\widetilde{V}_m^*)$','Interpreter','Latex','FontSize',36)
-xlabel('$\\log_2(C/C^*)$','Interpreter','Latex','FontSize',36)
-xlabh = get(gca,'XLabel');
-set(xlabh,'Position',get(xlabh,'Position') - [0 .1 0])
+ylabel('$\\log_2(\widetilde{V}_m/\widetilde{V}_m^*)$','Interpreter','Latex','FontSize',24)
+xlabel('$\\log_2(C/C^*)$','Interpreter','Latex','FontSize',24)
+%xlabh = get(gca,'XLabel');
+%set(xlabh,'Position',get(xlabh,'Position') - [0 .1 0])
 grid on
 hold on
-if(m==1)
-    text1=text(1.8,2.8,sprintf('$\\alpha = $ %5.2f',exp_VmVp),'fontweight','bold','FontSize',48,'Color',[0 .5 0])
-    set(text1,'HorizontalAlignment','center','VerticalAlignment','middle','Interpreter','Latex');
-else
-    text1=text(1.8,3.9,sprintf('$\\alpha = $ %5.2f',exp_VmVp),'fontweight','bold','FontSize',48,'Color',[0.5 0 0])
-    set(text1,'HorizontalAlignment','center','VerticalAlignment','middle','Interpreter','Latex');    
-end
+
 set(ax1,'YTick',[-4 -3 -2 -1 0 1 2 3 4],'XTick',[-4 -3 -2 -1 0 1 2 3 4])
 box on
 

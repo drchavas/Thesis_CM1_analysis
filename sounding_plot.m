@@ -11,7 +11,7 @@ clf(1)
 
 %% USER INPUT %%%%%%%%%%%%%%%%%%
 dz = .625;  %desired vertical resolution
-z_top = 25000;  %[m]
+z_top = 20000;  %[m]
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -23,7 +23,7 @@ epsilon=Rd/Rv;
 g=9.81; %[m/s2]
 
 snd_files = {
-'input_sounding_3dRCE_nx48_SST300.00K_Tthresh200K_usfc3_DRY'
+'input_sounding_3dRCE_nx48_SST300.00K_Tthresh175K_usfc3_DRY'
 }
 
 pl_clrs={'b' 'r' 'g' 'c' 'k' 'y' 'm' 'm.' 'y.'};

@@ -15,12 +15,12 @@ clf(1)     %clear figures without closing them
 %% USER INPUT %%%%%%%%%%%%%%%%%%
 
 subdir_pre='CTRL_icRCE/';
-%subdir_pre='TRANSFER/';
+subdir_pre='TRANSFER/';
 %subdir_pre='RCE/';    %general subdir that includes multiple runs within
-subdir_pre='';
-ext_hd = 0; %0=local hard drive; 1=external hard drive
+%subdir_pre='';
+ext_hd = 1; %0=local hard drive; 1=external hard drive
 
-run_types= [1 1 1]; %1=axisym; 3=3D
+run_types= [3 1 1 1]; %1=axisym; 3=3D
 %    toax = 1.688/1.326;
 %    div_dat_by=[toax toax 1 4 4*toax 16 16*toax 64 64*toax 4*64*toax 1 1 1 1]; %for any domain-integrated quantities, can normalize to equivalent domain size
 %    div_dat_by=[1 4 4^2 4^3 4^4 4^5 4^6]
@@ -28,7 +28,7 @@ run_types= [1 1 1]; %1=axisym; 3=3D
     div_dat_by=ones(30,1);
 subdirs = {
 
-'CTRLv0qrhSATqdz5000_nx3072_tap1hr'
+'RCE_test'
 
 }; %name of sub-directory with nc files
 

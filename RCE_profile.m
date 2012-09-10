@@ -11,10 +11,12 @@ clear
 clc
 
 %% USER INPUT %%%%%%%%%%%%%%%%%%
-subdir_pre='RCE/';
+%subdir_pre='RCE/';
+%subdir_pre='';
 %subdir_pre='CTRL_icRCE/';
+subdir_pre='TRANSFER/';
 ext_hd = 1; %0=local hard drive; 1=external hard drive
-moist = 0;  %1 = moist; 0 = dry
+moist = 1;  %1 = moist; 0 = dry
 
 SST = 300.00;  %[K]; used to calculate RCE th_sfc (=SST-2K) and qv_sfc (80% RH from saturation at SST)
 RH_sfc = .8;    %air-sea latent disequilibrium
@@ -22,14 +24,14 @@ dT_sfc = 2; %[K]; air-sea thermal disequilibrium
 
 run_types=3*ones(100,1);    %[1 1 1 1 1 1 1 1 1]; %1=axisym; 3=3d
 subdirs = {
-'RCE_nx48_SST300.00K_Tthresh200K_usfc3_DRY'
-%'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_usfc1'
+'RCE_test'
+%'CTRLv0qrhSATqdz5000_nx3072_DRY'
 }; %name of sub-directory with nc files
 
-t0 = 70;    %[day], starting time for averaging
-tf = 100;   %[day], ending time for averaging
+t0 = 5;    %[day], starting time for averaging
+tf = 10;   %[day], ending time for averaging
 
-save_output_sounding = 1;   %0=no output file created; 1=yes 'input_sounding_[subdir]'
+save_output_sounding = 0;   %0=no output file created; 1=yes 'input_sounding_[subdir]'
 plot_type = 1;  %0=no plot; 1=plots of RCE vertical profiles of qv [g/kg] and theta [K]
     pl_clrs={'b' 'b--' 'r' 'r--' 'g' 'g--' 'c' 'c--' 'k' 'k--' 'y' 'y--'};
     %pl_clrs={'b--' 'r--' 'g--' 'c--' 'k--' 'y--' 'm--' 'b' 'r' 'g' 'c' 'k' 'y' 'm'};
@@ -76,7 +78,7 @@ for rr=1:numruns
         if(ext_hd==0)
             dir_in=sprintf('/Users/drchavas/Documents/Research/Thesis/CM1/v15/axisym/CM1_output/%s',subdir_pre);
         else    %external harddrive
-            dir_in=sprintf('/Volumes/CHAVAS_CM1_FINAL/CM1_output/axisym/%s',subdir_pre);
+            dir_in=sprintf('/Volumes/CHAVAS_CM1_FINAL2/CM1_output/axisym/%s',subdir_pre);
         end
         copyfile('nc_extract_axisym.m','nc_extract.m') %copy nc_extract_axisym.m to nc_extract
     elseif(run_type==3)
@@ -84,7 +86,7 @@ for rr=1:numruns
         if(ext_hd==0)
             dir_in=sprintf('/Users/drchavas/Documents/Research/Thesis/CM1/v15/3d/CM1_output/%s',subdir_pre);
         else    %external harddrive
-            dir_in=sprintf('/Volumes/CHAVAS_CM1_FINAL/CM1_output/3d/%s',subdir_pre);
+            dir_in=sprintf('/Volumes/CHAVAS_CM1_FINAL2/CM1_output/3d/%s',subdir_pre);
         end
         copyfile('nc_extract_3d.m','nc_extract.m') %copy nc_extract_3d.m to nc_extract
     end
@@ -253,6 +255,7 @@ for rr=1:numruns
     
     %%Fix any vertical instabilities in th00_RCE (just set value to mean of levels it lies between)
     %%MOIST ONLY! For dry case, this needs to be updated since dth/dz<0 in lowest several model levels
+%{
     if(moist==1)
         for j = 2:length(th00_RCE{rr})-1
             if(th00_RCE{rr}(j)<th00_RCE{rr}(j-1))
@@ -260,7 +263,7 @@ for rr=1:numruns
             end
         end
     end
-
+%}
     
     %%Recalculate sfc theta (=SST-2K) and qv_sfc (80% RH from saturation at SST)
     Rd=287;  %[J/kg/K]

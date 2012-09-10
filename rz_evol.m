@@ -20,18 +20,19 @@ figure(1)
 
 
 %% USER INPUT %%%%%%%%%%%%%%%%%%
-subdir_pre='CTRL_icRCE/';    %general subdir that includes multiple runs within
-ext_hd = 1; %0=local hard drive; 1=external hard drive
+%subdir_pre='CTRL_icRCE/';    %general subdir that includes multiple runs within
+subdir_pre='';    %general subdir that includes multiple runs within
+ext_hd = 0; %0=local hard drive; 1=external hard drive
 run_type=1; %1=axisym; 3=3D
 moist = 0;  %1 = moist; else = dry
 
-subdir = 'CTRLv0qrhSATqdz5000_nx3072_DRYdrc'; %name of sub-directory with nc files
+subdir = 'CTRLv0qrhSATqdz5000_nx3072_DRY'; %name of sub-directory with nc files
 
 t0a = 145;
 tfa = 150;
 dt_mean = 5;   %[day]
 
-var_clr = 'vinterp';
+var_clr = 'thpert';
 var_cntr = 'angmom';
 
 %%Define grid of points to extract (i.e. all of them, will subset afterwards)
@@ -44,9 +45,9 @@ zf=100;  %last z grid point [0,end]
 
 %%Define subset of points to plot
 rmin_plot = 0;  %[km]; lowest value plotted
-rmax_plot = 20000;    %[km]; highest value plotted
+rmax_plot = 200;    %[km]; highest value plotted
 zmin_plot = 0;  %[km]; lowest value plotted
-zmax_plot = 20; %[km]; highest value plotted
+zmax_plot = 10; %[km]; highest value plotted
 datamin_plot = -5000;   %minimum data value plotted
 datamax_plot = 5000;   %minimum data value plotted
 

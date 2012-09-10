@@ -18,12 +18,13 @@ run_type=1; %1=axisym; 3=3d; 10/30=initial condition test (subdir 'code_test')
 subdir_pre='CTRL_icRCE/';    %general subdir that includes multiple runs within
 %subdir_pre='TRANSFER/';
 %subdir_pre='RCE/';    %general subdir that includes multiple runs within
+%subdir_pre='';    %general subdir that includes multiple runs within
 ext_hd = 1; %0=local hard drive; 1=external hard drive
 
 
-subdir_axisym = 'CTRLv0qrhSATqdz5000_nx3072_DRYdrc'; %name of sub-directory with nc files
-t_file_axisym=400;  %file timestep
-subdir_3d = 'RCE_nx48_SST292.50K_Tthresh200K_usfc3';  %name of sub-directory with nc files
+subdir_axisym = 'CTRLv0qrhSATqdz5000_nx3072'; %name of sub-directory with nc files
+t_file_axisym=600;  %file timestep
+subdir_3d = 'RCE_nx48_SST300.00K_Tthresh250K_usfc3_DRY';  %name of sub-directory with nc files
 t_file_3d=101;  %file timestep
 
 plot_type = 1;  %0=no plotd
@@ -36,18 +37,18 @@ plot_type = 1;  %0=no plotd
 %IF plot_type=1: input variable and domain
     fig_hold=1; %1=do not clear old figure
     pl_color='r--';
-    var = 'vinterp';  %variable of interest (DRC vars: 'angmom')
+    var = 'winterp';  %variable of interest (DRC vars: 'angmom')
     usr_maxmin=0;   %0=use data max/min for plot; 1=usr input
         vmin_plot = -40;
         vmax_plot = 40;
     
  if(run_type==1 || run_type==10)   %axisym
     x0=0;   %first x grid point [0,end]
-    xf=1000;   %first y grid point [0,end]
+    xf=5;   %first y grid point [0,end]
     y0=0;   %first y grid point [0,end]
     yf=0;   %last y grid point [0,end]
-    z0=1;  %first z grid point [0,end]
-    zf=1;  %last z grid point [0,end]
+    z0=0;  %first z grid point [0,end]
+    zf=20;  %last z grid point [0,end]
  elseif(run_type==3 || run_type==30)   %3d
     x0=-1000;   %first x grid point [0,end]
     xf=1000;   %first y grid point [0,end]

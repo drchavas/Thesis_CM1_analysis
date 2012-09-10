@@ -15,8 +15,8 @@ cd /Users/drchavas/Documents/Research/Thesis/CM1/v15/Thesis_CM1_analysis
 subdir_pre='CTRL_icRCE/';    %general subdir that includes multiple runs within
 ext_hd = 1; %0=local hard drive; 1=external hard drive
 
-sim_sets = {'nondim1.5' 'nondim'};    %nondim=single-parm; nondim2=extremes
-%sim_sets = {'nondim'};    %nondim=single-parm; nondim2=extremes
+%sim_sets = {'nondim2' 'nondim1.5' 'nondim'};    %nondim=single-parm; nondim2=extremes
+sim_sets = {'nondim_all'};    %nondim=single-parm; nondim2=extremes
 T_mean = 2; %[day]
 equil_dynamic = 1;  %1 = use dynamic equilibrium
     %%IF 0:
