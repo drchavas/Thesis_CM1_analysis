@@ -11,26 +11,34 @@ clf(1)
 
 %% USER INPUT %%%%%%%%%%%%%%%%%%
 dz = .625;  %desired vertical resolution
-z_top = 20000;  %[m]
+z_top = 25000;  %[m]
+
+snd_files = {
+'input_sounding_3dRCE_nx48_SST300.00K_Tthresh200K_usfc3_drag'
+%'stratcnst/input_sounding_stratcnstT200K_T300.00'
+}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%% Constants
-Rd=287;  %[J/kg/K]
-Rv=461.5;   %[J/K/kg]
-Cpd=1005.7; %[J/kg/K]; spec heat of dry air
-epsilon=Rd/Rv;
-g=9.81; %[m/s2]
-
-snd_files = {
-'input_sounding_3dRCE_nx48_SST300.00K_Tthresh175K_usfc3_DRY'
-}
 
 pl_clrs={'b' 'r' 'g' 'c' 'k' 'y' 'm' 'm.' 'y.'};
 pl_clrs2={'b--' 'r--' 'g--' 'c--' 'k--' 'y--' 'm--' 'm-.' 'y-.'};
 
 numruns=length(snd_files);  %total number of runs you want to plot (taken from below)
 %numruns=6;  %total number of runs you want to plot (taken from below)
+
+%% Constants (values taken from CM1 model)
+c_CM1 = constants_CM1(); %c_CM1: [g rd cp cv p00 xlv]
+
+g=c_CM1(1); %[m/s2]
+Rd=c_CM1(2);  %[J/kg/K]
+Cpd=c_CM1(3); %[J/kg/K]; spec heat of dry air
+Rv=c_CM1(4);   %[J/K/kg]
+p0 = c_CM1(5); %[Pa]
+Lv=c_CM1(6);   %[J/kg]
+
+eps=Rd/Rv;
 
 
 %%Append ax or 3d to subdir names for plot
@@ -93,3 +101,6 @@ if(isempty(Ttpp))
     Ttpp = 200;
 end
 ztpp = zz00(find(T00<Ttpp,1)-1)/1000+dz*(T00(find(T00<Ttpp,1)-1)-Ttpp)/(T00(find(T00<Ttpp,1)-1)-T00(find(T00<Ttpp,1)))
+T00
+
+assert(std(T00(end-5:end))<.1,'WARNING: DAMPING LAYER MAY NOT BE ISOTHERMAL!')
