@@ -17,14 +17,17 @@ function [zz00 pp00 th00 qv00 u00 v00 T00 Tv00 thv00 rho00 qvs00 rh00 pi00 p_sfc
 
 dz_model = dz_model * 1000; %[km] --> [m]
 
-%constants (values taken from CM1 model)
-Rd = 287.04;   %[J/kg/K];  dry air gas constant
-Rv = 461.5;   %[J/K/kg]
-Cpd = 1004; %[J/kg/K]; spec heat of dry air
-eps = Rd/Rv;
-g = 9.81;    %[m/s2]
-p00 = 100000;    %[Pa]
+%% Constants (values taken from CM1 model)
+c_CM1 = constants_CM1(); %c_CM1: [g rd cp cv p00 xlv]
 
+g=c_CM1(1); %[m/s2]
+Rd=c_CM1(2);  %[J/kg/K]
+Cpd=c_CM1(3); %[J/kg/K]; spec heat of dry air
+Rv=c_CM1(4);   %[J/K/kg]
+p0 = c_CM1(5); %[Pa]
+Lv=c_CM1(6);   %[J/kg]
+
+eps=Rd/Rv;
 
 %% EXTRACT DATA FROM input_sounding
 sounding_fil = sprintf('%s/%s',dir_in,snd_file);
@@ -38,6 +41,7 @@ temp=fgetl(fid);
     qv_sfc = str2num(temp(22:end));
     clear temp
 
+    
 %%initial sounding data: 1) zheight (m); 2) theta (K); 3) qv (g/kg); 4) u (m/s); 5) v (m/s)
 [C pos] = textscan(fid,'%f %f %f %f %f');
 zz00 = C{1}(1:end);
@@ -135,20 +139,20 @@ dz=dz_model;
 thv_sfc = th_sfc*(1+qv_sfc/eps)/(1+qv_sfc);
 thv00=th00.*(1+qv00/eps)./(1+qv00);
 
-%%calculate pressure from pi (via hydrostatic equation)
-pi_sfc = (p_sfc/p00)^(Rd/Cpd);
+%%calculate pressure from pi (via hydrostatic equation) -- see base.F line 587
+pi_sfc = (p_sfc/p0)^(Rd/Cpd);
 pi00(1)=pi_sfc-g*zz00(1)/(Cpd*0.5*(thv_sfc+thv00(1)));
 for k=2:nz_new
   pi00(k)=pi00(k-1)-g*(zz00(k)-zz00(k-1))/(Cpd*0.5*(thv00(k)+thv00(k-1)));
 end
-pp00=p00*(pi00.^(Cpd/Rd));
+pp00=p0*(pi00.^(Cpd/Rd));
 
 %load RE87_pres
 %%var: p_RE87
 %pp00 = p_RE87';
 
 %%calculate actual temperature from potential temperature
-T00 = th00.*(pp00/p00).^(Rd/Cpd);
+T00 = th00.*(pp00/p0).^(Rd/Cpd);
 
 %%calculate virtual temperature from actual temperature and wv mix ratio
 Tv00 = T00.*(1+.608*qv00); %virtual potential temperature
