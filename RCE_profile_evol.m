@@ -22,12 +22,13 @@ dT_sfc = 2; %[K]; air-sea thermal disequilibrium
 
 run_types=3*ones(100,1);    %[1 1 1 1 1 1 1 1 1]; %1=axisym; 3=3d
 subdirs = {
-'RCE_nx48_SST300.00K_Tthresh200K_usfc3'
+'RCE_nx48_SST300.00K_Tthresh200K_usfc10_drag'
 
 }; %name of sub-directory with nc files
 
-t0a = 0;    %[day], starting time for averaging
+t0a = 70;    %[day], starting time for averaging
 tfa = 100;   %[day], ending time for averaging
+interval_day = 10;  %[day], length of intervals
 
 save_output_sounding = 0;   %0=no output file created; 1=yes 'input_sounding_[subdir]'
 plot_type = 1;  %0=no plot; 1=plots of RCE vertical profiles of qv [g/kg] and theta [K]
@@ -65,7 +66,7 @@ end
 
 %% DETERMINE IF A QUASI-STEADY STATE EXISTS, AND IF SO, WHEN
 for rr=1:numruns
-ts = t0a:5:tfa;
+ts = t0a:interval_day:tfa;
 for pp=1:length(ts)-1    
     t0 = ts(pp);
     tf = ts(pp+1);
@@ -222,16 +223,16 @@ for pp=1:length(ts)-1
     %%MOIST ONLY! For dry case, this needs to be updated since dth/dz<0 in lowest several model levels
 %TEST    th00_RCE{rr}(10)=th00_RCE{rr}(9)-.001;
 %TEST    th00_RCE{rr}(9)=th00_RCE{rr}(8)-.01;
-    if(moist==1)
 
         RCE_instab_remove = 0;
         instab_check = th00_RCE{rr}(2:end)-th00_RCE{rr}(1:end-1);
         max_instab = min(instab_check);
         z_instab = find(instab_check == max_instab);
 
-        assert(abs(max_instab)<.1,'WARNING: THERE IS A LARGE INSTABILITY IN MOIST RCE PROFILE')
-        
         if(max_instab<0)    %there is an instability to remove
+
+            assert(abs(max_instab)<.1,'WARNING: THERE IS A LARGE INSTABILITY IN MOIST RCE PROFILE')
+
             RCE_instab_remove = 1;   %the profile will be adjusted
             
             %%Iterate upwards through the RCE profile and apply mass-weighted averaging ("mixing") over
@@ -257,10 +258,10 @@ for pp=1:length(ts)-1
             dth = th00_RCE_adj{rr}(2:end)-th00_RCE_adj{rr}(1:end-1);  %change in theta with height
 
             end
+            
+            th00_RCE{rr} = th00_RCE_adj{rr};    %only need the final adjusted profile
+            
         end
-        
-        th00_RCE{rr} = th00_RCE_adj{rr};    %only need the final adjusted profile
-    end
 %}
     
     %%Recalculate sfc theta (=SST-2K) and qv_sfc (80% RH from saturation at SST)
@@ -448,7 +449,7 @@ if(plot_type~=0)
 %}
 
 end
-tempdan(pp)=th00_RCE{1}(end-8)
+
 end
 
 end

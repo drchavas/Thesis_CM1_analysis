@@ -24,7 +24,7 @@ dT_sfc = 2; %[K]; air-sea thermal disequilibrium
 
 run_types=3*ones(100,1);    %[1 1 1 1 1 1 1 1 1]; %1=axisym; 3=3d
 subdirs = {
-'RCE_nx48_SST300.00K_Tthresh200K_usfc3_drag'
+'RCE_nx48_SST300.00K_Tthresh200K_usfc10_drag'
 %'CTRLv0qrhSATqdz5000_nx3072_DRY'
 }; %name of sub-directory with nc files
 
@@ -265,9 +265,10 @@ for rr=1:numruns
         max_instab = min(instab_check);
         z_instab = find(instab_check == max_instab);
 
-        assert(abs(max_instab)<.1,'WARNING: THERE IS A LARGE INSTABILITY IN MOIST RCE PROFILE')
-        
         if(max_instab<0)    %there is an instability to remove
+
+            assert(abs(max_instab)<.1,'WARNING: THERE IS A LARGE INSTABILITY IN MOIST RCE PROFILE')
+
             RCE_instab_remove = 1;   %the profile will be adjusted
             
             %%Iterate upwards through the RCE profile and apply mass-weighted averaging ("mixing") over
@@ -293,9 +294,11 @@ for rr=1:numruns
             dth = th00_RCE_adj{rr}(2:end)-th00_RCE_adj{rr}(1:end-1);  %change in theta with height
 
             end
+            
+            th00_RCE{rr} = th00_RCE_adj{rr};    %only need the final adjusted profile
+            
         end
         
-        th00_RCE{rr} = th00_RCE_adj{rr};    %only need the final adjusted profile
     end
 %}
     
