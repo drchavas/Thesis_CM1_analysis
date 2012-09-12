@@ -13,7 +13,7 @@ clc
 %% USER INPUT %%%%%%%%%%%%%%%%%%
 subdir_pre='RCE/';
 %subdir_pre='CTRL_icRCE/';
-subdir_pre='TRANSFER/';
+%subdir_pre='TRANSFER/';
 ext_hd = 1; %0=local hard drive; 1=external hard drive
 
 SST = 300.00;  %[K]; used to calculate RCE th_sfc (=SST-2K) and qv_sfc (80% RH from saturation at SST)
@@ -22,12 +22,12 @@ dT_sfc = 2; %[K]; air-sea thermal disequilibrium
 
 run_types=3*ones(100,1);    %[1 1 1 1 1 1 1 1 1]; %1=axisym; 3=3d
 subdirs = {
-'RCE_test'
+'RCE_nx48_SST300.00K_Tthresh200K_usfc3'
 
 }; %name of sub-directory with nc files
 
 t0a = 0;    %[day], starting time for averaging
-tfa = 10;   %[day], ending time for averaging
+tfa = 100;   %[day], ending time for averaging
 
 save_output_sounding = 0;   %0=no output file created; 1=yes 'input_sounding_[subdir]'
 plot_type = 1;  %0=no plot; 1=plots of RCE vertical profiles of qv [g/kg] and theta [K]
@@ -65,7 +65,7 @@ end
 
 %% DETERMINE IF A QUASI-STEADY STATE EXISTS, AND IF SO, WHEN
 for rr=1:numruns
-ts = t0a:1:tfa;
+ts = t0a:5:tfa;
 for pp=1:length(ts)-1    
     t0 = ts(pp);
     tf = ts(pp+1);
@@ -188,8 +188,8 @@ for pp=1:length(ts)-1
         data_hmean_th=data_hmean_th+vert_prof_temp_th/(i_tf-i_t0+1); %[g/kg]
         
         %%EXTRACT pressure DATA
-%        var_temp = 'prspert'
-        var_temp = 'pi'
+        var_temp = 'prspert'
+%        var_temp = 'pi'
         clear data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units
         [data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units] = nc_extract(dir_in,subdir,nc_file,var_temp,x0,xf,y0,yf,z0,zf);
         
@@ -219,21 +219,66 @@ for pp=1:length(ts)-1
     p00_RCE{rr} = pp00(z0+1:z0+vec_length)' + [data_hmean_p(z0+1:z0+vec_length)];   %[Pa]
     
     %%Fix any vertical instabilities in th00_RCE (just set value to mean of levels it lies between)
-    for j = 2:length(th00_RCE{rr})-1
-        if(th00_RCE{rr}(j)<th00_RCE{rr}(j-1))
-            th00_RCE{rr}(j)=mean([th00_RCE{rr}(j-1) th00_RCE{rr}(j+1)]);
+    %%MOIST ONLY! For dry case, this needs to be updated since dth/dz<0 in lowest several model levels
+%TEST    th00_RCE{rr}(10)=th00_RCE{rr}(9)-.001;
+%TEST    th00_RCE{rr}(9)=th00_RCE{rr}(8)-.01;
+    if(moist==1)
+
+        RCE_instab_remove = 0;
+        instab_check = th00_RCE{rr}(2:end)-th00_RCE{rr}(1:end-1);
+        max_instab = min(instab_check);
+        z_instab = find(instab_check == max_instab);
+
+        assert(abs(max_instab)<.1,'WARNING: THERE IS A LARGE INSTABILITY IN MOIST RCE PROFILE')
+        
+        if(max_instab<0)    %there is an instability to remove
+            RCE_instab_remove = 1;   %the profile will be adjusted
+            
+            %%Iterate upwards through the RCE profile and apply mass-weighted averaging ("mixing") over
+            %%each statically-unstable layer and repeat until the entire profile is stable
+            th00_RCE_adj{rr} = th00_RCE{1};  %adjusted profile begins as true RCE profile
+            dth = th00_RCE_adj{rr}(2:end)-th00_RCE_adj{rr}(1:end-1);  %change in theta with height
+
+            while(sum(dth<0)>0)   %there are unstable layers
+            for j = 1:length(th00_RCE_adj{rr})-1
+                dth_j = th00_RCE_adj{rr}(j+1)-th00_RCE_adj{rr}(j);
+                if(dth_j<0)   %unstable
+                    th_ave = (p00_RCE{rr}(j)*th00_RCE_adj{rr}(j) + p00_RCE{rr}(j+1)*th00_RCE_adj{rr}(j+1))/(p00_RCE{rr}(j)+p00_RCE{rr}(j+1));
+                    th00_RCE_adj{rr}(j) = th_ave;
+                    th00_RCE_adj{rr}(j+1) = th_ave;
+                end
+            end
+            
+            %%NOTE: I do NOT mix qv as well, as this is not a true
+            %%instability but instead a result of numerical noise, unlike
+            %%in the dry case (though in that case, qv=0 anyways)
+
+            %update change in theta with height
+            dth = th00_RCE_adj{rr}(2:end)-th00_RCE_adj{rr}(1:end-1);  %change in theta with height
+
+            end
         end
+        
+        th00_RCE{rr} = th00_RCE_adj{rr};    %only need the final adjusted profile
     end
+%}
     
     %%Recalculate sfc theta (=SST-2K) and qv_sfc (80% RH from saturation at SST)
-    Rd=287;  %[J/kg/K]
-    Rv=461.5;   %[J/K/kg]
-    Cpd=1005.7; %[J/kg/K]; spec heat of dry air
-    epsilon=Rd/Rv;
+    %% Constants (values taken from CM1 model)
+    c_CM1 = constants_CM1(); %c_CM1: [g rd cp cv p00 xlv]
+
+    g=c_CM1(1); %[m/s2]
+    Rd=c_CM1(2);  %[J/kg/K]
+    Cpd=c_CM1(3); %[J/kg/K]; spec heat of dry air
+    Rv=c_CM1(4);   %[J/K/kg]
+    p0 = c_CM1(5); %[Pa]
+    Lv=c_CM1(6);   %[J/kg]
+
+    eps=Rd/Rv;
     
     SST_C = SST-273.15;
     es_SST = 6.112*exp((17.67*SST_C)./(SST_C+243.5))*100;  %[Pa]
-    qvs_SST = epsilon*(es_SST./(p_sfc-es_SST));  %[kg/kg]
+    qvs_SST = eps*(es_SST./(p_sfc-es_SST));  %[kg/kg]
     
     qv_sfc_RCE(rr) = RH_sfc*qvs_SST;  %80% RH
     
@@ -403,8 +448,9 @@ if(plot_type~=0)
 %}
 
 end
+tempdan(pp)=th00_RCE{1}(end-8)
+end
 
-end 
 end
 
 
