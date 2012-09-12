@@ -11,10 +11,10 @@ clear
 clc
 
 %% USER INPUT %%%%%%%%%%%%%%%%%%
-%subdir_pre='RCE/';
+subdir_pre='RCE/';
 %subdir_pre='';
 %subdir_pre='CTRL_icRCE/';
-subdir_pre='TRANSFER/';
+%subdir_pre='TRANSFER/';
 ext_hd = 1; %0=local hard drive; 1=external hard drive
 moist = 1;  %1 = moist; 0 = dry
 
@@ -24,12 +24,12 @@ dT_sfc = 2; %[K]; air-sea thermal disequilibrium
 
 run_types=3*ones(100,1);    %[1 1 1 1 1 1 1 1 1]; %1=axisym; 3=3d
 subdirs = {
-'RCE_test'
+'RCE_nx48_SST300.00K_Tthresh200K_usfc3_drag'
 %'CTRLv0qrhSATqdz5000_nx3072_DRY'
 }; %name of sub-directory with nc files
 
-t0 = 5;    %[day], starting time for averaging
-tf = 10;   %[day], ending time for averaging
+t0 = 70;    %[day], starting time for averaging
+tf = 100;   %[day], ending time for averaging
 
 save_output_sounding = 0;   %0=no output file created; 1=yes 'input_sounding_[subdir]'
 plot_type = 1;  %0=no plot; 1=plots of RCE vertical profiles of qv [g/kg] and theta [K]
@@ -78,7 +78,7 @@ for rr=1:numruns
         if(ext_hd==0)
             dir_in=sprintf('/Users/drchavas/Documents/Research/Thesis/CM1/v15/axisym/CM1_output/%s',subdir_pre);
         else    %external harddrive
-            dir_in=sprintf('/Volumes/CHAVAS_CM1_FINAL2/CM1_output/axisym/%s',subdir_pre);
+            dir_in=sprintf('/Volumes/CHAVAS_CM1_FINAL/CM1_output/axisym/%s',subdir_pre);
         end
         copyfile('nc_extract_axisym.m','nc_extract.m') %copy nc_extract_axisym.m to nc_extract
     elseif(run_type==3)
@@ -86,7 +86,7 @@ for rr=1:numruns
         if(ext_hd==0)
             dir_in=sprintf('/Users/drchavas/Documents/Research/Thesis/CM1/v15/3d/CM1_output/%s',subdir_pre);
         else    %external harddrive
-            dir_in=sprintf('/Volumes/CHAVAS_CM1_FINAL2/CM1_output/3d/%s',subdir_pre);
+            dir_in=sprintf('/Volumes/CHAVAS_CM1_FINAL/CM1_output/3d/%s',subdir_pre);
         end
         copyfile('nc_extract_3d.m','nc_extract.m') %copy nc_extract_3d.m to nc_extract
     end
@@ -125,7 +125,7 @@ for rr=1:numruns
     data_hmean_qv=zeros(1000,1);
     data_hmean_th=zeros(1000,1);
     data_hmean_p=zeros(1000,1);
-%    data_hmean_pi=zeros(1000,1);
+    data_hmean_pi=zeros(1000,1);
 
     for ii=1:i_tf-i_t0+1
 
@@ -216,11 +216,11 @@ for rr=1:numruns
             data=squeeze(data);
             vert_prof_temp_p = ((xvals*data)/sum(xvals))';  %cylindrical integral--sum weighted by radius
         end
-        data_hmean_p=data_hmean_p+vert_prof_temp_p/(i_tf-i_t0+1); %[g/kg]        
+        data_hmean_p=data_hmean_p+vert_prof_temp_p/(i_tf-i_t0+1); %[Pa]        
 %        wspd = data_hmean_p;
         
         clear data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub xunits yunits zunits v_def v_units time t_units
-%{        
+        
         %%EXTRACT pi DATA
         var_temp = 'pi'
         clear data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units
@@ -237,7 +237,7 @@ for rr=1:numruns
             data=squeeze(data);
             vert_prof_temp_pi = ((xvals*data)/sum(xvals))';  %cylindrical integral--sum weighted by radius
         end
-        data_hmean_pi=data_hmean_pi+vert_prof_temp_pi/(i_tf-i_t0+1); %[g/kg]        
+        data_hmean_pi=data_hmean_pi+vert_prof_temp_pi/(i_tf-i_t0+1); %nondim        
         
         clear data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub xunits yunits zunits v_def v_units time t_units
 %}        
@@ -246,34 +246,75 @@ for rr=1:numruns
     vec_length = min(nz_sub,length(zz00)-z0);
           
     zz00_RCE{rr} = zz00(z0+1:z0+vec_length)'; %heights [m]
-    qv00_RCE{rr} = qv00(z0+1:z0+vec_length)' + [data_hmean_qv(z0+1:z0+vec_length)];   %[kg/kg]
-    th00_RCE{rr} = th00(z0+1:z0+vec_length)' + [data_hmean_th(z0+1:z0+vec_length)];   %[K] 
-    p00_RCE{rr} = pp00(z0+1:z0+vec_length)' + [data_hmean_p(z0+1:z0+vec_length)];   %[Pa]
+    qv00_RCE{rr} = qv00(z0+1:z0+vec_length)' + [data_hmean_qv(z0+1:z0+vec_length)];   %qv' [kg/kg]
+    th00_RCE{rr} = th00(z0+1:z0+vec_length)' + [data_hmean_th(z0+1:z0+vec_length)];   %th' [K] 
+    p00_RCE{rr} = pp00(z0+1:z0+vec_length)' + [data_hmean_p(z0+1:z0+vec_length)];   %p' [Pa]
+    pi00_RCE{rr} = [data_hmean_pi(z0+1:z0+vec_length)];   %FULL pi [-]
     
     %alternate method
 %    p200_RCE{rr} = 100000*(data_hmean_pi(z0+1:z0+vec_length)).^(1004/287);
     
     %%Fix any vertical instabilities in th00_RCE (just set value to mean of levels it lies between)
     %%MOIST ONLY! For dry case, this needs to be updated since dth/dz<0 in lowest several model levels
-%{
+%TEST    th00_RCE{rr}(10)=th00_RCE{rr}(9)-.001;
+%TEST    th00_RCE{rr}(9)=th00_RCE{rr}(8)-.01;
     if(moist==1)
-        for j = 2:length(th00_RCE{rr})-1
-            if(th00_RCE{rr}(j)<th00_RCE{rr}(j-1))
-                th00_RCE{rr}(j)=mean([th00_RCE{rr}(j-1) th00_RCE{rr}(j+1)]);
+
+        RCE_instab_remove = 0;
+        instab_check = th00_RCE{rr}(2:end)-th00_RCE{rr}(1:end-1);
+        max_instab = min(instab_check);
+        z_instab = find(instab_check == max_instab);
+
+        assert(abs(max_instab)<.1,'WARNING: THERE IS A LARGE INSTABILITY IN MOIST RCE PROFILE')
+        
+        if(max_instab<0)    %there is an instability to remove
+            RCE_instab_remove = 1;   %the profile will be adjusted
+            
+            %%Iterate upwards through the RCE profile and apply mass-weighted averaging ("mixing") over
+            %%each statically-unstable layer and repeat until the entire profile is stable
+            th00_RCE_adj{rr} = th00_RCE{1};  %adjusted profile begins as true RCE profile
+            dth = th00_RCE_adj{rr}(2:end)-th00_RCE_adj{rr}(1:end-1);  %change in theta with height
+
+            while(sum(dth<0)>0)   %there are unstable layers
+            for j = 1:length(th00_RCE_adj{rr})-1
+                dth_j = th00_RCE_adj{rr}(j+1)-th00_RCE_adj{rr}(j);
+                if(dth_j<0)   %unstable
+                    th_ave = (p00_RCE{rr}(j)*th00_RCE_adj{rr}(j) + p00_RCE{rr}(j+1)*th00_RCE_adj{rr}(j+1))/(p00_RCE{rr}(j)+p00_RCE{rr}(j+1));
+                    th00_RCE_adj{rr}(j) = th_ave;
+                    th00_RCE_adj{rr}(j+1) = th_ave;
+                end
+            end
+            
+            %%NOTE: I do NOT mix qv as well, as this is not a true
+            %%instability but instead a result of numerical noise, unlike
+            %%in the dry case (though in that case, qv=0 anyways)
+
+            %update change in theta with height
+            dth = th00_RCE_adj{rr}(2:end)-th00_RCE_adj{rr}(1:end-1);  %change in theta with height
+
             end
         end
+        
+        th00_RCE{rr} = th00_RCE_adj{rr};    %only need the final adjusted profile
     end
 %}
     
     %%Recalculate sfc theta (=SST-2K) and qv_sfc (80% RH from saturation at SST)
-    Rd=287;  %[J/kg/K]
-    Rv=461.5;   %[J/K/kg]
-    Cpd=1005.7; %[J/kg/K]; spec heat of dry air
-    epsilon=Rd/Rv;
+    %% Constants (values taken from CM1 model)
+    c_CM1 = constants_CM1(); %c_CM1: [g rd cp cv p00 xlv]
+
+    g=c_CM1(1); %[m/s2]
+    Rd=c_CM1(2);  %[J/kg/K]
+    Cpd=c_CM1(3); %[J/kg/K]; spec heat of dry air
+    Rv=c_CM1(4);   %[J/K/kg]
+    p0 = c_CM1(5); %[Pa]
+    Lv=c_CM1(6);   %[J/kg]
+
+    eps=Rd/Rv;
     
     SST_C = SST-273.15;
     es_SST = 6.112*exp((17.67*SST_C)./(SST_C+243.5))*100;  %[Pa]
-    qvs_SST = epsilon*(es_SST./(p_sfc-es_SST));  %[kg/kg]
+    qvs_SST = eps*(es_SST./(p_sfc-es_SST));  %[kg/kg]
     
     qv_sfc_RCE(rr) = RH_sfc*qvs_SST;  %80% RH
     
@@ -295,11 +336,11 @@ if(save_output_sounding~=0)
     %%sounding columns: 1) zz00 (m); 2) th00_RCE (K); 3) qv00_RCE (g/kg); 4) u00 (m/s); 5) v00 (m/s)
     
     %%need extra layers at top above model top 
-    zz00_ext = zz00_RCE{1}(end)+(zz00_RCE{1}(end)-zz00_RCE{1}(end-1))*[1 2 3];
-    th00_ext = th00_RCE{1}(end)+(th00_RCE{1}(end)-th00_RCE{1}(end-1))*[1 2 3];
-    qv00_ext = qv00_RCE{1}(end)*[1 1 1];
-    u00_ext = u00(end)*[1 1 1];
-    v00_ext = v00(end)*[1 1 1];
+    zz00_ext = zz00_RCE{1}(end)+(zz00_RCE{1}(end)-zz00_RCE{1}(end-1))*[1];
+    th00_ext = th00_RCE{1}(end)+(th00_RCE{1}(end)-th00_RCE{1}(end-1))*[1];
+    qv00_ext = qv00_RCE{1}(end)*[1];
+    u00_ext = u00(end)*[1];
+    v00_ext = v00(end)*[1];
     
     
     sounding_all=[[zz00_RCE{1};zz00_ext'] [th00_RCE{1};th00_ext'] 1000*[qv00_RCE{1};qv00_ext'] [u00(1:vec_length)';u00_ext'] [v00(1:vec_length)';v00_ext']];
@@ -499,6 +540,14 @@ if(plot_type~=0)
 
 end
 
+T_RCE_test = th00_RCE{1}.*pi00_RCE{1};
+assert(std(T_RCE_test(end-5:end))<.1,'WARNING: DAMPING LAYER MAY NOT BE ISOTHERMAL!')
 
+if(RCE_instab_remove == 1)  %an instability was removed
+    sprintf('A vertical dry static instability was removed from the RCE sounding')
+    sprintf('Maximum instability = %5.4f K at level %i',max_instab,z_instab)
+else
+    sprintf('There were no instabilities in the RCE sounding')
+end
 
 %}
