@@ -34,14 +34,19 @@ if(moist ~= 1)
     rh_strat= 0;   %relative humidity above tropopause
 end
 
-%% Constants
-Rd=287;  %[J/kg/K]
-Rv=461.5;   %[J/K/kg]
-Lv=2.5e6;   %[J/kg]
-Cpd=1005.7; %[J/kg/K]; spec heat of dry air
+%% Constants (values taken from CM1 model)
+c_CM1 = constants_CM1(); %c_CM1: [g rd cp cv p00 xlv]
+
+g=c_CM1(1); %[m/s2]
+Rd=c_CM1(2);  %[J/kg/K]
+Cpd=c_CM1(3); %[J/kg/K]; spec heat of dry air
+Rv=c_CM1(4);   %[J/K/kg]
+p0 = c_CM1(5); %[Pa]
+Lv=c_CM1(6);   %[J/kg]
+
 eps=Rd/Rv;
-g=9.81; %[m/s2]
-p0 = 100000; %[Pa]
+
+
 
 nz_sub = z_top/dz + 1;
 
