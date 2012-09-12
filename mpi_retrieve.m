@@ -23,6 +23,15 @@ else    %dry simulation
     dry_str='_DRY';
 end
 
+usedrag=strfind(file_in,'drag');
+if(isempty(usedrag))
+    drag_pre='soundings_nodrag/'
+    drag_str='';
+else
+    drag_pre='';
+    drag_str='_drag';
+end
+
 i_sst=strfind(file_in,'SST');
 if(isempty(i_sst))
     sst_str='300.00';
@@ -64,9 +73,9 @@ else
 end
 
 if(isempty(i_rad))
-    mpi_file = sprintf('input_sounding_3dRCE_nx48_SST%sK_Tthresh%sK_usfc%s%s_mpi',sst_str,tpp_str,usfc_str,dry_str);
+    mpi_file = sprintf('%sinput_sounding_3dRCE_nx48_SST%sK_Tthresh%sK_usfc%s%s%s_mpi',drag_pre,sst_str,tpp_str,usfc_str,drag_str,dry_str);
 else
-    mpi_file = sprintf('input_sounding_3dRCE_nx48_SST%sK_Tthresh%sK_usfc%s_rad%sK%s_mpi',sst_str,tpp_str,usfc_str,rad_str,dry_str);
+    mpi_file = sprintf('%sinput_sounding_3dRCE_nx48_SST%sK_Tthresh%sK_usfc%s_rad%sK%s%s_mpi',drag_pre,sst_str,tpp_str,usfc_str,rad_str,drag_str,dry_str);
 end
 
 fid=fopen(mpi_file);
