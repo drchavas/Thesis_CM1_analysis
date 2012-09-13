@@ -12,7 +12,7 @@
 %%TESTING
 %{
 subdir_pre = 'CTRL_icRCE/';
-ext_hd = 1;
+ext_hd = 1; %0=local hard drive; 1='CHAVAS_CM1_FINAL'; 2='CHAVAS_CM1_FINAL_nodrag'
 run_type = 1;
 t0 = 0;
 tf = 150;
@@ -52,7 +52,7 @@ junk='junk';
 
 %% USER INPUT %%%%%%%%%%%%%%%%%%
 %subdir_pre='CTRL_icRCE/';    %general subdir that includes multiple runs within
-%ext_hd = 1; %0=local hard drive; 1=external hard drive
+%ext_hd = 1; %0=local hard drive; 1='CHAVAS_CM1_FINAL'; 2='CHAVAS_CM1_FINAL_nodrag'
 
 %run_types=ones(1000,1); %[1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]; %1=axisym; 3=3D
 
@@ -66,8 +66,17 @@ junk='junk';
 
 %save_file = 1;
 
-%%CONSTANTS
-Cpd = 1004; %[J/K/kg]
+%% Constants (values taken from CM1 model)
+c_CM1 = constants_CM1(); %c_CM1: [g rd cp cv p00 xlv]
+
+g=c_CM1(1); %[m/s2]
+Rd=c_CM1(2);  %[J/kg/K]
+Cpd=c_CM1(3); %[J/kg/K]; spec heat of dry air
+Rv=c_CM1(4);   %[J/K/kg]
+p0 = c_CM1(5); %[Pa]
+Lv=c_CM1(6);   %[J/kg]
+
+eps=Rd/Rv;
 
 file_in = sprintf('%s/ax%s.mat',dir_in_dat,subdir);
 
@@ -123,7 +132,7 @@ else
 
 %% EXTRACT MPI
 mpi = mpi_retrieve(subdir); %[ms-1]
-    
+
 %% CALCULATE STEADY STATE RADIAL PROFILE
 t_day_min = 0;
 t_day_max = 0;
@@ -131,21 +140,22 @@ t_day_max = 0;
 %% OPTIONS FOR EITHER AXISYM OR 3D RUNS
 if(run_type==1)
     run_type_str='axisym';
-    if(ext_hd==0)
-        dir_in=sprintf('/Users/drchavas/Documents/Research/Thesis/CM1/v15/axisym/CM1_output/%s',subdir_pre);
-    else    %external harddrive
-        dir_in=sprintf('/Volumes/CHAVAS_CM1_FINAL/CM1_output/axisym/%s',subdir_pre);
-    end        
     copyfile('nc_extract_axisym.m','nc_extract.m') %copy nc_extract_axisym.m to nc_extract
 elseif(run_type==3)
     run_type_str='3D';
-    if(ext_hd==0)
-        dir_in=sprintf('/Users/drchavas/Documents/Research/Thesis/CM1/v15/3D/CM1_output/%s',subdir_pre);
-    else    %external harddrive
-        dir_in=sprintf('/Volumes/CHAVAS_CM1_FINAL/CM1_output/3D/%s',subdir_pre);
-    end
     copyfile('nc_extract_3d.m','nc_extract.m') %copy nc_extract_3d.m to nc_extract
 end
+
+switch ext_hd
+    case 0,
+        dir_in=sprintf('/Users/drchavas/Documents/Research/Thesis/CM1/v15/%s/CM1_output/%s',run_type_str,subdir_pre);
+    case 1,
+        dir_in=sprintf('/Volumes/CHAVAS_CM1_FINAL/CM1_output/%s/%s',run_type_str,subdir_pre);
+    case 2,
+        dir_in=sprintf('/Volumes/CHAVAS_CM1_FINAL_nodrag/CM1_output/%s/%s',run_type_str,subdir_pre);
+    otherwise
+        assert(2==3,'Invalid number for ext_hd!')
+end        
 
 %%DIRECTORY WITH OUTPUT DATA
 subdir_full=sprintf('%s%s',dir_in,subdir);
@@ -189,10 +199,25 @@ dir_full = strcat(dir_in,subdir);
 
 [zz00 pp00 th00 qv00 u00 v00 T00 Tv00 thv00 rho00 qvs00 rh00 pi00 p_sfc th_sfc qv_sfc] = snd_extract(dir_full,snd_file,dz,nz_sub);
 
-%%Estimate w_rad (clear-sky subsidence rate) from initial RCE sounding
-th_lowtrop = th00(zz00<=5000 & zz00>=1500);
-zz_lowtrop = zz00(zz00<=5000 & zz00>=1500);
-dthdz_wrad = (th_lowtrop(end)-th_lowtrop(1))/(zz_lowtrop(end)-zz_lowtrop(1));
+%% Estimate w_rad (clear-sky subsidence rate) from initial RCE sounding
+%%Find tropopause temperature, Ttpp
+i_tpp=strfind(subdir,'Tthresh');
+if(isempty(i_tpp))
+    Ttpp=200;  %[K]
+else
+    i_tppK=strfind(subdir,'K');
+    i_tppK=i_tppK(find(i_tppK>i_tpp,1));
+    tpp_str=subdir(i_tpp+7:i_tppK-1);
+    Ttpp=str2num(tpp_str); %[K]
+end
+
+z_trop_bot = 1500;  %[m]
+[zz_mid dp_mid dthdz_mid N_v_mid H_tpp N_v_trop] = vertprof_stats(th00,qv00,thv00,T00,pp00,zz00,Ttpp,z_trop_bot); 
+%% dtheta/dz in the lower troposphere  
+z1 = 1500;  %[m]
+z2 = 5000;  %[m]
+i_wrad = zz_mid<=5000 & zz_mid>=1500;   %indices for desired levels
+dthdz_wrad = (dthdz_mid(i_wrad)*dp_mid(i_wrad)')/sum(dp_mid(i_wrad));
 
 %Extract Qrad [K/day]
 temp1 = subdir(strfind(subdir,'rad')+3:end);
@@ -566,7 +591,7 @@ r0_movave_g=nan(i_tf-i_t0+1,1);
 r0Lil_movave_g=nan(i_tf-i_t0+1,1);
 r0Lil_Lilctrl_movave_g=nan(i_tf-i_t0+1,1);
 r0ER11_movave_g=nan(i_tf-i_t0+1,1);
-num_prof = 1;   %initialize iteration of time average profiles
+%num_prof = 1;   %initialize iteration of time average profiles
 numerr=0;
 
 clear t_day
@@ -637,7 +662,7 @@ for ii=1:i_tf-i_t0+1
         cd(dir_home);
         
         data_tmean_usr_g=zeros(nx,1);
-        data_tmean_g=zeros(nx,tf-t0);    %1 profile per day
+%        data_tmean_g=zeros(nx,tf-t0);    %1 profile per day
         v_r_all = NaN*zeros(nx,i_tf-i_t0+1);
 
     end
@@ -790,14 +815,15 @@ for ii=1:i_tf-i_t0+1
     data_temp = squeeze(data);
     data_sub = data_temp(i_xvals',i_zvals');
     xvals_sub = xvals(i_xvals);
-    data_tmean_g=data_tmean_g(i_xvals,:);
+%    data_tmean_g=data_tmean_g(i_xvals,:);
 
     %% Calculate and save instantaneous Vmax time-series
     i_temp = round(length(data_sub)/8); %CHECKS ONLY FIRST 1/8 OF DOMAIN
+    xres = dx;
+%{
     Vmax_g(ii) = max(data_sub(1:i_temp));  %index of max wind speed
 
     %% Calculate and save instantaneous rmax time-series
-    xres = dx;
     i_max = find(data_sub(1:i_temp)==max(data_sub(1:i_temp)));  %index of max wind speed
     i_max = i_max(1);
     if(~isempty(i_max))
@@ -805,6 +831,8 @@ for ii=1:i_tf-i_t0+1
     else
         rmax_g(ii)=NaN;
     end
+
+    assert(i_max<i_temp,'WARNING: rmax IS AT OUTER EDGE OF SEARCH AREA (R=R_WALL/8)')
 
     %% Calculate and save instantaneous r[v_usr] time-series
     v_usr = v_usr_fracVp*mpi;
@@ -846,7 +874,7 @@ for ii=1:i_tf-i_t0+1
     end
     r0_g(ii)=r_usr;
     clear i_vusr_out v_out v_in i_max
-
+%}
     %% Calculate T-day running mean time-series of same variables
     nfile_mean = T_mean*(24*60*60/dt)+1;  %corresponding number of files
 
@@ -875,8 +903,11 @@ for ii=1:i_tf-i_t0+1
         end
         rmax_movave_g(ii-floor(nfile_mean/2))=rmax_movave_g_temp;
 
+        assert(i_max<i_temp,'WARNING: rmax IS AT OUTER EDGE OF SEARCH AREA (R=R_WALL/8)')
+        
         %%Calculate and save T-day running mean rrad, and calculate r0Lil from rrad
         v_usr = v_usr_fracVp*mpi;
+        Vrad = v_usr;
         v_r_mean_temp=smooth(v_r_mean,10);  %use 10-point smoother on profile to calculate
         temp1=find(v_r_mean_temp<=v_usr);
         temp2=find(temp1>i_max,1);
@@ -935,9 +966,8 @@ for ii=1:i_tf-i_t0+1
     end
 
 %}  
-    %%Save all radial profile data (i.e. with no averaging) -- need this to
-    %%calculate mean radial profile for dynamic equilibrium
-    v_r_all(1:length(data_sub),ii) = data_sub;
+    %%Save all radial profile data (i.e. with no averaging)
+%    v_r_all(1:length(data_sub),ii) = data_sub;
     
     %%CALCULATE days tmean0-tmeanf TIME-AVERAGED xz-cross-section
     if(t_day(ii)>=tmean0_usr & t_day(ii)<=tmeanf_usr)
@@ -946,13 +976,15 @@ for ii=1:i_tf-i_t0+1
     end
 
     %%CALCULATE TIME-AVERAGED xz-cross-section for set time periods
+%{
     data_tmean_g(:,num_prof)=data_tmean_g(:,num_prof)+data_sub/(T_mean*(60*60*24/dt));
     if(ii>1)
         if(mod(t_day(ii),1)<mod(t_day(ii-1),1))
             num_prof=num_prof+1;
         end
     end
-
+%}
+    
 end
 
 %% Transient statistics %%%%%%%%%%
