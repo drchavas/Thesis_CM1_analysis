@@ -10,16 +10,16 @@ clf
 
 %% USER INPUT %%%%%%%%%%%%%%%%%%
 T_sfc_out = 300.00;    %[K]; T_sfc = T_sfc_out - 5
-T_tpp = 200;   %[K]; temp set constant at and above height of this temp
-moist = 0;    %if 0, appends '_DRY' to end of sounding file
-dT_sfc = 8; %[K]; surface potential temperature disequilibrium (with lowest model level)
+T_tpp = 250;   %[K]; temp set constant at and above height of this temp
+moist = 1;    %if 0, appends '_DRY' to end of sounding file
+dT_sfc = 2; %[K]; surface potential temperature disequilibrium (with lowest model level)
 
 p_sfc = 101500; %[Pa]
 z_bl = 1500;    %[m]
 %%these are set to 0 if moist ~= 1
 rh_bl = .8;
-rh_ft = .2;
-rh_strat=.05;   %relative humidity above tropopause
+%rh_ft = .001;
+%rh_strat=.001;   %relative humidity above tropopause
 
 dz = 625;  %[m]; desired vertical resolution
 z_top = 39989;  %[m]
@@ -30,8 +30,8 @@ save_output_sounding=1; %0=don't save; o.w. = save
 
 if(moist ~= 1)
     rh_bl = 0;
-    rh_ft = 0;
-    rh_strat= 0;   %relative humidity above tropopause
+%    rh_ft = 0;
+%    rh_strat= 0;   %relative humidity above tropopause
 end
 
 %% Constants (values taken from CM1 model)
@@ -101,13 +101,17 @@ for i=2:length(zz00)
     if(zz00(i)<=z_bl)
         qv00(i) = rh_bl*qvs00;
     else
-        qv00(i) = rh_ft*qvs00;
+        %qv00(i) = rh_ft*qvs00;
+        qv00(i) = qv00(1)*exp(-zz00(i)/2000);    %exponential decay with height
     end
     
     th00(i) = T00(i)*(p0/p(i))^(Rd/Cpd);
 end
 
 [zz00'/1000 T00' th00' qv00']
+
+%Ensure that qv00 > .00001 g/kg so that CM1 doesn't adjust it to be 5% RH
+qv00(qv00<1/1000) = .00001/1000; %[kg/kg]
 
 %% Save sounding file
 u00 = 0*zz00;
