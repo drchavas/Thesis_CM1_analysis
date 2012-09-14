@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009) (format=pdflatex 2009.11.7)  10 SEP 2012 08:48
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009) (format=pdflatex 2009.11.7)  10 SEP 2012 09:31
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -670,20 +670,20 @@ File: FIGURES_TC_RCE_equilibrium_v2.0/Fig6_Dimensional_scaling.pdf Graphic file
 <use FIGURES_TC_RCE_equilibrium_v2.0/Fig6_Dimensional_scaling.pdf> [30
 
  <./FIGURES_TC_RCE_equilibrium_v2.0/Fig6_Dimensional_scaling.pdf>]
-<FIGURES_TC_RCE_equilibrium_v2.0/Fig7a_Nondimensional_scaling_V.pdf, id=228, 61
-4.295pt x 794.97pt>
+<FIGURES_TC_RCE_equilibrium_v2.0/Fig7a_Nondimensional_scaling_V.pdf, id=228, 56
+9.12625pt x 569.12625pt>
 File: FIGURES_TC_RCE_equilibrium_v2.0/Fig7a_Nondimensional_scaling_V.pdf Graphi
 c file (type pdf)
 
 <use FIGURES_TC_RCE_equilibrium_v2.0/Fig7a_Nondimensional_scaling_V.pdf>
-<FIGURES_TC_RCE_equilibrium_v2.0/Fig7b_Nondimensional_scaling_rm.pdf, id=229, 6
-14.295pt x 794.97pt>
+<FIGURES_TC_RCE_equilibrium_v2.0/Fig7b_Nondimensional_scaling_rm.pdf, id=229, 5
+69.12625pt x 569.12625pt>
 File: FIGURES_TC_RCE_equilibrium_v2.0/Fig7b_Nondimensional_scaling_rm.pdf Graph
 ic file (type pdf)
 
 <use FIGURES_TC_RCE_equilibrium_v2.0/Fig7b_Nondimensional_scaling_rm.pdf>
-<FIGURES_TC_RCE_equilibrium_v2.0/Fig7c_Nondimensional_scaling_r0.pdf, id=230, 6
-14.295pt x 794.97pt>
+<FIGURES_TC_RCE_equilibrium_v2.0/Fig7c_Nondimensional_scaling_r0.pdf, id=230, 5
+69.12625pt x 569.12625pt>
 File: FIGURES_TC_RCE_equilibrium_v2.0/Fig7c_Nondimensional_scaling_r0.pdf Graph
 ic file (type pdf)
 
@@ -735,7 +735,7 @@ e/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr/local/texlive/
 texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2009/te
 xmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2009/tex
 mf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb>
-Output written on TC_RCE_equilibrium_v2.0.pdf (32 pages, 392066 bytes).
+Output written on TC_RCE_equilibrium_v2.0.pdf (32 pages, 391757 bytes).
 PDF statistics:
  359 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
