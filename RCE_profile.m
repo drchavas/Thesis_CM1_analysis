@@ -24,14 +24,14 @@ dT_sfc = 2; %[K]; air-sea thermal disequilibrium
 
 run_types=3*ones(100,1);    %[1 1 1 1 1 1 1 1 1]; %1=axisym; 3=3d
 subdirs = {
-'RCE_nx48_SST300.00K_Tthresh200K_usfc10_drag'
+'RCE_nx48_SST300.00K_Tthresh250K_usfc3_drag'
 %'CTRLv0qrhSATqdz5000_nx3072_DRY'
 }; %name of sub-directory with nc files
 
 t0 = 70;    %[day], starting time for averaging
 tf = 100;   %[day], ending time for averaging
 
-save_output_sounding = 0;   %0=no output file created; 1=yes 'input_sounding_[subdir]'
+save_output_sounding = 1;   %0=no output file created; 1=yes 'input_sounding_[subdir]'
 plot_type = 1;  %0=no plot; 1=plots of RCE vertical profiles of qv [g/kg] and theta [K]
     pl_clrs={'b' 'b--' 'r' 'r--' 'g' 'g--' 'c' 'c--' 'k' 'k--' 'y' 'y--'};
     %pl_clrs={'b--' 'r--' 'g--' 'c--' 'k--' 'y--' 'm--' 'b' 'r' 'g' 'c' 'k' 'y' 'm'};
@@ -267,7 +267,7 @@ for rr=1:numruns
 
         if(max_instab<0)    %there is an instability to remove
 
-            assert(abs(max_instab)<.1,'WARNING: THERE IS A LARGE INSTABILITY IN MOIST RCE PROFILE')
+            assert(abs(max_instab)<.3,'WARNING: THERE IS A LARGE INSTABILITY IN MOIST RCE PROFILE')
 
             RCE_instab_remove = 1;   %the profile will be adjusted
             
@@ -338,14 +338,16 @@ if(save_output_sounding~=0)
     %%sounding header: %1) p_sfc (mb); 2) th_sfc (K); 3) qv_sfc (g/kg)
     %%sounding columns: 1) zz00 (m); 2) th00_RCE (K); 3) qv00_RCE (g/kg); 4) u00 (m/s); 5) v00 (m/s)
     
+    %%Ensure that qv00_RCE > .00001 g/kg
+    qv00_RCE{1}(qv00_RCE{1}<.00001/1000)=.00001/1000;
+
     %%need extra layers at top above model top 
     zz00_ext = zz00_RCE{1}(end)+(zz00_RCE{1}(end)-zz00_RCE{1}(end-1))*[1];
     th00_ext = th00_RCE{1}(end)+(th00_RCE{1}(end)-th00_RCE{1}(end-1))*[1];
     qv00_ext = qv00_RCE{1}(end)*[1];
     u00_ext = u00(end)*[1];
     v00_ext = v00(end)*[1];
-    
-    
+        
     sounding_all=[[zz00_RCE{1};zz00_ext'] [th00_RCE{1};th00_ext'] 1000*[qv00_RCE{1};qv00_ext'] [u00(1:vec_length)';u00_ext'] [v00(1:vec_length)';v00_ext']];
     sounding_all=double(sounding_all);
     
