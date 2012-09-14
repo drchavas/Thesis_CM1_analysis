@@ -231,6 +231,9 @@ else
 end
 wrad = (Qrad/86400) / dthdz_wrad;
 
+%% Calculate the Rossby deformation radius for the troposphere, L_R = (N_v*H)/f
+L_R = (N_v_trop*H_tpp)/fcor;
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%% FULL WIND %%%%%%%
 %{
