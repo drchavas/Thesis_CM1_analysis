@@ -11,10 +11,10 @@ clf(1)
 
 %% USER INPUT %%%%%%%%%%%%%%%%%%
 dz = .625;  %desired vertical resolution
-z_top = 25000;  %[m]
+z_top = 30000;  %[m]
 
 snd_files = {
-'input_sounding_3dRCE_nx48_SST300.00K_Tthresh200K_usfc3_drag'
+'input_sounding_3dRCE_nx48_SST300.00K_Tthresh200K_usfc3_rad0.125K'
 %'stratcnst/input_sounding_stratcnstT200K_T300.00'
 }
 
@@ -51,9 +51,6 @@ for i=1:numruns
 
     %%load initial sounding variables
     dir_full = '/Users/drchavas/Documents/Research/Thesis/CM1/v15/Thesis_CM1_analysis/input_soundings/';
-    if(i==5)
-        dir_full = '/Volumes/CHAVAS_CM1_FINAL/CM1_output/axisym/CTRL_icRCE/'
-    end
     
     [zz00 pp00 th00 qv00 u00 v00 T00 Tv00 thv00 rho00 qvs00 rh00 pi00 p_sfc th_sfc qv_sfc] = snd_extract(dir_full,snd_file,dz,nz_sub);
     zz00(end)
@@ -101,6 +98,6 @@ if(isempty(Ttpp))
     Ttpp = 200;
 end
 ztpp = zz00(find(T00<Ttpp,1)-1)/1000+dz*(T00(find(T00<Ttpp,1)-1)-Ttpp)/(T00(find(T00<Ttpp,1)-1)-T00(find(T00<Ttpp,1)))
-T00
+%TEST T00
 
 assert(std(T00(end-5:end))<.1,'WARNING: DAMPING LAYER MAY NOT BE ISOTHERMAL!')

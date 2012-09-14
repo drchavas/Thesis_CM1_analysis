@@ -22,11 +22,11 @@ dT_sfc = 2; %[K]; air-sea thermal disequilibrium
 
 run_types=3*ones(100,1);    %[1 1 1 1 1 1 1 1 1]; %1=axisym; 3=3d
 subdirs = {
-'RCE_nx48_SST300.00K_Tthresh200K_usfc10_drag'
+'RCE_nx48_SST300.00K_Tthresh250K_usfc3_drag'
 
 }; %name of sub-directory with nc files
 
-t0a = 70;    %[day], starting time for averaging
+t0a = 0;    %[day], starting time for averaging
 tfa = 100;   %[day], ending time for averaging
 interval_day = 10;  %[day], length of intervals
 

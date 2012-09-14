@@ -13,18 +13,19 @@ tic
 %name out output subdir (within simsets_Tmean#/PLOTS/[sim_set]/) where plots will be saved
 %sim_sets_all = {'Lx' 'dx' 'dz' 'lh' 'lv' 'qro' 'ro' 'fcor' 'Tsst' 'Ttpp' 'usfc' 'usfc_drag' 'Qcool' 'nondim' 'nondim1.5' 'nondim2' 'mpi' 'Cd' 'QcoolVpcnst' 'QcoolVplvHcnst'}; 
 %sim_sets_all = {'Ttpp_DRY' 'lh_DRY' 'fcor_DRY'}; 
-sim_sets_all = {'nondim_all'}; 
+%sim_sets_all = {'nondim_all'}; 
+sim_sets_all = {'single'}; 
     %IF 'single'
-    sim_single = 'CTRLv0qrhSATqdz5000_nx3072_tap1hr';    %runs only this simulation
+    sim_single = 'CTRLv0qrhSATqdz5000_nx3072';    %runs only this simulation
 moist = 1;  %1 = moist; else = dry
     
 %% Which scripts should I run?
-run_TC_stats = 0;
+run_TC_stats = 1;
     save_file = 0;  %for TC_stats only; note: program will not overwrite old file
 run_TC_stats_dynamicequil = 0;  %overwrites old file automatically
 run_TC_structure_ts = 0;    %overwrites old plot automatically
-run_TC_stats_plot = 1;  %overwrites old [simset].mat file and plots automatically
-    run_TC_stats_plot_dynamicequil = 1; %also run for dynamic equilibrium
+run_TC_stats_plot = 0;  %overwrites old [simset].mat file and plots automatically
+    run_TC_stats_plot_dynamicequil = 0; %also run for dynamic equilibrium
 
 %% Parameters for scripts
 v_usr_fracVp = .1;  %wind speed as fraction of Vp; beyond this radius, radiative subsidence radial wind profile should apply.
@@ -42,9 +43,9 @@ rmax_plot = 1500;    %[km]
 
 
 %% Basic crap
-%subdir_pre='CTRL_icRCE/';    %general subdir that includes multiple runs within
-subdir_pre='';    %general subdir that includes multiple runs within
-ext_hd = 0; %0=local hard drive; 1=external hard drive
+subdir_pre='CTRL_icRCE_nodrag/';    %general subdir that includes multiple runs within
+%subdir_pre='';    %general subdir that includes multiple runs within
+ext_hd = 2; %0=local hard drive; 1='CHAVAS_CM1_FINAL'; 2='CHAVAS_CM1_FINAL_nodrag'
 run_types=ones(1000,1); %[1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]; %1=axisym; 3=3D
 
 %%Data time range (want data for entire simulation)

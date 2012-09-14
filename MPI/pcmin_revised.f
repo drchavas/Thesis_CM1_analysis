@@ -101,9 +101,8 @@ C
       TP=T(NK)
       PP=MIN(PM,1000.0)
       RP=0.622*R(NK)*PSL/(PP*(0.622+R(NK))-R(NK)*PSL)
-	WRITE(*,*)'rmax',' T(1)=',TP,' qv(1)=',RP,' p(1)=',PP
-      CALL CAPE(TP,RP,PP,T,R,P,NA,N,SIG,CAPEM,TOM,IFLAG)
-	WRITE(*,*)'rmax',' cape=',CAPEM,' iflag=',IFLAG 
+	WRITE(*,*)'rmax',TP,RP,PP
+      CALL CAPE(TP,RP,PP,T,R,P,NA,N,SIG,CAPEM,TOM,IFLAG) 
       IF(IFLAG.NE.1)IFL=2
       RAT=SSTK/TOM
       IF(IDISS.EQ.0)RAT=1.0
@@ -112,11 +111,9 @@ C  ***  Find saturation CAPE at radius of maximum winds   ***
 C
       TP=SSTK
       PP=MIN(PM,1000.0)
-C      RP=0.622*ES0/(PP-ES0)
-	WRITE(*,*)'sst',' T(sst)=',TP,' qv(sst)=',RP,' p(sst)=',PP
-	RP=0
+      RP=0.622*ES0/(PP-ES0)
+	WRITE(*,*)'sst',TP,RP,PP
       CALL CAPE(TP,RP,PP,T,R,P,NA,N,SIG,CAPEMS,TOMS,IFLAG)
-        WRITE(*,*)'sst',' cape=',CAPEM,' iflag=',IFLAG
       IF(IFLAG.NE.1)IFL=2
 C
 C  ***  Initial estimate of minimum pressure   ***
@@ -185,10 +182,10 @@ C
 C
 C   ***   Check that sounding is suitable    ***
 C
-C      IF(RP.LT.1.0E-6.OR.TP.LT.200.0)THEN
-C       IFLAG=0
-C       RETURN
-C      END IF            
+      IF(RP.LT.1.0E-6.OR.TP.LT.200.0)THEN
+       IFLAG=0
+       RETURN
+      END IF            
 C
 C   ***   Assign values of thermodynamic constants     ***
 C

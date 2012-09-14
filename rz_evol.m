@@ -55,8 +55,17 @@ pl_clrs={'b' 'r' 'g' 'c' 'k' 'y' 'm' 'b--' 'r--' 'g--' 'c--' 'k--' 'y--' 'm--'};
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%CONSTANTS
-Cpd = 1004; %[J/K/kg]
+%% Constants (values taken from CM1 model)
+c_CM1 = constants_CM1(); %c_CM1: [g rd cp cv p00 xlv]
+
+g=c_CM1(1); %[m/s2]
+Rd=c_CM1(2);  %[J/kg/K]
+Cpd=c_CM1(3); %[J/kg/K]; spec heat of dry air
+Rv=c_CM1(4);   %[J/K/kg]
+p0 = c_CM1(5); %[Pa]
+Lv=c_CM1(6);   %[J/kg]
+
+eps=Rd/Rv;
 
 vars = {var_clr,var_cntr};
 
