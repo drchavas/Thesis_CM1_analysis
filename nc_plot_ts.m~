@@ -14,13 +14,13 @@ clf(1)     %clear figures without closing them
 
 %% USER INPUT %%%%%%%%%%%%%%%%%%
 
-%subdir_pre='CTRL_icRCE/';
+subdir_pre='CTRL_icRCE/';
 subdir_pre='TRANSFER/';
 %subdir_pre='RCE/';    %general subdir that includes multiple runs within
 %subdir_pre='';
-ext_hd = 1; %0=local hard drive; 1='CHAVAS_CM1_FINAL'; 2='CHAVAS_CM1_FINAL_nodrag'
+ext_hd = 2; %0=local hard drive; 1='CHAVAS_CM1_FINAL'; 2='CHAVAS_CM1_FINAL_nodrag'
 
-run_types= [1 1 1 1]; %1=axisym; 3=3D
+run_types= [3 1 1 1]; %1=axisym; 3=3D
 %    toax = 1.688/1.326;
 %    div_dat_by=[toax toax 1 4 4*toax 16 16*toax 64 64*toax 4*64*toax 1 1 1 1]; %for any domain-integrated quantities, can normalize to equivalent domain size
 %    div_dat_by=[1 4 4^2 4^3 4^4 4^5 4^6]
@@ -28,7 +28,7 @@ run_types= [1 1 1 1]; %1=axisym; 3=3D
     div_dat_by=ones(30,1);
 subdirs = {
 
-'TEST'
+'RCE_test'
 
 }; %name of sub-directory with nc files
 
@@ -108,6 +108,24 @@ switch plot_type
                 otherwise
                     assert(2==3,'Invalid number for ext_hd!')
             end   
+            
+            if(run_type==1)
+                run_type_str='axisym';
+                if(ext_hd==0)
+                    dir_in=sprintf('/Users/drchavas/Documents/Research/Thesis/CM1/v15/axisym/CM1_output/%s',subdir_pre);
+                else    %external harddrive
+                    dir_in=sprintf('/Volumes/CHAVAS_CM1_FINAL/CM1_output/axisym/%s',subdir_pre);
+                end
+                copyfile('nc_extract_axisym.m','nc_extract.m') %copy nc_extract_axisym.m to nc_extract
+            elseif(run_type==3)
+                run_type_str='3d';
+                if(ext_hd==0)
+                    dir_in=sprintf('/Users/drchavas/Documents/Research/Thesis/CM1/v15/3d/CM1_output/%s',subdir_pre);
+                else    %external harddrive
+                    dir_in=sprintf('/Volumes/CHAVAS_CM1_FINAL/CM1_output/3d/%s',subdir_pre);
+                end
+                copyfile('nc_extract_3d.m','nc_extract.m') %copy nc_extract_3d.m to nc_extract
+            end
             
             
             %% EXTRACT DATA EITHER USING cm1out_stats.nc OR ORIGINAL nc DATA

@@ -22,7 +22,7 @@ figure(1)
 %% USER INPUT %%%%%%%%%%%%%%%%%%
 %subdir_pre='CTRL_icRCE/';    %general subdir that includes multiple runs within
 subdir_pre='';    %general subdir that includes multiple runs within
-ext_hd = 0; %0=local hard drive; 1=external hard drive
+ext_hd = 2; %0=local hard drive; 1='CHAVAS_CM1_FINAL'; 2='CHAVAS_CM1_FINAL_nodrag'
 run_type=1; %1=axisym; 3=3D
 moist = 0;  %1 = moist; else = dry
 
@@ -86,21 +86,22 @@ t_day_max = 0;
 %% OPTIONS FOR EITHER AXISYM OR 3D RUNS
 if(run_type==1)
     run_type_str='axisym';
-    if(ext_hd==0)
-        dir_in=sprintf('/Users/drchavas/Documents/Research/Thesis/CM1/v15/axisym/CM1_output/%s',subdir_pre);
-    else    %external harddrive
-        dir_in=sprintf('/Volumes/CHAVAS_CM1_FINAL/CM1_output/axisym/%s',subdir_pre);
-    end        
     copyfile('nc_extract_axisym.m','nc_extract.m') %copy nc_extract_axisym.m to nc_extract
 elseif(run_type==3)
     run_type_str='3D';
-    if(ext_hd==0)
-        dir_in=sprintf('/Users/drchavas/Documents/Research/Thesis/CM1/v15/3D/CM1_output/%s',subdir_pre);
-    else    %external harddrive
-        dir_in=sprintf('/Volumes/CHAVAS_CM1_FINAL/CM1_output/3D/%s',subdir_pre);
-    end
     copyfile('nc_extract_3d.m','nc_extract.m') %copy nc_extract_3d.m to nc_extract
 end
+
+switch ext_hd
+    case 0,
+        dir_in=sprintf('/Users/drchavas/Documents/Research/Thesis/CM1/v15/%s/CM1_output/%s',run_type_str,subdir_pre);
+    case 1,
+        dir_in=sprintf('/Volumes/CHAVAS_CM1_FINAL/CM1_output/%s/%s',run_type_str,subdir_pre);
+    case 2,
+        dir_in=sprintf('/Volumes/CHAVAS_CM1_FINAL_nodrag/CM1_output/%s/%s',run_type_str,subdir_pre);
+    otherwise
+        assert(2==3,'Invalid number for ext_hd!')
+end   
 
 %%DIRECTORY WITH OUTPUT DATA
 subdir_full=sprintf('%s%s',dir_in,subdir)

@@ -15,15 +15,17 @@ clf(1)
 %% USER INPUT %%%%%%%%%%%%%%%%%%
 run_type=1; %1=axisym; 3=3d; 10/30=initial condition test (subdir 'code_test')
 
-%subdir_pre='CTRL_icRCE/';    %general subdir that includes multiple runs within
-subdir_pre='TRANSFER/';
+subdir_pre='CTRL_icRCE/';    %general subdir that includes multiple runs within
+%subdir_pre='TRANSFER/';
 %subdir_pre='RCE/';    %general subdir that includes multiple runs within
 %subdir_pre='';    %general subdir that includes multiple runs within
-ext_hd = 1; %0=local hard drive; 1='CHAVAS_CM1_FINAL'; 2='CHAVAS_CM1_FINAL_nodrag'
+ext_hd = 2; %0=local hard drive; 1='CHAVAS_CM1_FINAL'; 2='CHAVAS_CM1_FINAL_nodrag'
 
 
-subdir = 'TEST'; %name of sub-directory with nc files
-t_file=5;  %file timestep
+subdir_axisym = 'CTRLv0qrhSATqdz5000_nx3072'; %name of sub-directory with nc files
+t_file_axisym=600;  %file timestep
+subdir_3d = 'RCE_nx48_SST300.00K_Tthresh250K_usfc3_DRY';  %name of sub-directory with nc files
+t_file_3d=101;  %file timestep
 
 plot_type = 1;  %0=no plotd
                 %1=single plot of [var] in domain defined below
@@ -35,18 +37,18 @@ plot_type = 1;  %0=no plotd
 %IF plot_type=1: input variable and domain
     fig_hold=1; %1=do not clear old figure
     pl_color='r--';
-    var = 'qv0';  %variable of interest (DRC vars: 'angmom')
+    var = 'winterp';  %variable of interest (DRC vars: 'angmom')
     usr_maxmin=0;   %0=use data max/min for plot; 1=usr input
         vmin_plot = -40;
         vmax_plot = 40;
     
  if(run_type==1 || run_type==10)   %axisym
     x0=0;   %first x grid point [0,end]
-    xf=100;   %first y grid point [0,end]
+    xf=5;   %first y grid point [0,end]
     y0=0;   %first y grid point [0,end]
     yf=0;   %last y grid point [0,end]
     z0=0;  %first z grid point [0,end]
-    zf=40;  %last z grid point [0,end]
+    zf=20;  %last z grid point [0,end]
  elseif(run_type==3 || run_type==30)   %3d
     x0=-1000;   %first x grid point [0,end]
     xf=1000;   %first y grid point [0,end]
@@ -69,23 +71,42 @@ quit_prog=0;
 %% OPTIONS FOR EITHER AXISYM OR 3d RUNS
 if(run_type==1)
     run_type_str='axisym';
-    copyfile('nc_extract_axisym.m','nc_extract.m') %copy nc_extract_axisym.m to nc_extract
+    if(ext_hd==0)
+        dir_in=sprintf('/Users/drchavas/Documents/Research/Thesis/CM1/v15/axisym/CM1_output/%s',subdir_pre);
+    else    %external harddrive
+        dir_in=sprintf('/Volumes/CHAVAS_CM1_FINAL/CM1_output/axisym/%s',subdir_pre);
+    end
+    subdir=subdir_axisym;
+    t_file=t_file_axisym;
+    copyfile('nc_extract_axisym.m','nc_extract.m') %copy nc_extract_axisym.m to nc_extract       
 elseif(run_type==3)
-    run_type_str='3D';
+    run_type_str='3d';
+    if(ext_hd==0)
+        dir_in=sprintf('/Users/drchavas/Documents/Research/Thesis/CM1/v15/3d/CM1_output/%s',subdir_pre);
+    else    %external harddrive
+        dir_in=sprintf('/Volumes/CHAVAS_CM1_FINAL/CM1_output/3d/%s',subdir_pre);
+    end
+    subdir=subdir_3d;
+    t_file=t_file_3d;
     copyfile('nc_extract_3d.m','nc_extract.m') %copy nc_extract_3d.m to nc_extract
+elseif(run_type==10)
+    run_type_str='axisym';
+    dir_in=sprintf('/Users/drchavas/Documents/Research/Thesis/CM1/v15/code_test/CM1_output/%s',subdir_pre);
+    subdir=subdir_axisym;
+    t_file=t_file_axisym;
+    copyfile('nc_extract_axisym.m','nc_extract.m') %copy nc_extract_axisym.m to nc_extract
+elseif(run_type==30)
+    run_type_str='3d';
+    dir_in=sprintf('/Users/drchavas/Documents/Research/Thesis/CM1/v15/code_test/CM1_output/%s',subdir_pre);
+    subdir=subdir_3d;
+    t_file=t_file_3d;
+    copyfile('nc_extract_axisym.m','nc_extract.m') %copy nc_extract_3d.m to nc_extract    
+else
+    sprintf('ERROR: Input value for run_type must be 1 (axisym) or 3 (3d).')
+    quit_prog=1;
 end
 
-switch ext_hd
-    case 0,
-        dir_in=sprintf('/Users/drchavas/Documents/Research/Thesis/CM1/v15/%s/CM1_output/%s',run_type_str,subdir_pre);
-    case 1,
-        dir_in=sprintf('/Volumes/CHAVAS_CM1_FINAL/CM1_output/%s/%s',run_type_str,subdir_pre);
-    case 2,
-        dir_in=sprintf('/Volumes/CHAVAS_CM1_FINAL_nodrag/CM1_output/%s/%s',run_type_str,subdir_pre);
-    otherwise
-        assert(2==3,'Invalid number for ext_hd!')
-end   
-
+if(quit_prog==0)
 
 %%NC FILENAME (default)
 if(t_file<10)
@@ -1307,5 +1328,6 @@ switch plot_type
         sprintf('Invalid plot number. Fail.')
 end
 
+end
 
 %}

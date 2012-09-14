@@ -77,22 +77,21 @@ for pp=1:length(ts)-1
     %% OPTIONS FOR EITHER AXISYM OR 3d RUNS
     if(run_type==1)
         run_type_str='axisym';
+        if(ext_hd==0)
+            dir_in=sprintf('/Users/drchavas/Documents/Research/Thesis/CM1/v15/axisym/CM1_output/%s',subdir_pre);
+        else    %external harddrive
+            dir_in=sprintf('/Volumes/CHAVAS_CM1_FINAL/CM1_output/axisym/%s',subdir_pre);
+        end
         copyfile('nc_extract_axisym.m','nc_extract.m') %copy nc_extract_axisym.m to nc_extract
     elseif(run_type==3)
-        run_type_str='3D';
+        run_type_str='3d';
+        if(ext_hd==0)
+            dir_in=sprintf('/Users/drchavas/Documents/Research/Thesis/CM1/v15/3d/CM1_output/%s',subdir_pre);
+        else    %external harddrive
+            dir_in=sprintf('/Volumes/CHAVAS_CM1_FINAL/CM1_output/3d/%s',subdir_pre);
+        end
         copyfile('nc_extract_3d.m','nc_extract.m') %copy nc_extract_3d.m to nc_extract
     end
-
-    switch ext_hd
-        case 0,
-            dir_in=sprintf('/Users/drchavas/Documents/Research/Thesis/CM1/v15/%s/CM1_output/%s',run_type_str,subdir_pre);
-        case 1,
-            dir_in=sprintf('/Volumes/CHAVAS_CM1_FINAL/CM1_output/%s/%s',run_type_str,subdir_pre);
-        case 2,
-            dir_in=sprintf('/Volumes/CHAVAS_CM1_FINAL_nodrag/CM1_output/%s/%s',run_type_str,subdir_pre);
-        otherwise
-            assert(2==3,'Invalid number for ext_hd!')
-    end   
     
     %%DIRECTORY WITH OUTPUT DATA
     subdir_full=sprintf('%s%s',dir_in,subdir)

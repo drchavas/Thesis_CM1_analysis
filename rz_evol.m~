@@ -1,23 +1,28 @@
-%radprof_evol.m
+%rz_evol.m
 
-%Created: 02 May 2012, Dan Chavas
+%Created: 3 May 2012, Dan Chavas
 
-%Purpose: to plot the evolution of the radial profile of a quantity over successive 10-day
+%Purpose: to plot the evolution of the rz-cross-section of important quantities over successive 10-day
 %periods to view equilibration.
+%variables: streamfunction (solid), angular momentum (dashed), moist static energy (shaded)
+%  single trajectory through (r,z) = (rmax, Vmax) (dark black solid)
 
 %NOTE: data at varying x (i.e. zonal cross-sec) = matrix COLUMN in MATLAB!
 
 clear
 clc
-close all
 figure(1)
-clf(1)
+%hold on
+%figure(2)
+%close all
+%clf(1)     %clear figures without closing them
+%clf(2)     %clear figures without closing them
+
 
 %% USER INPUT %%%%%%%%%%%%%%%%%%
 %subdir_pre='CTRL_icRCE/';    %general subdir that includes multiple runs within
 subdir_pre='';    %general subdir that includes multiple runs within
 ext_hd = 2; %0=local hard drive; 1='CHAVAS_CM1_FINAL'; 2='CHAVAS_CM1_FINAL_nodrag'
-
 run_type=1; %1=axisym; 3=3D
 moist = 0;  %1 = moist; else = dry
 
@@ -27,19 +32,8 @@ t0a = 145;
 tfa = 150;
 dt_mean = 5;   %[day]
 
-%pl_clrs={'b' 'r' 'g' 'c' 'k' 'y' 'm' 'b--' 'r--' 'g--' 'c--' 'k--' 'y--' 'm--'};
-vars = {'vinterp'}%'vinterp' 'Ri'};
-    numpt_sm = 1;  %smoother uses this number of points
-    
-%%Define subset of points to plot
-rmin_plot = 0;  %[km]; lowest value plotted
-rmax_plot = 20000;    %[km]; highest value plotted
-zmin_plot = .5;  %[km]; lowest value plotted
-zmax_plot = 1; %[km]; highest value plotted
-datamin_plot = -5000;   %minimum data value plotted
-datamax_plot = 5000;   %maximum data value plotted
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+var_clr = 'thpert';
+var_cntr = 'angmom';
 
 %%Define grid of points to extract (i.e. all of them, will subset afterwards)
 x0=0;   %first x grid point [0,end]
@@ -48,6 +42,18 @@ y0=0;   %first y grid point [0,end]
 yf=0;   %last y grid point [0,end]
 z0=0;  %first z grid point [0,end]
 zf=100;  %last z grid point [0,end]
+
+%%Define subset of points to plot
+rmin_plot = 0;  %[km]; lowest value plotted
+rmax_plot = 200;    %[km]; highest value plotted
+zmin_plot = 0;  %[km]; lowest value plotted
+zmax_plot = 10; %[km]; highest value plotted
+datamin_plot = -5000;   %minimum data value plotted
+datamax_plot = 5000;   %minimum data value plotted
+
+pl_clrs={'b' 'r' 'g' 'c' 'k' 'y' 'm' 'b--' 'r--' 'g--' 'c--' 'k--' 'y--' 'm--'};
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% Constants (values taken from CM1 model)
 c_CM1 = constants_CM1(); %c_CM1: [g rd cp cv p00 xlv]
@@ -60,6 +66,8 @@ p0 = c_CM1(5); %[Pa]
 Lv=c_CM1(6);   %[J/kg]
 
 eps=Rd/Rv;
+
+vars = {var_clr,var_cntr};
 
 numvars = length(vars);
 
@@ -78,22 +86,21 @@ t_day_max = 0;
 %% OPTIONS FOR EITHER AXISYM OR 3D RUNS
 if(run_type==1)
     run_type_str='axisym';
+    if(ext_hd==0)
+        dir_in=sprintf('/Users/drchavas/Documents/Research/Thesis/CM1/v15/axisym/CM1_output/%s',subdir_pre);
+    else    %external harddrive
+        dir_in=sprintf('/Volumes/CHAVAS_CM1_FINAL/CM1_output/axisym/%s',subdir_pre);
+    end        
     copyfile('nc_extract_axisym.m','nc_extract.m') %copy nc_extract_axisym.m to nc_extract
 elseif(run_type==3)
     run_type_str='3D';
+    if(ext_hd==0)
+        dir_in=sprintf('/Users/drchavas/Documents/Research/Thesis/CM1/v15/3D/CM1_output/%s',subdir_pre);
+    else    %external harddrive
+        dir_in=sprintf('/Volumes/CHAVAS_CM1_FINAL/CM1_output/3D/%s',subdir_pre);
+    end
     copyfile('nc_extract_3d.m','nc_extract.m') %copy nc_extract_3d.m to nc_extract
 end
-
-switch ext_hd
-    case 0,
-        dir_in=sprintf('/Users/drchavas/Documents/Research/Thesis/CM1/v15/%s/CM1_output/%s',run_type_str,subdir_pre);
-    case 1,
-        dir_in=sprintf('/Volumes/CHAVAS_CM1_FINAL/CM1_output/%s/%s',run_type_str,subdir_pre);
-    case 2,
-        dir_in=sprintf('/Volumes/CHAVAS_CM1_FINAL_nodrag/CM1_output/%s/%s',run_type_str,subdir_pre);
-    otherwise
-        assert(2==3,'Invalid number for ext_hd!')
-end   
 
 %%DIRECTORY WITH OUTPUT DATA
 subdir_full=sprintf('%s%s',dir_in,subdir)
@@ -116,6 +123,9 @@ clear data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy nx_sub ny
 ts = t0a:dt_mean:tfa;
 for pp=1:length(ts)-1
 
+figure(pp)
+clf(pp)
+    
 t0 = ts(pp);
 tf = ts(pp+1);
     
@@ -181,7 +191,7 @@ for ii=1:i_tf-i_t0+1
         dir_start=pwd;
         dir_tmp = strcat(dir_in,subdir);
         cd(dir_tmp)
-        first_file = nc_file
+        nc_file
         ncid = netcdf.open(nc_file,'WRITE');
 
         %NX
@@ -274,6 +284,11 @@ for ii=1:i_tf-i_t0+1
     var_temp = 'vinterp';
     [data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units] = nc_extract(dir_in,subdir,nc_file,var_temp,x0,xf,y0,yf,z0,zf);
     v_pert = squeeze(data);
+    
+    %%load wpert
+    var_temp = 'winterp';
+    [data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units] = nc_extract(dir_in,subdir,nc_file,var_temp,x0,xf,y0,yf,z0,zf);
+    w_pert = squeeze(data);
 
     %%calculate pressure
     p = repmat(pp00(z0+1:z0+nz_sub),nx_sub,1) + pp_pert;
@@ -292,9 +307,13 @@ for ii=1:i_tf-i_t0+1
         qv = 0;
         ql = 0;
     end
-        
+
+    %%calculate liquid water mixing ratio
+    ql = ql_pert;    %[kg/kg]
+
     %%calculate T, Tv, rho, rh
     [T rho rh the s s_sat gam_m thv] = thermo(p,th,qv,ql);
+    
     
     %%Calculate final variable data
     for vv = 1:numvars
@@ -349,6 +368,9 @@ for ii=1:i_tf-i_t0+1
 %            dp_dr = (p(2:end,:)-p(1:end-1,:))/(1000*dx); %[m/s^2]
 %            dp_dr(2:end+1,:)=dp_dr;  %add extra level at center equal to nearest level value
 
+            
+            vinterp = data;
+            temp2=(xmat*1000*fcor).^2+4*xmat*1000.*dp_dr;
             data =  .5*(-xmat*1000*fcor+sqrt((xmat*1000*fcor).^2+4*xmat*1000.*dp_dr));   %Vg^2 + r*f*Vg-r*(dp_dr); solve for Vg
             data = real(data);  %remove imaginary numbers, which are always very small
             %data(imag(data)~=0)=NaN;    %ignore imaginary numbers
@@ -356,39 +378,15 @@ for ii=1:i_tf-i_t0+1
             v_defs{vv} = 'Gradient wind';
             v_unitss{vv} = 'm/s';
             
-        elseif(strcmp(var,'vg2'))    %composite variables: gradient wind, BR09 formulation
-            %%load pipert
-            var_temp = 'pipert';
-            [data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units] = nc_extract(dir_in,subdir,nc_file,var_temp,x0,xf,y0,yf,z0,zf);
-            pi_pert = squeeze(data);
-
-            %%calculate pi
-            pi = repmat(pi00(z0+1:z0+nz_sub),nx_sub,1) + pi_pert;
-
-            %%EXTRACT DATA: vinterp
-            clear data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units
-            [data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units] = nc_extract(dir_in,subdir,nc_file,'vinterp',x0,xf,y0,yf,z0,zf);
+        elseif(strcmp(var,'rh'))    %relative humidity
             
             xvals = xmin_sub:dx:xmax_sub;
             zvals = zmin_sub:dz:zmax_sub;
             xmat = repmat(xvals,length(zvals),1)';
-            dpi_dr = (pi(3:end,:)-pi(1:end-2,:))/(2*1000*dx); %[m/s^2]
-            dpi_dr(2:end+1,:)=dpi_dr;  %add extra level at center equal to nearest level value
-            dpi_dr(end+1,:)=dpi_dr(end,:);  %add extra level at outer edge equal to nearest level value
+            data = rh;   %M = rV + .5fr^2
+            v_defs{vv} = 'Relative humidity';
+            v_unitss{vv} = '-';
 
-            %calculate at mid-points between grid points
-%            dp_dr = (p(2:end,:)-p(1:end-1,:))/(1000*dx); %[m/s^2]
-%            dp_dr(2:end+1,:)=dp_dr;  %add extra level at center equal to nearest level value
-
-            data =  .5*(-xmat*1000*fcor+sqrt((xmat*1000*fcor).^2+4*xmat*1000*Cpd.*thv.*dpi_dr));   %Vg^2 + r*f*Vg-r*(dp_dr); solve for Vg
-            data = real(data);  %remove imaginary numbers, which are always very small
-            %data(imag(data)~=0)=NaN;    %ignore imaginary numbers
-%            data = data - squeeze(vinterp);
-            v_defs{vv} = 'Gradient wind';
-            v_unitss{vv} = 'm/s';
-            
-            
-            
         else %just extract data for the input variable itself
             %%EXTRACT DATA
             clear data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units
@@ -409,13 +407,44 @@ for ii=1:i_tf-i_t0+1
 
         
 end
-   
+
 %%Extract subset of data for plotting
 %ALL DATA
 xvals = xmin_sub:dx:xmax_sub;
 zvals = zmin_sub:dz:zmax_sub;
 i_xvals = max(1,x0+1):max(1,x0+1)+nx_sub;
 i_zvals = max(1,z0+1):max(1,z0+1)+nz_sub;
+
+
+%% Calculate relevant fields from MEAN data: streamfunction
+
+%%STREAMFUNCTION
+v_defs{vv} = 'streamfunction';
+v_unitss{vv} = 'kg s^{-1}';
+
+%%calculate radial velocity
+u = repmat(u00(z0+1:nz_sub),nx_sub,1) + u_pert;
+
+%%calculate vertical velocity
+w = w_pert;
+
+%%calculate streamfunction (solid) -- FIGURE ME OUT!
+xmat_all = repmat(xvals,length(zvals),1)';
+zmat_all = repmat(zvals,length(xvals),1);
+
+%run code flowfun.m, which calculates streamfunction for cartesian
+%coordinates: u = -d(psi)/dy; v = d(psi)/dx; to apply to cylindrical, r replaces x and
+%z replaces y, and then simply input rho*r*u for u and rho*r*w for v.
+psi = flowfun(xmat_all.*rho.*u,xmat_all.*rho.*w,'stream');
+%figure(4)
+%contour(xmat)
+
+%%angular momentum (dashed)
+
+%%moist static energy (shaded)
+
+%%single trajectory through (r,z) = (rmax, Vmax) (dark black solid)
+
 
 %SUBSET DATA
 indices = find(xvals>=rmin_plot & xvals<=rmax_plot);
@@ -444,45 +473,48 @@ for vv=1:numvars
 end
 
 %%BLOCK OUT UNDESIRED DATA VALUES
-if(numvars > 1)
-    data_tmean{2}(data_tmean{2}>datamax_plot)=datamax_plot;
-    data_tmean{2}(data_tmean{2}<datamin_plot)=datamin_plot;
-end
+data_tmean{2}(data_tmean{2}>datamax_plot)=datamax_plot;
+data_tmean{2}(data_tmean{2}<datamin_plot)=datamin_plot;
 
-%1-DIM RADIAL PLOT
-figure(1)
-numruns=length(ts)-1;
-pl_clr = (1-(pp/numruns))*[0 1 0] + (pp/numruns)*[1 0 0];
-plot(xmat,smooth(data_tmean{1}',numpt_sm),'Color',pl_clr,'LineWidth',1)
-%axis([rmin_plot rmax_plot datamin_plot datamax_plot])
+%% RZ-plot
+%%color plot
+pcolor(xmat,zmat,data_tmean{1}')
+shading flat
+shading interp
 hold on
 
+axis([xvals(1) xvals(end) zvals(1) zvals(end)])
+hold on
+temp=caxis;
+caxis(temp);    %are you serious?
+clear temp
+colorbar
+
+%%contour plot on top
+hold on
+[C H] = contour(xmat,zmat,data_tmean{2}',20,'k');
+clabel(C,H)
+%[C1 H1] = contour(xmat,zmat,data_tmean{2}',[1 1],'r');
+%clabel(C1,H1)
+
+
 %%for plot labeling
-input_ylabel=sprintf('%s [%s]',v_defs{1},v_unitss{1});
-
-input_title2=sprintf('z=%5.2f %s',zvals,zunits);
-
-end
-
-legend({num2str(ts(1:end-1)'+dt_mean/2)},'Location','NorthEast')
-
-figure(1)
-plot(xvals,0*xvals,'k')
-set(gca,'fontweight','bold','fontsize',11)
-
-
+input_ylabel=sprintf('z-distance [%s]',zunits);
+%input_title2=sprintf('min=%5.3f max=%5.3f',data_min(2),data_max(2));
 input_xlabel=sprintf('x-distance [%s]',xunits);
 xlabel(input_xlabel);
 ylabel(input_ylabel);
-input_title1=sprintf('%s [%s], %i-pt smooth',v_defs{1},v_unitss{1},numpt_sm);
-title({input_title1,input_title2})
+input_title1=sprintf('%s [%s]',v_defs{1},v_unitss{1});
+input_title2=sprintf('%s',subdir);
+title({input_title1,input_title2},'FontSize',14,'Linestyle','none','Interpreter','none')
 
-%input_legend=strrep([subdirs_plot(1:numruns)],'_','\_');
-%legend(input_legend)
+%%legend
+%legend({num2str(ts(1:end-1)'+dt_mean/2)},'Location','NorthEast')
 
 %% FIGURE TITLE
-input_title=strrep(sprintf('time-mean %i-day increments',dt_mean),'_','\_');
+input_title=strrep(sprintf('time-mean day %i-%i',t0,tf),'_','\_');
 annotation('textbox','String',input_title,'Position',[0 .5 .2 .5],'Linestyle','none','Interpreter','none','HorizontalAlignment','center','FontSize',10,'Fontweight','bold')
 fig_title = sprintf('%s',subdir);
 annotation('textbox','String',fig_title,'Position',[0 -.45 .5 .5],'Linestyle','none','Interpreter','none','HorizontalAlignment','center','FontSize',10,'Fontweight','bold')
 
+end
