@@ -15,7 +15,7 @@ subdir_pre='RCE/';
 %subdir_pre='';
 %subdir_pre='CTRL_icRCE/';
 %subdir_pre='TRANSFER/';
-ext_hd = 2; %0=local hard drive; 1='CHAVAS_CM1_FINAL'; 2='CHAVAS_CM1_FINAL_nodrag'
+ext_hd = 1; %0=local hard drive; 1='CHAVAS_CM1_FINAL'; 2='CHAVAS_CM1_FINAL_nodrag'
 moist = 1;  %1 = moist; 0 = dry
 
 SST = 300.00;  %[K]; used to calculate RCE th_sfc (=SST-2K) and qv_sfc (80% RH from saturation at SST)
@@ -24,7 +24,7 @@ dT_sfc = 2; %[K]; air-sea thermal disequilibrium
 
 run_types=3*ones(100,1);    %[1 1 1 1 1 1 1 1 1]; %1=axisym; 3=3d
 subdirs = {
-'RCE_nx48_SST300.00K_Tthresh200K_usfc.5_drag'
+'RCE_nx48_SST300.00K_Tthresh200K_usfc2_drag'
 %'CTRLv0qrhSATqdz5000_nx3072_DRY'
 }; %name of sub-directory with nc files
 
@@ -48,6 +48,17 @@ zf=100;  %last z grid point [0,end]
 numruns=length(subdirs);  %total number of runs you want to plot (taken from below)
 %numruns=6;  %total number of runs you want to plot (taken from below)
 
+%% Constants (values taken from CM1 model)
+c_CM1 = constants_CM1(); %c_CM1: [g rd cp cv p00 xlv]
+
+g=c_CM1(1); %[m/s2]
+Rd=c_CM1(2);  %[J/kg/K]
+Cpd=c_CM1(3); %[J/kg/K]; spec heat of dry air
+Rv=c_CM1(4);   %[J/K/kg]
+p0 = c_CM1(5); %[Pa]
+Lv=c_CM1(6);   %[J/kg]
+
+eps=Rd/Rv;
 
 %%Append ax or 3d to subdir names for plot
 %subdirs_plot = subdirs;
@@ -65,6 +76,7 @@ for i=1:length(subdirs)
 end
 %}
 
+
 %% DETERMINE IF A QUASI-STEADY STATE EXISTS, AND IF SO, WHEN
 for rr=1:numruns
 
@@ -72,24 +84,36 @@ for rr=1:numruns
     run_type=run_types(rr);
     subdir=subdirs{rr};
 
+    %% Extract T_sst from file name
+    i_sst=strfind(subdir,'SST');
+    if(isempty(i_sst))
+        sst_str='300.00';
+    else
+        i_sstK=strfind(subdir,'K');
+        i_sstK=i_sstK(find(i_sstK>i_sst,1));
+        sst_str=subdir(i_sst+3:i_sstK-1);
+    end
+    SST = str2num(sst_str
+
     %% OPTIONS FOR EITHER AXISYM OR 3d RUNS
     if(run_type==1)
         run_type_str='axisym';
-        if(ext_hd==0)
-            dir_in=sprintf('/Users/drchavas/Documents/Research/Thesis/CM1/v15/axisym/CM1_output/%s',subdir_pre);
-        else    %external harddrive
-            dir_in=sprintf('/Volumes/CHAVAS_CM1_FINAL/CM1_output/axisym/%s',subdir_pre);
-        end
         copyfile('nc_extract_axisym.m','nc_extract.m') %copy nc_extract_axisym.m to nc_extract
     elseif(run_type==3)
-        run_type_str='3d';
-        if(ext_hd==0)
-            dir_in=sprintf('/Users/drchavas/Documents/Research/Thesis/CM1/v15/3d/CM1_output/%s',subdir_pre);
-        else    %external harddrive
-            dir_in=sprintf('/Volumes/CHAVAS_CM1_FINAL/CM1_output/3d/%s',subdir_pre);
-        end
+        run_type_str='3D';
         copyfile('nc_extract_3d.m','nc_extract.m') %copy nc_extract_3d.m to nc_extract
     end
+
+    switch ext_hd
+        case 0,
+            dir_in=sprintf('/Users/drchavas/Documents/Research/Thesis/CM1/v15/%s/CM1_output/%s',run_type_str,subdir_pre);
+        case 1,
+            dir_in=sprintf('/Volumes/CHAVAS_CM1_FINAL/CM1_output/%s/%s',run_type_str,subdir_pre);
+        case 2,
+            dir_in=sprintf('/Volumes/CHAVAS_CM1_FINAL_nodrag/CM1_output/%s/%s',run_type_str,subdir_pre);
+        otherwise
+            assert(2==3,'Invalid number for ext_hd!')
+    end   
     
     %%DIRECTORY WITH OUTPUT DATA
     subdir_full=sprintf('%s%s',dir_in,subdir)
@@ -261,28 +285,32 @@ for rr=1:numruns
     if(moist==1)
 
         RCE_instab_remove = 0;
-        instab_check = th00_RCE{rr}(2:end)-th00_RCE{rr}(1:end-1);
+        
+        thv00_RCE{rr}=th00_RCE{rr}.*(1+qv00_RCE{rr}/eps)./(1+qv00_RCE{rr})
+        
+        instab_check = thv00_RCE{rr}(2:end)-thv00_RCE{rr}(1:end-1);
         max_instab = min(instab_check);
         z_instab = find(instab_check == max_instab);
 
         if(max_instab<0)    %there is an instability to remove
 
             assert(abs(max_instab)<.3,'WARNING: THERE IS A LARGE INSTABILITY IN MOIST RCE PROFILE')
+            assert(z_instab>=2 || abs(max_instab)<.1,'WARNING: THERE IS A LARGE NEAR-SURFACE INSTABILITY IN MOIST RCE PROFILE')
 
             RCE_instab_remove = 1;   %the profile will be adjusted
             
             %%Iterate upwards through the RCE profile and apply mass-weighted averaging ("mixing") over
             %%each statically-unstable layer and repeat until the entire profile is stable
-            th00_RCE_adj{rr} = th00_RCE{1};  %adjusted profile begins as true RCE profile
-            dth = th00_RCE_adj{rr}(2:end)-th00_RCE_adj{rr}(1:end-1);  %change in theta with height
+            thv00_RCE_adj{rr} = thv00_RCE{rr};  %adjusted profile begins as true RCE profile
+            dthv = thv00_RCE_adj{rr}(2:end)-thv00_RCE_adj{rr}(1:end-1);  %change in theta with height
 
-            while(sum(dth<0)>0)   %there are unstable layers
-            for j = 1:length(th00_RCE_adj{rr})-1
-                dth_j = th00_RCE_adj{rr}(j+1)-th00_RCE_adj{rr}(j);
-                if(dth_j<0)   %unstable
-                    th_ave = (p00_RCE{rr}(j)*th00_RCE_adj{rr}(j) + p00_RCE{rr}(j+1)*th00_RCE_adj{rr}(j+1))/(p00_RCE{rr}(j)+p00_RCE{rr}(j+1));
-                    th00_RCE_adj{rr}(j) = th_ave;
-                    th00_RCE_adj{rr}(j+1) = th_ave;
+            while(sum(dthv<0)>0)   %there are unstable layers
+            for j = 1:length(thv00_RCE_adj{rr})-1
+                dthv_j = thv00_RCE_adj{rr}(j+1)-thv00_RCE_adj{rr}(j);
+                if(dthv_j<0)   %unstable
+                    thv_ave = (p00_RCE{rr}(j)*thv00_RCE_adj{rr}(j) + p00_RCE{rr}(j+1)*thv00_RCE_adj{rr}(j+1))/(p00_RCE{rr}(j)+p00_RCE{rr}(j+1));
+                    thv00_RCE_adj{rr}(j) = thv_ave;
+                    thv00_RCE_adj{rr}(j+1) = thv_ave;
                 end
             end
             
@@ -291,10 +319,13 @@ for rr=1:numruns
             %%in the dry case (though in that case, qv=0 anyways)
 
             %update change in theta with height
-            dth = th00_RCE_adj{rr}(2:end)-th00_RCE_adj{rr}(1:end-1);  %change in theta with height
+            dthv = thv00_RCE_adj{rr}(2:end)-thv00_RCE_adj{rr}(1:end-1);  %change in theta with height
 
             end
             
+            %%Adjust th00_RCE according to adjustmnet in thv00_RCE assuming qv00_RCE fixed
+            th00_RCE_adj{rr}=thv00_RCE_adj{rr}.*(1+qv00_RCE{rr})./(1+qv00_RCE{rr}/eps);
+            th00_RCE_temp = th00_RCE{rr};
             th00_RCE{rr} = th00_RCE_adj{rr};    %only need the final adjusted profile
             
         end
@@ -303,17 +334,6 @@ for rr=1:numruns
 %}
     
     %%Recalculate sfc theta (=SST-2K) and qv_sfc (80% RH from saturation at SST)
-    %% Constants (values taken from CM1 model)
-    c_CM1 = constants_CM1(); %c_CM1: [g rd cp cv p00 xlv]
-
-    g=c_CM1(1); %[m/s2]
-    Rd=c_CM1(2);  %[J/kg/K]
-    Cpd=c_CM1(3); %[J/kg/K]; spec heat of dry air
-    Rv=c_CM1(4);   %[J/K/kg]
-    p0 = c_CM1(5); %[Pa]
-    Lv=c_CM1(6);   %[J/kg]
-
-    eps=Rd/Rv;
     
     SST_C = SST-273.15;
     es_SST = 6.112*exp((17.67*SST_C)./(SST_C+243.5))*100;  %[Pa]
@@ -549,8 +569,8 @@ T_RCE_test = th00_RCE{1}.*pi00_RCE{1};
 assert(std(T_RCE_test(end-5:end))<.1,'WARNING: DAMPING LAYER MAY NOT BE ISOTHERMAL!')
 
 if(RCE_instab_remove == 1)  %an instability was removed
-    sprintf('A vertical dry static instability was removed from the RCE sounding')
-    sprintf('Maximum instability = %5.4f K at level %i',max_instab,z_instab)
+    sprintf('A vertical static instability was removed from the RCE sounding')
+    sprintf('Maximum instability = %5.4f K (th_v) at level %i',max_instab,z_instab)
 else
     sprintf('There were no instabilities in the RCE sounding')
 end

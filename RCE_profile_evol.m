@@ -14,15 +14,16 @@ clc
 subdir_pre='RCE/';
 %subdir_pre='CTRL_icRCE/';
 %subdir_pre='TRANSFER/';
-ext_hd = 2; %0=local hard drive; 1='CHAVAS_CM1_FINAL'; 2='CHAVAS_CM1_FINAL_nodrag'
+ext_hd = 1; %0=local hard drive; 1='CHAVAS_CM1_FINAL'; 2='CHAVAS_CM1_FINAL_nodrag'
 
-SST = 300.00;  %[K]; used to calculate RCE th_sfc (=SST-2K) and qv_sfc (80% RH from saturation at SST)
+%SST = 300.00;  %[K]; EXTRACTED BELOW used to calculate RCE th_sfc (=SST-2K) and qv_sfc (80% RH from saturation at SST)
 RH_sfc = .8;    %air-sea latent disequilibrium
 dT_sfc = 2; %[K]; air-sea thermal disequilibrium
 
 run_types=3*ones(100,1);    %[1 1 1 1 1 1 1 1 1]; %1=axisym; 3=3d
 subdirs = {
-'RCE_nx48_SST300.00K_Tthresh250K_usfc3_drag'
+'RCE_nx48_SST300.00K_Tthresh220K_usfc3_rad1.0K_drag'
+%'RCE_nx48_SST300.00K_Tthresh237K_usfc3_rad2.0K_drag'
 
 }; %name of sub-directory with nc files
 
@@ -74,6 +75,17 @@ for pp=1:length(ts)-1
     run_type=run_types(rr);
     subdir=subdirs{rr};
 
+    %% Extract T_sst from file name
+    i_sst=strfind(subdir,'SST');
+    if(isempty(i_sst))
+        sst_str='300.00';
+    else
+        i_sstK=strfind(subdir,'K');
+        i_sstK=i_sstK(find(i_sstK>i_sst,1));
+        sst_str=subdir(i_sst+3:i_sstK-1);
+    end
+    SST = str2num(sst_str);
+    
     %% OPTIONS FOR EITHER AXISYM OR 3d RUNS
     if(run_type==1)
         run_type_str='axisym';
@@ -207,7 +219,7 @@ for pp=1:length(ts)-1
             vert_prof_temp_p = ((xvals*data)/sum(xvals))';  %cylindrical integral--sum weighted by radius
         end
         data_hmean_p=data_hmean_p+vert_prof_temp_p/(i_tf-i_t0+1); %[g/kg]        
-        pi = data_hmean_p
+        pi = data_hmean_p;
         
         clear data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub xunits yunits zunits v_def v_units time t_units
         
@@ -232,7 +244,7 @@ for pp=1:length(ts)-1
 
         if(max_instab<0)    %there is an instability to remove
 
-            assert(abs(max_instab)<.1,'WARNING: THERE IS A LARGE INSTABILITY IN MOIST RCE PROFILE')
+            %assert(abs(max_instab)<.1,'WARNING: THERE IS A LARGE INSTABILITY IN MOIST RCE PROFILE')
 
             RCE_instab_remove = 1;   %the profile will be adjusted
             
