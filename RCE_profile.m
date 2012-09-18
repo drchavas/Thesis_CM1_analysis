@@ -21,16 +21,62 @@ moist = 1;  %1 = moist; 0 = dry
 %SST = 300.00;  %[K]; EXTRACTED BELOW used to calculate RCE th_sfc (=SST-2K) and qv_sfc (80% RH from saturation at SST)
 RH_sfc = .8;    %air-sea latent disequilibrium
 dT_sfc = 2; %[K]; air-sea thermal disequilibrium
+dth_max_equil = 1; %[K] maximum allowable integrated change in theta at any level over equilibrium period
 
 run_types=3*ones(100,1);    %[1 1 1 1 1 1 1 1 1]; %1=axisym; 3=3d
 subdirs = {
+'RCE_nx24_SST300.00K_Tthresh200K_usfc3_fx8_drag'  %dth_equil_max = 2.23K
+};
+%{
+subdirs = {
+
 'RCE_nx48_SST275.00K_Tthresh200K_usfc3_drag'
 'RCE_nx48_SST285.00K_Tthresh200K_usfc3_drag'
-%'CTRLv0qrhSATqdz5000_nx3072_DRY'
+'RCE_nx48_SST290.00K_Tthresh200K_usfc3_drag'
+'RCE_nx48_SST295.00K_Tthresh200K_usfc3_drag'
+'RCE_nx48_SST300.00K_Tthresh150K_usfc3_drag'
+'RCE_nx48_SST300.00K_Tthresh175K_usfc3_drag'
+'RCE_nx48_SST300.00K_Tthresh175K_usfc3_rad0.25K_drag'
+'RCE_nx48_SST300.00K_Tthresh200K_usfc.5_drag'
+'RCE_nx48_SST300.00K_Tthresh200K_usfc1.5_rad0.25K_drag'
+'RCE_nx48_SST300.00K_Tthresh200K_usfc10_drag'
+'RCE_nx48_SST300.00K_Tthresh200K_usfc1_drag'
+'RCE_nx48_SST300.00K_Tthresh200K_usfc1_rad0.125K_drag'
+'RCE_nx48_SST300.00K_Tthresh200K_usfc20_rad2.0K_drag'
+'RCE_nx48_SST300.00K_Tthresh200K_usfc2_drag'
+'RCE_nx48_SST300.00K_Tthresh200K_usfc3_Cddiv8_drag'
+'RCE_nx48_SST300.00K_Tthresh200K_usfc3_Cdx8_drag'
+'RCE_nx48_SST300.00K_Tthresh200K_usfc3_drag'
+'RCE_nx48_SST300.00K_Tthresh200K_usfc3_fdiv8_drag'
+%'RCE_nx48_SST300.00K_Tthresh200K_usfc3_fx8_drag'   %skip me! I'm aggregated!
+'RCE_nx24_SST300.00K_Tthresh200K_usfc3_fx8_drag'    %better: no aggregation
+%'RCE_nx48_SST300.00K_Tthresh200K_usfc3_rad0.125K_drag' %dth_max_equil = 2.1 K
+'RCE_nx48_SST300.00K_Tthresh200K_usfc3_rad0.25K_drag'
+'RCE_nx48_SST300.00K_Tthresh200K_usfc3_rad1.0K_drag' %has dthv = .2 K at lev 1
+'RCE_nx48_SST300.00K_Tthresh220K_usfc3_rad1.0K_drag' %has dthv = .15 K at lev 1 -- changes Vp by 0.13 m/s
+'RCE_nx48_SST300.00K_Tthresh200K_usfc3_rad2.0K_drag'
+'RCE_nx48_SST300.00K_Tthresh200K_usfc4_drag'
+'RCE_nx48_SST300.00K_Tthresh200K_usfc5_drag'
+'RCE_nx48_SST300.00K_Tthresh200K_usfc6_rad1.0K_drag'
+'RCE_nx48_SST300.00K_Tthresh225K_usfc3_drag'
+'RCE_nx48_SST300.00K_Tthresh250K_usfc3_drag'
+'RCE_nx48_SST305.00K_Tthresh200K_usfc3_drag'
+'RCE_nx48_SST310.00K_Tthresh200K_usfc3_drag'
+'RCE_nx48_SST300.00K_Tthresh150K_usfc3_rad0.125K_drag'
+'RCE_nx48_SST300.00K_Tthresh237K_usfc3_rad2.0K_drag'
 }; %name of sub-directory with nc files
+%}
+%%Or just use all subdirectories in RCE/
+%{
+temp = dir('/Volumes/CHAVAS_CM1_FINAL/CM1_output/3d/RCE/RCE*');
+for i = 1:length(temp)
+    subdirs{i} = temp(i).name
+end
+%}
 
-t0 = 70;    %[day], starting time for averaging
-tf = 100;   %[day], ending time for averaging
+%t0 = 70;    %[day], starting time for averaging
+%tf = 100;   %[day], ending time for averaging
+Tmean_RCE = 30; %[day], will average over final [Tmean_RCE] days of simulation
 
 save_output_sounding = 1;   %0=no output file created; 1=yes 'input_sounding_[subdir]'
 plot_type = 1;  %0=no plot; 1=plots of RCE vertical profiles of qv [g/kg] and theta [K]
@@ -133,8 +179,12 @@ for rr=1:numruns
     end
     dt = time; %[s]; time of cm1out_0001.nc is defined as zero
     clear data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy nx_sub ny_sub xunits yunits zunits v_def v_units time t_units
-    i_t0 = max(0,round(t0*24*60*60/dt)+1); %timestep corresponding to start time for averaging
-    i_tf = min(numfiles,round(tf*24*60*60/dt)+1); %timestep corresponding to end time for averaging
+    i_tf = numfiles-1;    %last file of simulation
+    tf = (i_tf-1)*dt/(24*60*60);
+    i_t0 = max(0,round(tf-Tmean_RCE*24*60*60/dt)+1); %timestep corresponding to start time for averaging
+    t0 = (i_t0-1)*dt/(24*60*60);
+%    i_t0 = max(0,round(t0*24*60*60/dt)+1); %timestep corresponding to start time for averaging
+%    i_tf = min(numfiles-1,round(tf*24*60*60/dt)+1); %timestep corresponding to end time for averaging
 
     %% EXTRACT DATA FROM input_sounding
     snd_file = 'input_sounding';
@@ -151,6 +201,7 @@ for rr=1:numruns
     data_hmean_th=zeros(1000,1);
     data_hmean_p=zeros(1000,1);
     data_hmean_pi=zeros(1000,1);
+    vert_prof_temp_dth=zeros(1000,1);
 
     for ii=1:i_tf-i_t0+1
 
@@ -205,6 +256,11 @@ for rr=1:numruns
         v_def_th = v_def;
         v_units_th = v_units;
         data_hmean_th=data_hmean_th(1:nz_sub);
+        vert_prof_temp_dth=vert_prof_temp_dth(1:nz_sub);
+        if(ii>=2)
+            vert_prof_temp_th_save = vert_prof_temp_th;
+        end
+        
         if(run_type==3)
             vert_prof_temp_th=squeeze(mean(mean(data,1),2));   %horiz-averaged vertical profile
         elseif(run_type==1)
@@ -213,6 +269,10 @@ for rr=1:numruns
             vert_prof_temp_th = ((xvals*data)/sum(xvals))';  %cylindrical integral--sum weighted by radius
         end
         data_hmean_th=data_hmean_th+vert_prof_temp_th/(i_tf-i_t0+1); %[g/kg]
+        
+        if(ii>=2)
+            vert_prof_temp_dth = vert_prof_temp_dth + (vert_prof_temp_th - vert_prof_temp_th_save); %integrated change over time
+        end
         
         %%EXTRACT pressure DATA
         var_temp = 'prspert'
@@ -296,7 +356,7 @@ for rr=1:numruns
         if(max_instab<0)    %there is an instability to remove
 
             assert(abs(max_instab)<.3,'WARNING: THERE IS A LARGE INSTABILITY IN MOIST RCE PROFILE')
-            assert(z_instab>=2 || abs(max_instab)<.1,'WARNING: THERE IS A LARGE NEAR-SURFACE INSTABILITY IN MOIST RCE PROFILE')
+            assert(z_instab>=2 || abs(max_instab)<.3,'WARNING: THERE IS A LARGE NEAR-SURFACE INSTABILITY IN MOIST RCE PROFILE')
 
             RCE_instab_remove = 1;   %the profile will be adjusted
             
@@ -351,99 +411,115 @@ for rr=1:numruns
     qv00_init{rr} = qv00(z0+1:z0+vec_length)';   %[kg/kg]
     th00_init{rr} = th00(z0+1:z0+vec_length)';   %[K] 
 
-    
-end
+    if(save_output_sounding~=0)
 
-if(save_output_sounding~=0)
+        %%sounding header: %1) p_sfc (mb); 2) th_sfc (K); 3) qv_sfc (g/kg)
+        %%sounding columns: 1) zz00 (m); 2) th00_RCE (K); 3) qv00_RCE (g/kg); 4) u00 (m/s); 5) v00 (m/s)
 
-    %%sounding header: %1) p_sfc (mb); 2) th_sfc (K); 3) qv_sfc (g/kg)
-    %%sounding columns: 1) zz00 (m); 2) th00_RCE (K); 3) qv00_RCE (g/kg); 4) u00 (m/s); 5) v00 (m/s)
-    
-    %%Ensure that qv00_RCE > .00001 g/kg
-    qv00_RCE{rr}(qv00_RCE{rr}<.00001/1000)=.00001/1000;
+        %%Ensure that qv00_RCE > .00001 g/kg
+        qv00_RCE{rr}(qv00_RCE{rr}<.00001/1000)=.00001/1000;
 
-    %%need extra layers at top above model top 
-    zz00_ext = zz00_RCE{rr}(end)+(zz00_RCE{rr}(end)-zz00_RCE{rr}(end-1))*[1];
-    th00_ext = th00_RCE{rr}(end)+(th00_RCE{rr}(end)-th00_RCE{rr}(end-1))*[1];
-    qv00_ext = qv00_RCE{rr}(end)*[1];
-    u00_ext = u00(end)*[1];
-    v00_ext = v00(end)*[1];
-        
-    sounding_all=[[zz00_RCE{rr};zz00_ext'] [th00_RCE{rr};th00_ext'] 1000*[qv00_RCE{rr};qv00_ext'] [u00(1:vec_length)';u00_ext'] [v00(1:vec_length)';v00_ext']];
-    sounding_all=double(sounding_all);
-    
-    pressure_all=[p00_RCE{rr}];
-    pressure_all=double(pressure_all);
+        %%need extra layers at top above model top 
+        zz00_ext = zz00_RCE{rr}(end)+(zz00_RCE{rr}(end)-zz00_RCE{rr}(end-1))*[1];
+        th00_ext = th00_RCE{rr}(end)+(th00_RCE{rr}(end)-th00_RCE{rr}(end-1))*[1];
+        qv00_ext = qv00_RCE{rr}(end)*[1];
+        u00_ext = u00(end)*[1];
+        v00_ext = v00(end)*[1];
 
-    file_out = sprintf('input_soundings/input_sounding_%s',subdirs_plot{rr});
-%    save(file_out,'p_sfc','th_sfc','qv_sfc','sounding_all');    
-    clear fid
-    fid = fopen(file_out,'w');
-    fprintf(fid,'   %6.2f     %6.2f     %6.2f\n',p_sfc/100,th00_RCE{rr}(1),1000*qv00_RCE{rr}(1));
-    fprintf(fid,'   %8.5f     %8.5f     %8.5f     %8.5f    %8.5f\n',sounding_all');
-    
-    file_out_pres = sprintf('input_soundings/input_sounding_%s_pressures',subdirs_plot{rr});
-%    save(file_out,'p_sfc','th_sfc','qv_sfc','sounding_all');    
-    clear fid
-    fid = fopen(file_out_pres,'w');
-    fprintf(fid,'   %8.5f     \n',pressure_all');
+        sounding_all=[[zz00_RCE{rr};zz00_ext'] [th00_RCE{rr};th00_ext'] 1000*[qv00_RCE{rr};qv00_ext'] [u00(1:vec_length)';u00_ext'] [v00(1:vec_length)';v00_ext']];
+        sounding_all=double(sounding_all);
+
+        pressure_all=[p00_RCE{rr}];
+        pressure_all=double(pressure_all);
+
+        file_out = sprintf('input_soundings/input_sounding_%s',subdirs_plot{rr});
+    %    save(file_out,'p_sfc','th_sfc','qv_sfc','sounding_all');    
+        clear fid
+        fid = fopen(file_out,'w');
+        fprintf(fid,'   %6.2f     %6.2f     %6.2f\n',p_sfc/100,th00_RCE{rr}(1),1000*qv00_RCE{rr}(1));
+        fprintf(fid,'   %8.5f     %8.5f     %8.5f     %8.5f    %8.5f\n',sounding_all');
+
+        file_out_pres = sprintf('input_soundings/input_sounding_%s_pressures',subdirs_plot{rr});
+    %    save(file_out,'p_sfc','th_sfc','qv_sfc','sounding_all');    
+        clear fid
+        fid = fopen(file_out_pres,'w');
+        fprintf(fid,'   %8.5f     \n',pressure_all');
 
 
-    %%Make adjusted dry RCE sounding + perturbation (dry RCE is statically unstable)
-    if(moist == 0)
+        %%Make adjusted dry RCE sounding + perturbation (dry RCE is statically unstable)
+        if(moist == 0)
 
-        %%Iterate upwards through the RCE profile and apply mass-weighted averaging ("mixing") over
-        %%each statically-unstable layer and repeat until the entire profile is stable
-        th00_RCE_adj{rr} = th00_RCE{rr};  %adjusted profile begins as true RCE profile
-        dth = th00_RCE_adj{rr}(2:end)-th00_RCE_adj{rr}(1:end-1);  %change in theta with height
-       
-        sprintf('Producing adjusted dry RCE sounding that is statically stable; also perturbation')
-        while(sum(dth<0)>0)   %there are unstable layers
-        for j = 1:length(th00_RCE_adj{rr})-1
-            dth_j = th00_RCE_adj{rr}(j+1)-th00_RCE_adj{rr}(j);
-            if(dth_j<0)   %unstable
-                th_ave = (p00_RCE{rr}(j)*th00_RCE_adj{rr}(j) + p00_RCE{rr}(j+1)*th00_RCE_adj{rr}(j+1))/(p00_RCE{rr}(j)+p00_RCE{rr}(j+1));
-                th00_RCE_adj{rr}(j) = th_ave;
-                th00_RCE_adj{rr}(j+1) = th_ave;
+            %%Iterate upwards through the RCE profile and apply mass-weighted averaging ("mixing") over
+            %%each statically-unstable layer and repeat until the entire profile is stable
+            th00_RCE_adj{rr} = th00_RCE{rr};  %adjusted profile begins as true RCE profile
+            dth = th00_RCE_adj{rr}(2:end)-th00_RCE_adj{rr}(1:end-1);  %change in theta with height
+
+            sprintf('Producing adjusted dry RCE sounding that is statically stable; also perturbation')
+            while(sum(dth<0)>0)   %there are unstable layers
+            for j = 1:length(th00_RCE_adj{rr})-1
+                dth_j = th00_RCE_adj{rr}(j+1)-th00_RCE_adj{rr}(j);
+                if(dth_j<0)   %unstable
+                    th_ave = (p00_RCE{rr}(j)*th00_RCE_adj{rr}(j) + p00_RCE{rr}(j+1)*th00_RCE_adj{rr}(j+1))/(p00_RCE{rr}(j)+p00_RCE{rr}(j+1));
+                    th00_RCE_adj{rr}(j) = th_ave;
+                    th00_RCE_adj{rr}(j+1) = th_ave;
+                end
             end
+
+            %update change in theta with height
+            dth = th00_RCE_adj{rr}(2:end)-th00_RCE_adj{rr}(1:end-1);  %change in theta with height
+
+            end
+
+            %magnitude of the adjustment from the true RCE
+            th00_RCE_pert{rr} = th00_RCE{rr}-th00_RCE_adj{rr};
+
+            %%Save soundings for the adjusted profile and the perturbation
+
+            %ADJUSTED PROFILE
+            sounding_all=[[zz00_RCE{rr};zz00_ext'] [th00_RCE_adj{rr};th00_ext'] 1000*[qv00_RCE{rr};qv00_ext'] [u00(1:vec_length)';u00_ext'] [v00(1:vec_length)';v00_ext']];
+            sounding_all=double(sounding_all);
+
+            file_out = sprintf('input_soundings/input_sounding_%s_adj',subdirs_plot{rr});
+        %    save(file_out,'p_sfc','th_sfc','qv_sfc','sounding_all');    
+            clear fid
+            fid = fopen(file_out,'w');
+            fprintf(fid,'   %6.2f     %6.2f     %6.2f\n',p_sfc/100,th00_RCE_adj{rr}(1),1000*qv00_RCE{rr}(1));
+            fprintf(fid,'   %8.5f     %8.5f     %8.5f     %8.5f    %8.5f\n',sounding_all');
+
+            %PERTURBATION PROFILE
+            sounding_all=[[zz00_RCE{rr};zz00_ext'] [th00_RCE_pert{rr};0*th00_ext'] 1000*[0*qv00_RCE{rr};0*qv00_ext'] [0*u00(1:vec_length)';0*u00_ext'] [0*v00(1:vec_length)';0*v00_ext']];
+            sounding_all=double(sounding_all);
+
+            file_out = sprintf('input_soundings/input_sounding_%s_pert',subdirs_plot{rr});
+        %    save(file_out,'p_sfc','th_sfc','qv_sfc','sounding_all');    
+            clear fid
+            fid = fopen(file_out,'w');
+            fprintf(fid,'   %6.2f     %6.2f     %6.2f\n',0*p_sfc/100,th00_RCE_pert{rr}(1),0*1000*qv00_RCE{rr}(1));
+            fprintf(fid,'   %8.5f     %8.5f     %8.5f     %8.5f    %8.5f\n',sounding_all');
+
         end
 
-        %update change in theta with height
-        dth = th00_RCE_adj{rr}(2:end)-th00_RCE_adj{rr}(1:end-1);  %change in theta with height
-
-        end
-
-        %magnitude of the adjustment from the true RCE
-        th00_RCE_pert{rr} = th00_RCE{rr}-th00_RCE_adj{rr};
-
-        %%Save soundings for the adjusted profile and the perturbation
-        
-        %ADJUSTED PROFILE
-        sounding_all=[[zz00_RCE{rr};zz00_ext'] [th00_RCE_adj{rr};th00_ext'] 1000*[qv00_RCE{rr};qv00_ext'] [u00(1:vec_length)';u00_ext'] [v00(1:vec_length)';v00_ext']];
-        sounding_all=double(sounding_all);
-
-        file_out = sprintf('input_soundings/input_sounding_%s_adj',subdirs_plot{rr});
-    %    save(file_out,'p_sfc','th_sfc','qv_sfc','sounding_all');    
-        clear fid
-        fid = fopen(file_out,'w');
-        fprintf(fid,'   %6.2f     %6.2f     %6.2f\n',p_sfc/100,th00_RCE_adj{rr}(1),1000*qv00_RCE{rr}(1));
-        fprintf(fid,'   %8.5f     %8.5f     %8.5f     %8.5f    %8.5f\n',sounding_all');
-
-        %PERTURBATION PROFILE
-        sounding_all=[[zz00_RCE{rr};zz00_ext'] [th00_RCE_pert{rr};0*th00_ext'] 1000*[0*qv00_RCE{rr};0*qv00_ext'] [0*u00(1:vec_length)';0*u00_ext'] [0*v00(1:vec_length)';0*v00_ext']];
-        sounding_all=double(sounding_all);
-
-        file_out = sprintf('input_soundings/input_sounding_%s_pert',subdirs_plot{rr});
-    %    save(file_out,'p_sfc','th_sfc','qv_sfc','sounding_all');    
-        clear fid
-        fid = fopen(file_out,'w');
-        fprintf(fid,'   %6.2f     %6.2f     %6.2f\n',0*p_sfc/100,th00_RCE_pert{rr}(1),0*1000*qv00_RCE{rr}(1));
-        fprintf(fid,'   %8.5f     %8.5f     %8.5f     %8.5f    %8.5f\n',sounding_all');
-        
     end
-    
-end
 
+    vert_prof_dth_max = max(vert_prof_temp_dth);
+    z_vert_prof_dth_max = find(vert_prof_temp_dth == vert_prof_dth_max);
+    assert(vert_prof_dth_max < dth_max_equil,'WARNING: NOT EQUILIBRATED, max(dth_equil) = %5.5f at level %i',vert_prof_dth_max,z_vert_prof_dth_max)
+
+    T_RCE_test = th00_RCE{rr}.*pi00_RCE{rr};
+    assert(std(T_RCE_test(end-5:end))<.1,'WARNING: DAMPING LAYER MAY NOT BE ISOTHERMAL!')
+
+    if(RCE_instab_remove == 1)  %an instability was removed
+        sprintf('%s',subdir)
+        sprintf('A vertical static instability was removed from the RCE sounding')
+        sprintf('Maximum instability = %5.4f K (th_v) at level %i',max_instab,z_instab)
+    else
+        sprintf('%s',subdir)
+        sprintf('There were no instabilities in the RCE sounding')
+    end
+
+   fclose('all')
+   
+end
 
 %%Make plot
 if(plot_type~=0)
@@ -564,16 +640,6 @@ if(plot_type~=0)
     legend(input_legend)
 %}
 
-end
-
-T_RCE_test = th00_RCE{rr}.*pi00_RCE{rr};
-assert(std(T_RCE_test(end-5:end))<.1,'WARNING: DAMPING LAYER MAY NOT BE ISOTHERMAL!')
-
-if(RCE_instab_remove == 1)  %an instability was removed
-    sprintf('A vertical static instability was removed from the RCE sounding')
-    sprintf('Maximum instability = %5.4f K (th_v) at level %i',max_instab,z_instab)
-else
-    sprintf('There were no instabilities in the RCE sounding')
 end
 
 %}
