@@ -201,6 +201,7 @@ for ss=1:numruns
     %% Extract and keep mpi and fcor%%%%%
     mpi_all(ss) = mpi;
     fcor_all(ss) = fcor;
+    Cd_all(ss) = Cd_in;
 
     %% Extract H, tropospheric depth from RCE sounding
     Ttpp = str2num(subdir(strfind(subdir,'Tthresh')+7:strfind(subdir,'Tthresh')+9));
