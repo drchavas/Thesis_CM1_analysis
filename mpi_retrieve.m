@@ -72,14 +72,55 @@ else
     rad_str=file_in(i_rad+3:i_radK-1);
 end
 
-if(isempty(i_rad))
-    mpi_file = sprintf('%sinput_sounding_3dRCE_nx48_SST%sK_Tthresh%sK_usfc%s%s%s_mpi',drag_pre,sst_str,tpp_str,usfc_str,drag_str,dry_str);
+i_Cd=strfind(file_in,'_Cd');
+if(isempty(i_Cd))
 else
-    mpi_file = sprintf('%sinput_sounding_3dRCE_nx48_SST%sK_Tthresh%sK_usfc%s_rad%sK%s%s_mpi',drag_pre,sst_str,tpp_str,usfc_str,rad_str,drag_str,dry_str);
+    i_Cd_0=strfind(file_in,'_Cd')+3;
+    i_Cd_f_relative = strfind(file_in(i_Cd_0:end),'_');
+    if(isempty(i_Cd_f_relative))
+        Cd_str = file_in(i_Cd_0:end);
+    else
+        Cd_str = file_in(i_Cd_0:i_Cd_0+i_Cd_f_relative-2);
+    end
 end
 
+%%recall: Cddiv8 corresponds to Ck/Cd = x8
+switch Cd_str
+    case 'div8'
+        CkCd_str = '_CkCd8.0';
+    case 'div4'
+        CkCd_str = '_CkCd4.0';
+    case 'div2'
+        CkCd_str = '_CkCd2.0';
+    case 'x2'
+        CkCd_str = '_CkCd0.5';
+    case 'x4'
+        CkCd_str = '_CkCd0.25';
+    case 'x8'
+        CkCd_str = '_CkCd0.125';
+    otherwise
+        CkCd_str = '';
+end
+
+%% Determine final mpi file name
+if(isempty(i_rad))
+    mpi_file = sprintf('%sinput_sounding_3dRCE_nx48_SST%sK_Tthresh%sK_usfc%s%s%s%s_mpi',drag_pre,sst_str,tpp_str,usfc_str,drag_str,CkCd_str,dry_str);
+else
+    mpi_file = sprintf('%sinput_sounding_3dRCE_nx48_SST%sK_Tthresh%sK_usfc%s_rad%sK%s%s%s_mpi',drag_pre,sst_str,tpp_str,usfc_str,rad_str,drag_str,CkCd_str,dry_str);
+end
+mpi_file
 cd ..
 
+%% EXCEPTIONS
+%%TESTING%%%
+%file_in = 'CTRLv0qrhSATqdz5000_nx3072_Cddiv4'
+%file_in = 'CTRLv0qrhSATqdz5000_nx3072_Cddiv4_drag';
+%%%%%%%%%%%%
+
+
+
+
+%% Extract mpi value from file
 [mpi] = mpi_getfromfile(mpi_file);
 
 
