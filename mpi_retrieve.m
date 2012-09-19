@@ -16,13 +16,6 @@ cd input_soundings/
 
 %file_in='CTRLv0qrhSATqdz5000_nx3072_SST295.00K_Tthresh250K_usfc5_fdiv2_lh375_rad1K'
 
-isDRY=strfind(file_in,'DRY');
-if(isempty(isDRY)) 
-    dry_str='';
-else    %dry simulation
-    dry_str='_DRY';
-end
-
 usedrag=strfind(file_in,'drag');
 if(isempty(usedrag))
     drag_pre='soundings_nodrag/'
@@ -30,6 +23,13 @@ if(isempty(usedrag))
 else
     drag_pre='';
     drag_str='_drag';
+end
+
+isDRY=strfind(file_in,'DRY');
+if(isempty(isDRY)) 
+    dry_str='';
+else    %dry simulation
+    dry_str='_DRY';
 end
 
 i_sst=strfind(file_in,'SST');
@@ -78,11 +78,9 @@ else
     mpi_file = sprintf('%sinput_sounding_3dRCE_nx48_SST%sK_Tthresh%sK_usfc%s_rad%sK%s%s_mpi',drag_pre,sst_str,tpp_str,usfc_str,rad_str,drag_str,dry_str);
 end
 
-fid=fopen(mpi_file);
-temp=textscan(fid,'%s%s%s%s');
-mpi=str2num(char(temp{3}(1)));
-fclose(fid);
-
 cd ..
+
+[mpi] = mpi_getfromfile(mpi_file);
+
 
 end
