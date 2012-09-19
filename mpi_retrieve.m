@@ -72,8 +72,10 @@ else
     rad_str=file_in(i_rad+3:i_radK-1);
 end
 
+
 i_Cd=strfind(file_in,'_Cd');
 if(isempty(i_Cd))
+    CkCd_str = '';
 else
     i_Cd_0=strfind(file_in,'_Cd')+3;
     i_Cd_f_relative = strfind(file_in(i_Cd_0:end),'_');
@@ -82,24 +84,25 @@ else
     else
         Cd_str = file_in(i_Cd_0:i_Cd_0+i_Cd_f_relative-2);
     end
-end
 
-%%recall: Cddiv8 corresponds to Ck/Cd = x8
-switch Cd_str
-    case 'div8'
-        CkCd_str = '_CkCd8.0';
-    case 'div4'
-        CkCd_str = '_CkCd4.0';
-    case 'div2'
-        CkCd_str = '_CkCd2.0';
-    case 'x2'
-        CkCd_str = '_CkCd0.5';
-    case 'x4'
-        CkCd_str = '_CkCd0.25';
-    case 'x8'
-        CkCd_str = '_CkCd0.125';
-    otherwise
-        CkCd_str = '';
+    %%recall: Cddiv8 corresponds to Ck/Cd = x8
+    switch Cd_str
+        case 'div8'
+            CkCd_str = '_CkCd8.0';
+        case 'div4'
+            CkCd_str = '_CkCd4.0';
+        case 'div2'
+            CkCd_str = '_CkCd2.0';
+        case 'x2'
+            CkCd_str = '_CkCd0.5';
+        case 'x4'
+            CkCd_str = '_CkCd0.25';
+        case 'x8'
+            CkCd_str = '_CkCd0.125';
+        otherwise
+            assert(1==2,'NO MPI FILES EXIST WITH THE GIVEN VALUE OF CkCd!')
+    end
+
 end
 
 %% Determine final mpi file name
