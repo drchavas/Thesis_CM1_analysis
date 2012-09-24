@@ -143,7 +143,7 @@ set(h,'PaperUnits','centimeters');
 set(h,'PaperPosition',hpos);
 set(h,'PaperSize',hpos(3:4));
 
-ax1=axes('position',[0.15    0.15    0.75    0.75]);
+ax1=axes('position',[0.15    0.15    0.8    0.8]);
 axes(ax1)
 
 hold off
@@ -157,8 +157,8 @@ end
 plot(0*(1:xvals_pl(end)),'k')
 %input_title = sprintf('Equilibrium radial profiles of gradient wind for variable domain width');
 %title(input_title)
-xlabel('Radius [km]','FontSize',18)
-ylabel('Azimuthal wind speed [m/s]','FontSize',18)
+xlabel('radius [km]','FontSize',18)
+ylabel('azimuthal wind speed [m/s]','FontSize',18)
 input_legend={'768 km','1536 km','3072 km','6144 km','12288 km'};
 legend(input_legend)
 set(ax1,'YTick',[-10 0 10 20 30 40 50 60 70 80],'XTick',[0 500 1000 1500])

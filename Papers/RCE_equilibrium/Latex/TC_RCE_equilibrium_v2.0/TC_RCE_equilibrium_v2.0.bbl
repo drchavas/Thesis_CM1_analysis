@@ -1,0 +1,190 @@
+\begin{thebibliography}{33}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\urlprefix}{URL }
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi:\discretionary{}{}{}#1}\else
+  \providecommand{\doi}{doi:\discretionary{}{}{}\begingroup
+  \urlstyle{rm}\Url}\fi
+\providecommand{\eprint}[2][]{\url{#2}}
+
+\bibitem[{Bister and Emanuel(1997)}]{Bister_Emanuel_1997}
+Bister, M. and K.~A. Emanuel, 1997: The genesis of hurricane guillermo: Texmex
+  analyses and a modeling study. \textit{Monthly Weather Review},
+  \textbf{125~(10)}, 2662--2682.
+
+\bibitem[{Bister and Emanuel(1998)}]{Bister_Emanuel_1998}
+Bister, M. and K.~A. Emanuel, 1998: Dissipative heating and hurricane
+  intensity. \textit{Meteorology and Atmospheric Physics}, \textbf{65~(3-4)},
+  233--240.
+
+\bibitem[{Bretherton et~al.(2005)Bretherton, Blossey, and
+  Khairoutdinov}]{Bretherton_Blossey_Khairoutdinov_2005}
+Bretherton, C.~S., P.~N. Blossey, and M.~Khairoutdinov, 2005: An energy-balance
+  analysis of deep convective self-aggregation above uniform sst.
+  \textit{Journal of the Atmospheric Sciences}, \textbf{62~(12)}, 4273--4292.
+
+\bibitem[{Bryan and Fritsch(2002)}]{Bryan_Fritsch_2002}
+Bryan, G.~H. and J.~M. Fritsch, 2002: A benchmark simulation for moist
+  nonhydrostatic numerical models. \textit{Monthly Weather Review},
+  \textbf{130~(12)}, 2917--2928,
+  \doi{10.1175/1520-0493(2002)130<2917:ABSFMN>2.0.CO;2}.
+
+\bibitem[{Bryan and Rotunno(2009{\natexlab{a}})}]{Bryan_Rotunno_2009}
+Bryan, G.~H. and R.~Rotunno, 2009{\natexlab{a}}: Evaluation of an analytical
+  model for the maximum intensity of tropical cyclones. \textit{Journal of the
+  Atmospheric Sciences}, \textbf{66~(10)}, 3042--3060.
+
+\bibitem[{Bryan and Rotunno(2009{\natexlab{b}})}]{Bryan_Rotunno_2009b}
+Bryan, G.~H. and R.~Rotunno, 2009{\natexlab{b}}: The maximum intensity of
+  tropical cyclones in axisymmetric numerical model simulations.
+  \textit{Monthly Weather Review}, \textbf{137~(6)}, 1770--1789,
+  \doi{10.1175/2008MWR2709.1}.
+
+\bibitem[{Chavas and Emanuel(2010)}]{Chavas_Emanuel_2010}
+Chavas, D.~R. and K.~A. Emanuel, 2010: A quikscat climatology of tropical
+  cyclone size. \textit{Geophysical Research Letters}, \textbf{37~(18)},
+  10--13.
+
+\bibitem[{Cheng-Shang et~al.(2010)Cheng-Shang, Cheung, Wei-Ting, and
+  Elsberry}]{Cheng-Shang_Cheung_Wei-Ting_Elsberry_2010}
+Cheng-Shang, L., K.~K.~W. Cheung, F.~Wei-Ting, and R.~L. Elsberry, 2010:
+  Initial maintenance of tropical cyclone size in the western north pacific.
+  \textit{Monthly Weather Review}, \textbf{138~(8)}, 3207--3223.
+
+\bibitem[{Emanuel(2010)}]{Emanuel_2010}
+Emanuel, K., 2010: Tropical cyclone activity downscaled from noaa-cires
+  reanalysis, 1908-1958. \textit{Journal of Advances in Modeling Earth
+  Systems}, \textbf{2~(1)}, 1--12.
+
+\bibitem[{Emanuel and Rotunno(2011)}]{Emanuel_Rotunno_2011}
+Emanuel, K. and R.~Rotunno, 2011: Self-stratification of tropical cyclone
+  outflow. part {I}: Implications for storm structure. \textit{Journal of the
+  Atmospheric Sciences}, \textbf{68~(10)}, 2236--2249,
+  \doi{10.1175/JAS-D-10-05024.1}.
+
+\bibitem[{Emanuel(1986)}]{Emanuel_1986}
+Emanuel, K.~A., 1986: An air-sea interaction theory for tropical cyclones. part
+  i: Steady-state maintenance. \textit{Journal of the Atmospheric Sciences},
+  \textbf{43~(6)}, 585--605,
+  \doi{10.1175/1520-0469(1986)043<0585:AASITF>2.0.CO;2}.
+
+\bibitem[{Emanuel(1995{\natexlab{a}})}]{Emanuel_1995a}
+Emanuel, K.~A., 1995{\natexlab{a}}: The behavior of a simple hurricane model
+  using a convective scheme based on subcloud-layer entropy equilibrium.
+  \textit{Journal of the Atmospheric Sciences}, \textbf{52~(22)}, 3960--3968,
+  \doi{10.1175/1520-0469(1995)052<3960:TBOASH>2.0.CO;2}.
+
+\bibitem[{Emanuel(1995{\natexlab{b}})}]{Emanuel_1995b}
+Emanuel, K.~A., 1995{\natexlab{b}}: Sensitivity of tropical cyclones to surface
+  exchange coefficients and a revised steady-state model incorporating eye
+  dynamics. \textit{Journal of the Atmospheric Sciences}, \textbf{52~(22)},
+  3969--3976.
+
+\bibitem[{Emanuel(1997)}]{Emanuel_1997}
+Emanuel, K.~A., 1997: Some aspects of hurricane inner-core dynamics and
+  energetics. \textit{Journal of the Atmospheric Sciences}, \textbf{54~(8)},
+  1014--1026.
+
+\bibitem[{Frank(1977)}]{Frank_1977}
+Frank, W.~M., 1977: The structure and energetics of the tropical cyclone i.
+  storm structure. \textit{Monthly Weather Review}, \textbf{105~(9)},
+  1119--1135.
+
+\bibitem[{Hakim(2011)}]{Hakim_2011}
+Hakim, G.~J., 2011: The mean state of axisymmetric hurricanes in statistical
+  equilibrium. \textit{Journal of the Atmospheric Sciences}, \textbf{68~(6)},
+  1364--1386.
+
+\bibitem[{Hartmann et~al.(2001)Hartmann, Holton, and
+  Fu}]{Hartmann_Holton_Fu_2001}
+Hartmann, D.~L., J.~R. Holton, and Q.~Fu, 2001: The heat balance of the
+  tropical tropopause, cirrus, and stratospheric dehydration. \textit{Geophys.
+  Res. Lett.}, \textbf{28~(10)}, 1969--1972, \doi{10.1029/2000GL012833}.
+
+\bibitem[{Hill and Lackmann(2009)}]{Hill_Lackmann_2009}
+Hill, K.~A. and G.~M. Lackmann, 2009: Influence of environmental humidity on
+  tropical cyclone size. \textit{Monthly Weather Review}, \textbf{137~(10)},
+  3294--3315, \doi{10.1175/2009MWR2679.1}.
+
+\bibitem[{Iman et~al.(2005)Iman, Johnson, and
+  Watson}]{Iman_Johnson_Watson_2005}
+Iman, R.~L., M.~E. Johnson, and C.~C. Watson, 2005: Sensitivity analysis for
+  computer model projections of hurricane losses. \textit{Risk Analysis},
+  \textbf{25~(5)}, 1277--1297.
+
+\bibitem[{Irish et~al.(2008)Irish, Resio, and
+  Ratcliff}]{Irish_Resio_Ratcliff_2008}
+Irish, J.~L., D.~T. Resio, and J.~J. Ratcliff, 2008: The influence of storm
+  size on hurricane surge. \textit{Journal of Physical Oceanography},
+  \textbf{38~(9)}, 2003--2013.
+
+\bibitem[{Lin et~al.(1983)Lin, Farley, and Orville}]{Lin_Farley_Orville_1983}
+Lin, Y.-L., R.~D. Farley, and H.~D. Orville, 1983: Bulk parameterization of the
+  snow field in a cloud model. \textit{Journal of Climate and Applied
+  Meteorology}, \textbf{22~(6)}, 1065--1092.
+
+\bibitem[{Merrill(1984)}]{Merrill_1984}
+Merrill, R.~T., 1984: A comparison of large and small tropical cyclones.
+  \textit{Monthly Weather Review}, \textbf{112~(7)}, 1408–1418.
+
+\bibitem[{Miglietta and Rotunno(2010)}]{Miglietta_Rotunno_2010}
+Miglietta, M.~M. and R.~Rotunno, 2010: Numerical simulations of low-cape flows
+  over a mountain ridge. \textit{Society}, \textbf{67~(7)}, 2391--2401.
+
+\bibitem[{Nolan et~al.(2007)Nolan, Rappin, and
+  Emanuel}]{Nolan_Rappin_Emanuel_2007}
+Nolan, D.~S., E.~D. Rappin, and K.~A. Emanuel, 2007: Tropical cyclogenesis
+  sensitivity to environmental parameters in radiative–convective equilibrium.
+  \textit{Society}, \textbf{2107~(629)}, 2085--2107.
+
+\bibitem[{Parker(2008)}]{Parker_2008}
+Parker, M.~D., 2008: Response of simulated squall lines to low-level cooling.
+  \textit{Journal of the Atmospheric Sciences}, \textbf{65~(4)}, 1323.
+
+\bibitem[{Powell et~al.(2003)Powell, Vickery, and
+  Reinhold}]{Powell_Vickery_Reinhold_2003}
+Powell, M.~D., P.~J. Vickery, and T.~A. Reinhold, 2003: Reduced drag
+  coefficient for high wind speeds in tropical cyclones. \textit{Nature},
+  \textbf{422~(6929)}, 279--283.
+
+\bibitem[{Quiring et~al.(2011)Quiring, Schumacher, Labosier, and
+  Zhu}]{Quiring_Schumacher_Labosier_Zhu_2011}
+Quiring, S., A.~Schumacher, C.~Labosier, and L.~Zhu, 2011: Variations in mean
+  annual tropical cyclone size in the atlantic. \textit{Journal of Geophysical
+  Research}, \textbf{116~(D9)}, D09\,114.
+
+\bibitem[{Rotunno and Emanuel(1987)}]{Rotunno_Emanuel_1987}
+Rotunno, R. and K.~A. Emanuel, 1987: An air-sea interaction theory for tropical
+  cyclones. part ii: Evolutionary study using a nonhydrostatic axisymmetric
+  numerical model. \textit{Journal of the Atmospheric Sciences},
+  \textbf{44~(3)}, 542--561.
+
+\bibitem[{Smagorinsky(1963)}]{Smagorinsky_1963}
+Smagorinsky, J., 1963: General circulation experiments with the primitive
+  equations. \textit{Monthly Weather Review}, \textbf{91~(3)}, 99--164,
+  \doi{10.1175/1520-0493(1963)091<0099:GCEWTP>2.3.CO;2}.
+
+\bibitem[{Smith et~al.(2011)Smith, Schmidt, and
+  Montgomery}]{Smith_Schmidt_Montgomery_2011}
+Smith, R.~K., C.~W. Schmidt, and M.~T. Montgomery, 2011: An investigation of
+  rotational influences on tropical-cyclone size and intensity.
+  \textit{Quarterly Journal of the Royal Meteorological Society},
+  \textbf{137~(660)}, 1841--1855, \doi{10.1002/qj.862}.
+
+\bibitem[{Tang and Emanuel(2010)}]{Tang_Emanuel_2010}
+Tang, B. and K.~Emanuel, 2010: Midlevel ventilation's constraint on tropical
+  cyclone intensity. \textit{Journal of the Atmospheric Sciences},
+  \textbf{67~(6)}, 1817--1830, \doi{10.1175/2010JAS3318.1}.
+
+\bibitem[{Weatherford and Gray(1988)}]{Weatherford_Gray_1988}
+Weatherford, C. and W.~Gray, 1988: Typhoon structure as revealed by aircraft
+  reconnaissance. part i: Data analysis and climatology. \textit{Monthly
+  Weather Review}, \textbf{116~(8)}, 1032--1043.
+
+\bibitem[{Xu and Wang(2010)}]{Xu_Wang_2010}
+Xu, J. and Y.~Wang, 2010: Sensitivity of the simulated tropical cyclone
+  inner-core size to the initial vortex size*. \textit{Monthly Weather Review},
+  \textbf{138~(11)}, 4135--4157, \doi{10.1175/2010MWR3335.1}.
+
+\end{thebibliography}

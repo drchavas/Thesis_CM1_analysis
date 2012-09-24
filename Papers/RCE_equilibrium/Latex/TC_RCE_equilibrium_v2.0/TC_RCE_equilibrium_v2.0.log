@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009) (format=pdflatex 2009.11.7)  10 SEP 2012 09:31
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009) (format=pdflatex 2009.11.7)  24 SEP 2012 16:21
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -318,221 +318,7 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
 Non-PDF special ignored!{/usr/local/texlive/2009/texmf-var/fonts/map/pdftex/upd
 map/pdftex.map}
 
-] [1]
-
-Package natbib Warning: Citation `Emanuel_1986' on page 2 undefined on input li
-ne 90.
-
-
-Package natbib Warning: Citation `Emanuel_1995a' on page 2 undefined on input l
-ine 90.
-
-
-Package natbib Warning: Citation `Rotunno_Emanuel_1987' on page 2 undefined on 
-input line 90.
-
-
-Package natbib Warning: Citation `Emanuel_Rotunno_2011' on page 2 undefined on 
-input line 90.
-
-
-Package natbib Warning: Citation `Irish_Resio_Ratcliff_2008' on page 2 undefine
-d on input line 92.
-
-
-Package natbib Warning: Citation `Iman_Johnson_Watson_2005' on page 2 undefined
- on input line 92.
-
-
-Package natbib Warning: Citation `Merrill_1984' on page 2 undefined on input li
-ne 92.
-
-
-Package natbib Warning: Citation `Frank_1977' on page 2 undefined on input line
- 92.
-
-
-Package natbib Warning: Citation `Chavas_Emanuel_2010' on page 2 undefined on i
-nput line 92.
-
-
-Package natbib Warning: Citation `Cheng-Shang_Cheung_Wei-Ting_Elsberry_2010' on
- page 2 undefined on input line 92.
-
-
-Package natbib Warning: Citation `Merrill_1984' on page 2 undefined on input li
-ne 92.
-
-
-Package natbib Warning: Citation `Weatherford_Gray_1988' on page 2 undefined on
- input line 92.
-
-
-Package natbib Warning: Citation `Chavas_Emanuel_2010' on page 2 undefined on i
-nput line 92.
-
-
-Package natbib Warning: Citation `Chavas_Emanuel_2010' on page 2 undefined on i
-nput line 92.
-
-
-Package natbib Warning: Citation `Quiring_Schumacher_Labosier_Zhu_2011' on page
- 2 undefined on input line 94.
-
-
-Package natbib Warning: Citation `Hill_Lackmann_2009' on page 2 undefined on in
-put line 94.
-
-
-Package natbib Warning: Citation `Xu_Wang_2010' on page 2 undefined on input li
-ne 94.
-
-
-Package natbib Warning: Citation `Smith_Schmidt_Montgomery_2011' on page 2 unde
-fined on input line 94.
-
-
-Package natbib Warning: Citation `Rotunno_Emanuel_1987' on page 2 undefined on 
-input line 94.
-
-[2]
-
-Package natbib Warning: Citation `Tang_Emanuel_2010' on page 3 undefined on inp
-ut line 96.
-
-
-Package natbib Warning: Citation `Rotunno_Emanuel_1987' on page 3 undefined on 
-input line 96.
-
-
-Package natbib Warning: Citation `Hakim_2011' on page 3 undefined on input line
- 96.
-
-
-Package natbib Warning: Citation `Chavas_Emanuel_2010' on page 3 undefined on i
-nput line 96.
-
-
-Package natbib Warning: Citation `Hakim_2011' on page 3 undefined on input line
- 98.
-
-[3]
-
-Package natbib Warning: Citation `Bryan_Fritsch_2002' on page 4 undefined on in
-put line 103.
-
-
-Package natbib Warning: Citation `Miglietta_Rotunno_2010' on page 4 undefined o
-n input line 103.
-
-
-Package natbib Warning: Citation `Bryan_Rotunno_2009b' on page 4 undefined on i
-nput line 103.
-
-
-Package natbib Warning: Citation `Parker_2008' on page 4 undefined on input lin
-e 103.
-
-
-Package natbib Warning: Citation `Lin_Farley_Orville_1983' on page 4 undefined 
-on input line 105.
-
-
-Package natbib Warning: Citation `Bryan_Fritsch_2002' on page 4 undefined on in
-put line 105.
-
-
-Package natbib Warning: Citation `Smagorinsky_1963' on page 4 undefined on inpu
-t line 107.
-
-
-Package natbib Warning: Citation `Emanuel_1997' on page 4 undefined on input li
-ne 107.
-
-[4]
-
-Package natbib Warning: Citation `Hartmann_Holton_Fu_2001' on page 5 undefined 
-on input line 111.
-
-
-Package natbib Warning: Citation `Powell_Vickery_Reinhold_2003' on page 5 undef
-ined on input line 128.
-
-
-Package natbib Warning: Citation `Hakim_2011' on page 5 undefined on input line
- 128.
-
-[5]
-
-Package natbib Warning: Citation `Nolan_Rappin_Emanuel_2007' on page 6 undefine
-d on input line 130.
-
-
-Package natbib Warning: Citation `Bretherton_Blossey_Khairoutdinov_2005' on pag
-e 6 undefined on input line 130.
-
-
-Package natbib Warning: Citation `Rotunno_Emanuel_1987' on page 6 undefined on 
-input line 130.
-
-[6]
-
-Package natbib Warning: Citation `Emanuel_1986' on page 7 undefined on input li
-ne 132.
-
-
-Package natbib Warning: Citation `Emanuel_2010' on page 7 undefined on input li
-ne 135.
-
-[7]
-
-Package natbib Warning: Citation `Bister_Emanuel_1997' on page 8 undefined on i
-nput line 158.
-
-
-Package natbib Warning: Citation `Rotunno_Emanuel_1987' on page 8 undefined on 
-input line 158.
-
-
-Package natbib Warning: Citation `Bryan_Rotunno_2009b' on page 8 undefined on i
-nput line 161.
-
-[8]
-
-Package natbib Warning: Citation `Rotunno_Emanuel_1987' on page 9 undefined on 
-input line 164.
-
-
-Package natbib Warning: Citation `Hakim_2011' on page 9 undefined on input line
- 164.
-
-
-Package natbib Warning: Citation `Emanuel_Rotunno_2011' on page 9 undefined on 
-input line 169.
-
-
-Package natbib Warning: Citation `Bryan_Rotunno_2009' on page 9 undefined on in
-put line 169.
-
-[9]
-
-Package natbib Warning: Citation `Chavas_Emanuel_2010' on page 10 undefined on 
-input line 173.
-
-[10]
-
-Package natbib Warning: Citation `Hakim_2011' on page 11 undefined on input lin
-e 194.
-
-
-Package natbib Warning: Citation `Hakim_2011' on page 11 undefined on input lin
-e 194.
-
-[11] [12] [13]
-
-Package natbib Warning: Citation `Smith_Schmidt_Montgomery_2011' on page 14 und
-efined on input line 212.
-
+] [1] [2] [3] [4] [5] [6] [7] [8] [9] [10] [11] [12] [13]
 [14] [15]
 Overfull \hbox (0.51218pt too wide) in paragraph at lines 225--226
 \OT1/cmr/m/n/12 given the di-men-sional pa-ram-e-ters $\OML/cmm/m/it/12 V[]$\OT
@@ -540,167 +326,193 @@ Overfull \hbox (0.51218pt too wide) in paragraph at lines 225--226
 \OT1/cmr/m/n/12 , there ex-ists only one rel-e-vant non-dimensional
  []
 
-[16] [17]
-
-Package natbib Warning: Citation `Bryan_Rotunno_2009b' on page 18 undefined on 
-input line 266.
-
-
-Package natbib Warning: Citation `Bryan_Rotunno_2009b' on page 18 undefined on 
-input line 266.
-
-
-Package natbib Warning: Citation `Emanuel_1986' on page 18 undefined on input l
-ine 275.
-
-
-Package natbib Warning: Citation `Emanuel_1995b' on page 18 undefined on input 
-line 275.
-
-[18]
-
-Package natbib Warning: Citation `Bister_Emanuel_1998' on page 19 undefined on 
-input line 280.
-
-
-Package natbib Warning: Citation `Emanuel_Rotunno_2011' on page 19 undefined on
- input line 282.
-
-
-Package natbib Warning: Citation `Bryan_Rotunno_2009b' on page 19 undefined on 
-input line 292.
-
-
-Package natbib Warning: Citation `Bryan_Rotunno_2009b' on page 19 undefined on 
-input line 292.
-
-[19]
+[16] [17] [18] [19]
 LaTeX Font Info:    Try loading font information for OMS+cmr on input line 305.
 
- (/usr/local/texlive/2009/texmf-dist/tex/latex/base/omscmr.fd
+
+(/usr/local/texlive/2009/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 305.
+ [20] [21]
+[22] [23] (./TC_RCE_equilibrium_v2.0.bbl [24
 
+] [25]
+Missing character: There is no Ð in font cmr12!
+Missing character: There is no Ð in font cmr12!
+ [26]
+Underfull \hbox (badness 2111) in paragraph at lines 164--167
+[]\OT1/cmr/m/n/12 Smagorinsky, J., 1963: Gen-eral cir-cu-la-tion ex-per-i-ments
+ with the prim-i-tive equa-
+ []
 
-Package natbib Warning: Citation `Emanuel_Rotunno_2011' on page 20 undefined on
- input line 315.
-
-[20] [21] [22]
-No file TC_RCE_equilibrium_v2.0.bbl.
+)
 \openout3 = `TC_RCE_equilibrium_v2.0.fff'.
 
-(TC_RCE_equilibrium_v2.0.fff)
+ (TC_RCE_equilibrium_v2.0.fff)
+AED endfloat: Processing end Figures and Tables [27]
+(./TC_RCE_equilibrium_v2.0.lof [28
 
-Package natbib Warning: There were undefined citations.
 
-AED endfloat: Processing end Figures and Tables (./TC_RCE_equilibrium_v2.0.lof
 
-LaTeX Warning: Reference `fig:mpicollapse' on page 31 undefined on input line 7
+]
+
+LaTeX Warning: Reference `fig:mpicollapse' on page 38 undefined on input line 9
 .
 
 
-Overfull \hbox (2.15665pt too wide) in paragraph at lines 7--7
+Overfull \hbox (2.15665pt too wide) in paragraph at lines 9--9
  [][] []\OT1/cmr/m/n/12 Scaling of the equi-lib-rium value of each struc-tural 
 vari-able non-dimensionalized 
  []
 
-[23
-
-
-
-
-])
+)
 \tf@lof=\write6
 \openout6 = `TC_RCE_equilibrium_v2.0.lof'.
 
- [24] (./TC_RCE_equilibrium_v2.0.fff
-<FIGURES_TC_RCE_equilibrium_v2.0/Fig1_Domain_size.pdf, id=99, 569.12625pt x 455
-.7025pt>
+ [29] (./TC_RCE_equilibrium_v2.0.fff
+<FIGURES_TC_RCE_equilibrium_v2.0/Fig0half_Sounding_ctrl.pdf, id=114, 569.12625p
+t x 569.12625pt>
+File: FIGURES_TC_RCE_equilibrium_v2.0/Fig0half_Sounding_ctrl.pdf Graphic file (
+type pdf)
+
+<use FIGURES_TC_RCE_equilibrium_v2.0/Fig0half_Sounding_ctrl.pdf> [30
+
+ <./FIGURES_TC_RCE_equilibrium_v2.0/Fig0half_Sounding_ctrl.pdf>]
+<FIGURES_TC_RCE_equilibrium_v2.0/Fig1_Domain_size.pdf, id=122, 569.12625pt x 45
+5.7025pt>
 File: FIGURES_TC_RCE_equilibrium_v2.0/Fig1_Domain_size.pdf Graphic file (type p
 df)
- <use FIGURES_TC_RCE_equilibrium_v2.0/Fig1_Domain_size.pdf> [25
+ <use FIGURES_TC_RCE_equilibrium_v2.0/Fig1_Domain_size.pdf> [31
 
  <./FIGURES_TC_RCE_equilibrium_v2.0/Fig1_Domain_size.pdf>]
-<FIGURES_TC_RCE_equilibrium_v2.0/Fig2_Control_run.pdf, id=108, 569.12625pt x 45
+<FIGURES_TC_RCE_equilibrium_v2.0/Fig2_Control_run.pdf, id=131, 569.12625pt x 45
 5.7025pt>
 File: FIGURES_TC_RCE_equilibrium_v2.0/Fig2_Control_run.pdf Graphic file (type p
 df)
- <use FIGURES_TC_RCE_equilibrium_v2.0/Fig2_Control_run.pdf> [26
+ <use FIGURES_TC_RCE_equilibrium_v2.0/Fig2_Control_run.pdf> [32
 
  <./FIGURES_TC_RCE_equilibrium_v2.0/Fig2_Control_run.pdf>]
-<FIGURES_TC_RCE_equilibrium_v2.0/Fig3_MPI_collapse_V.pdf, id=127, 569.12625pt x
+<FIGURES_TC_RCE_equilibrium_v2.0/Fig3_MPI_collapse_V.pdf, id=150, 569.12625pt x
  569.12625pt>
 File: FIGURES_TC_RCE_equilibrium_v2.0/Fig3_MPI_collapse_V.pdf Graphic file (typ
 e pdf)
  <use FIGURES_TC_RCE_equilibrium_v2.0/Fig3_MPI_collapse_V.pdf>
-[27
+[33
 
  <./FIGURES_TC_RCE_equilibrium_v2.0/Fig3_MPI_collapse_V.pdf>]
-<FIGURES_TC_RCE_equilibrium_v2.0/Fig4a_MPI_collapse_rm.pdf, id=147, 569.12625pt
+<FIGURES_TC_RCE_equilibrium_v2.0/Fig4a_MPI_collapse_rm.pdf, id=170, 569.12625pt
  x 569.12625pt>
 File: FIGURES_TC_RCE_equilibrium_v2.0/Fig4a_MPI_collapse_rm.pdf Graphic file (t
 ype pdf)
 
 <use FIGURES_TC_RCE_equilibrium_v2.0/Fig4a_MPI_collapse_rm.pdf>
-<FIGURES_TC_RCE_equilibrium_v2.0/Fig4b_MPI_collapse_r0.pdf, id=148, 569.12625pt
+<FIGURES_TC_RCE_equilibrium_v2.0/Fig4b_MPI_collapse_r0.pdf, id=171, 569.12625pt
  x 569.12625pt>
 File: FIGURES_TC_RCE_equilibrium_v2.0/Fig4b_MPI_collapse_r0.pdf Graphic file (t
 ype pdf)
 
-<use FIGURES_TC_RCE_equilibrium_v2.0/Fig4b_MPI_collapse_r0.pdf> [28
+<use FIGURES_TC_RCE_equilibrium_v2.0/Fig4b_MPI_collapse_r0.pdf> [34
 
  <./FIGURES_TC_RCE_equilibrium_v2.0/Fig4a_MPI_collapse_rm.pdf> <./FIGURES_TC_RC
 E_equilibrium_v2.0/Fig4b_MPI_collapse_r0.pdf>]
-<FIGURES_TC_RCE_equilibrium_v2.0/Fig5_MPI_collapse_r0ctrlwcool.pdf, id=183, 569
+<FIGURES_TC_RCE_equilibrium_v2.0/Fig5_MPI_collapse_r0ctrlwcool.pdf, id=206, 569
 .12625pt x 569.12625pt>
 File: FIGURES_TC_RCE_equilibrium_v2.0/Fig5_MPI_collapse_r0ctrlwcool.pdf Graphic
  file (type pdf)
 
 <use FIGURES_TC_RCE_equilibrium_v2.0/Fig5_MPI_collapse_r0ctrlwcool.pdf>
-[29
+[35
 
  <./FIGURES_TC_RCE_equilibrium_v2.0/Fig5_MPI_collapse_r0ctrlwcool.pdf>]
-<FIGURES_TC_RCE_equilibrium_v2.0/Fig6_Dimensional_scaling.pdf, id=207, 426.5937
+<FIGURES_TC_RCE_equilibrium_v2.0/Fig5half_LR_nocollapse_r0ctrlwcool.pdf, id=230
+, 569.12625pt x 569.12625pt>
+File: FIGURES_TC_RCE_equilibrium_v2.0/Fig5half_LR_nocollapse_r0ctrlwcool.pdf Gr
+aphic file (type pdf)
+
+<use FIGURES_TC_RCE_equilibrium_v2.0/Fig5half_LR_nocollapse_r0ctrlwcool.pdf>
+[36
+
+ <./FIGURES_TC_RCE_equilibrium_v2.0/Fig5half_LR_nocollapse_r0ctrlwcool.pdf>]
+<FIGURES_TC_RCE_equilibrium_v2.0/Fig6_Dimensional_scaling.pdf, id=255, 426.5937
 5pt x 853.1875pt>
 File: FIGURES_TC_RCE_equilibrium_v2.0/Fig6_Dimensional_scaling.pdf Graphic file
  (type pdf)
 
-<use FIGURES_TC_RCE_equilibrium_v2.0/Fig6_Dimensional_scaling.pdf> [30
+<use FIGURES_TC_RCE_equilibrium_v2.0/Fig6_Dimensional_scaling.pdf> [37
 
  <./FIGURES_TC_RCE_equilibrium_v2.0/Fig6_Dimensional_scaling.pdf>]
-<FIGURES_TC_RCE_equilibrium_v2.0/Fig7a_Nondimensional_scaling_V.pdf, id=228, 56
-9.12625pt x 569.12625pt>
+<FIGURES_TC_RCE_equilibrium_v2.0/Fig7a_Nondimensional_scaling_V.pdf, id=275, 42
+6.59375pt x 426.59375pt>
 File: FIGURES_TC_RCE_equilibrium_v2.0/Fig7a_Nondimensional_scaling_V.pdf Graphi
 c file (type pdf)
 
 <use FIGURES_TC_RCE_equilibrium_v2.0/Fig7a_Nondimensional_scaling_V.pdf>
-<FIGURES_TC_RCE_equilibrium_v2.0/Fig7b_Nondimensional_scaling_rm.pdf, id=229, 5
-69.12625pt x 569.12625pt>
+<FIGURES_TC_RCE_equilibrium_v2.0/Fig7b_Nondimensional_scaling_rm.pdf, id=276, 4
+26.59375pt x 426.59375pt>
 File: FIGURES_TC_RCE_equilibrium_v2.0/Fig7b_Nondimensional_scaling_rm.pdf Graph
 ic file (type pdf)
 
 <use FIGURES_TC_RCE_equilibrium_v2.0/Fig7b_Nondimensional_scaling_rm.pdf>
-<FIGURES_TC_RCE_equilibrium_v2.0/Fig7c_Nondimensional_scaling_r0.pdf, id=230, 5
-69.12625pt x 569.12625pt>
+<FIGURES_TC_RCE_equilibrium_v2.0/Fig7c_Nondimensional_scaling_r0.pdf, id=277, 4
+26.59375pt x 426.59375pt>
 File: FIGURES_TC_RCE_equilibrium_v2.0/Fig7c_Nondimensional_scaling_r0.pdf Graph
 ic file (type pdf)
 
 <use FIGURES_TC_RCE_equilibrium_v2.0/Fig7c_Nondimensional_scaling_r0.pdf>
 
-LaTeX Warning: Reference `fig:mpicollapse' on page 31 undefined on input line 7
+LaTeX Warning: Reference `fig:mpicollapse' on page 38 undefined on input line 9
 3.
 
 
-LaTeX Warning: Reference `fig:mpicollapse' on page 31 undefined on input line 7
+LaTeX Warning: Reference `fig:mpicollapse' on page 38 undefined on input line 9
 3.
 
-[31
+[38
 
  <./FIGURES_TC_RCE_equilibrium_v2.0/Fig7a_Nondimensional_scaling_V.pdf> <./FIGU
 RES_TC_RCE_equilibrium_v2.0/Fig7b_Nondimensional_scaling_rm.pdf> <./FIGURES_TC_
-RCE_equilibrium_v2.0/Fig7c_Nondimensional_scaling_r0.pdf>])
+RCE_equilibrium_v2.0/Fig7c_Nondimensional_scaling_r0.pdf>]
+<FIGURES_TC_RCE_equilibrium_v2.0/Fig8a_CkCd_nondimensional_scaling_V.pdf, id=35
+0, 426.59375pt x 426.59375pt>
+File: FIGURES_TC_RCE_equilibrium_v2.0/Fig8a_CkCd_nondimensional_scaling_V.pdf G
+raphic file (type pdf)
+
+<use FIGURES_TC_RCE_equilibrium_v2.0/Fig8a_CkCd_nondimensional_scaling_V.pdf>
+<FIGURES_TC_RCE_equilibrium_v2.0/Fig8b_CkCd_nondimensional_scaling_rm.pdf, id=3
+51, 426.59375pt x 426.59375pt>
+File: FIGURES_TC_RCE_equilibrium_v2.0/Fig8b_CkCd_nondimensional_scaling_rm.pdf 
+Graphic file (type pdf)
+
+<use FIGURES_TC_RCE_equilibrium_v2.0/Fig8b_CkCd_nondimensional_scaling_rm.pdf>
+<FIGURES_TC_RCE_equilibrium_v2.0/Fig8c_CkCd_nondimensional_scaling_r0.pdf, id=3
+52, 426.59375pt x 426.59375pt>
+File: FIGURES_TC_RCE_equilibrium_v2.0/Fig8c_CkCd_nondimensional_scaling_r0.pdf 
+Graphic file (type pdf)
+
+<use FIGURES_TC_RCE_equilibrium_v2.0/Fig8c_CkCd_nondimensional_scaling_r0.pdf>
+[39
+
+ <./FIGURES_TC_RCE_equilibrium_v2.0/Fig8a_CkCd_nondimensional_scaling_V.pdf> <.
+/FIGURES_TC_RCE_equilibrium_v2.0/Fig8b_CkCd_nondimensional_scaling_rm.pdf> <./F
+IGURES_TC_RCE_equilibrium_v2.0/Fig8c_CkCd_nondimensional_scaling_r0.pdf>]
+<FIGURES_TC_RCE_equilibrium_v2.0/Fig9_CkCd_scaling_VmVp.pdf, id=425, 569.12625p
+t x 569.12625pt>
+File: FIGURES_TC_RCE_equilibrium_v2.0/Fig9_CkCd_scaling_VmVp.pdf Graphic file (
+type pdf)
+
+<use FIGURES_TC_RCE_equilibrium_v2.0/Fig9_CkCd_scaling_VmVp.pdf> [40
+
+ <./FIGURES_TC_RCE_equilibrium_v2.0/Fig9_CkCd_scaling_VmVp.pdf>]
+<FIGURES_TC_RCE_equilibrium_v2.0/Fig10_lh_optimize.pdf, id=441, 569.12625pt x 5
+69.12625pt>
+File: FIGURES_TC_RCE_equilibrium_v2.0/Fig10_lh_optimize.pdf Graphic file (type 
+pdf)
+ <use FIGURES_TC_RCE_equilibrium_v2.0/Fig10_lh_optimize.pdf>
+[41
+
+ <./FIGURES_TC_RCE_equilibrium_v2.0/Fig10_lh_optimize.pdf>])
 (./TC_RCE_equilibrium_v2.0.aux)
 
 LaTeX Warning: There were undefined references.
@@ -710,13 +522,13 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 3420 strings out of 493848
- 46540 string characters out of 3149207
- 103105 words of memory out of 3000000
- 6612 multiletter control sequences out of 15000+200000
+ 3532 strings out of 493848
+ 50936 string characters out of 3149207
+ 105550 words of memory out of 3000000
+ 6715 multiletter control sequences out of 15000+200000
  21781 words of font info for 79 fonts, out of 3000000 for 9000
  714 hyphenation exceptions out of 8191
- 34i,14n,45p,1813b,307s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 34i,14n,45p,1813b,326s stack positions out of 5000i,500n,10000p,200000b,50000s
 </usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb
 ></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb
 ></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb>
@@ -735,9 +547,9 @@ e/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr/local/texlive/
 texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2009/te
 xmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2009/tex
 mf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb>
-Output written on TC_RCE_equilibrium_v2.0.pdf (32 pages, 391757 bytes).
+Output written on TC_RCE_equilibrium_v2.0.pdf (42 pages, 467080 bytes).
 PDF statistics:
- 359 PDF objects out of 1000 (max. 8388607)
+ 518 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 51 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 86 words of extra memory for PDF output out of 10000 (max. 10000000)
 

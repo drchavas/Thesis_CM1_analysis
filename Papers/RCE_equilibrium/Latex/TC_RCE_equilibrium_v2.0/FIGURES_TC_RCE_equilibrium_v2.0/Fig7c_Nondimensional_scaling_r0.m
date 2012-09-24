@@ -32,13 +32,13 @@ h=figure(1)
 
 %resize the figure to be pdf print-ready
 set(h,'Units','centimeters');
-hpos = [0 0 20 20];
+hpos = [0 0 15 15];
 set(h,'Position',hpos);
 set(h,'PaperUnits','centimeters');
 set(h,'PaperPosition',hpos);
 set(h,'PaperSize',hpos(3:4));
 
-ax1=axes('position',[0.1    0.1    0.85    0.85]);
+ax1=axes('position',[0.15    0.15    0.80    0.80]);
 
 %%Determine output subdirectory pathname for given sim_set
 if(equil_dynamic == 1)
@@ -132,7 +132,7 @@ dat_min=0;
 pl_edge = max([abs(floor(min(xvals_pl(1:numruns,m)))) abs(ceil(max(xvals_pl(1:numruns,m)))) 5]);
 
 
-%% RMAX
+%% R0
 %subplot(3,1,1)
 axes(ax1)
 data_temp = r0Lil_equil_g./(mpi_all./fcor_all);

@@ -186,7 +186,7 @@ set(h,'PaperPosition',hpos);
 set(h,'PaperSize',hpos(3:4));
 
 
-ax1=axes('position',[0.15    0.15    0.75    0.75]);
+ax1=axes('position',[0.15    0.15    0.8    0.8]);
 
 Vm_plot = Vmax_movave_g_all/Vmax_equil_g;
 plot(ax1,t_day,Vm_plot,'Color',pl_clrs{1})
@@ -237,8 +237,8 @@ legend(input_legend,'Location','SouthEast','Interpreter','Latex')
 input_title1=sprintf('Evolution of control storm structure');
 input_title2=sprintf('%s',subdir);
 %title({input_title1},'Linestyle','none','Interpreter','none')
-xlabel('Time [day]','FontSize',18)
-ylabel('Non-dimensional units','FontSize',18)
+xlabel('time [day]','FontSize',18)
+ylabel('non-dimensional units','FontSize',18)
 %ymax = 1*max([max(Vm_plot) max(rm_plot(Vm_plot>.7)) max(r0_plot(Vm_plot>.7))])
 ymax = 2;   %just make plot go [0,2] in y axis for simplicity
 axis([t0 tf 0 min([ymax 2])])

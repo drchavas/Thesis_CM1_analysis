@@ -32,13 +32,13 @@ h=figure(1)
 
 %resize the figure to be pdf print-ready
 set(h,'Units','centimeters');
-hpos = [0 0 20 20];
+hpos = [0 0 15 15];
 set(h,'Position',hpos);
 set(h,'PaperUnits','centimeters');
 set(h,'PaperPosition',hpos);
 set(h,'PaperSize',hpos(3:4));
 
-ax1=axes('position',[0.1    0.1    0.85    0.85]);
+ax1=axes('position',[0.15    0.15    0.80    0.80]);
 
 %%Determine output subdirectory pathname for given sim_set
 if(equil_dynamic == 1)
@@ -189,7 +189,7 @@ text1=text(-4.75,-4.75,input_title1,'FontSize',30);
 set(text1,'HorizontalAlignment','left','VerticalAlignment','bottom','Interpreter','Latex','BackgroundColor','white','EdgeColor','k');
 axis([-pl_edge pl_edge -pl_edge pl_edge])
 ylabel('$\\log_2(\widetilde{r}_m/\widetilde{r}_m^*)$','Interpreter','Latex','FontSize',18)
-xlabel('$\\log_2(C/C^*)$','Interpreter','Latex','FontSize',18)
+%xlabel('$\\log_2(C/C^*)$','Interpreter','Latex','FontSize',18)
 %xlabh = get(gca,'XLabel');
 %set(xlabh,'Position',get(xlabh,'Position') - [0 .1 0])
 grid on

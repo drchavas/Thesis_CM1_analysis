@@ -12,6 +12,11 @@ ls input_sounding*SST$1K* > file_list
 #@ n = 1        # define a looping variable
 #echo $nf
 
+cd sndg_pres_mpi_temp/
+mv *_pressures *_mpi ../.
+cd ..
+rm -r sndg_pres_mpi_temp
+
 ## loop through files
 foreach sndfil ( "`cat file_list`" )
   cd ../mpi
@@ -21,12 +26,6 @@ foreach sndfil ( "`cat file_list`" )
 end
 
 rm file_list
-
-cd sndg_pres_mpi_temp/
-mv *_pressures *_mpi ../.
-
-cd ..
-rm -r sndg_pres_mpi_temp
 
 cd ../mpi
 

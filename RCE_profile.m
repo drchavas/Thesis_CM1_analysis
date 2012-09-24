@@ -22,48 +22,52 @@ moist = 1;  %1 = moist; 0 = dry
 RH_sfc = .8;    %air-sea latent disequilibrium
 dT_sfc = 2; %[K]; air-sea thermal disequilibrium
 dth_max_equil = 1; %[K] maximum allowable integrated change in theta at any level over equilibrium period
+override_instab = 1;    %if 1, will not stop calculation even if there is a large instability
 
 run_types=3*ones(100,1);    %[1 1 1 1 1 1 1 1 1]; %1=axisym; 3=3d
 subdirs = {
-'RCE_nx24_SST300.00K_Tthresh200K_usfc3_fx8_drag'  %dth_equil_max = 2.23K
+'RCE_nx48_SST300.00K_Tthresh125K_usfc3_rad0.125K_drag'  
 };
 %{
+%%List last updated: 11am Thu 20 Sep
 subdirs = {
-
+'RCE_nx24_SST300.00K_Tthresh200K_usfc3_fx8_drag'
 'RCE_nx48_SST275.00K_Tthresh200K_usfc3_drag'
 'RCE_nx48_SST285.00K_Tthresh200K_usfc3_drag'
 'RCE_nx48_SST290.00K_Tthresh200K_usfc3_drag'
 'RCE_nx48_SST295.00K_Tthresh200K_usfc3_drag'
 'RCE_nx48_SST300.00K_Tthresh150K_usfc3_drag'
+'RCE_nx48_SST300.00K_Tthresh150K_usfc3_rad0.125K_drag'
 'RCE_nx48_SST300.00K_Tthresh175K_usfc3_drag'
 'RCE_nx48_SST300.00K_Tthresh175K_usfc3_rad0.25K_drag'
 'RCE_nx48_SST300.00K_Tthresh200K_usfc.5_drag'
+'RCE_nx48_SST300.00K_Tthresh200K_usfc.7_rad0.125K_drag'
 'RCE_nx48_SST300.00K_Tthresh200K_usfc1.5_rad0.25K_drag'
 'RCE_nx48_SST300.00K_Tthresh200K_usfc10_drag'
+'RCE_nx48_SST300.00K_Tthresh200K_usfc15_rad2.0K_drag'
 'RCE_nx48_SST300.00K_Tthresh200K_usfc1_drag'
-'RCE_nx48_SST300.00K_Tthresh200K_usfc1_rad0.125K_drag'
-'RCE_nx48_SST300.00K_Tthresh200K_usfc20_rad2.0K_drag'
 'RCE_nx48_SST300.00K_Tthresh200K_usfc2_drag'
+'RCE_nx48_SST300.00K_Tthresh200K_usfc34_rad4.0K_drag'   %has dthv = .37 K at lev 1
 'RCE_nx48_SST300.00K_Tthresh200K_usfc3_Cddiv8_drag'
 'RCE_nx48_SST300.00K_Tthresh200K_usfc3_Cdx8_drag'
 'RCE_nx48_SST300.00K_Tthresh200K_usfc3_drag'
 'RCE_nx48_SST300.00K_Tthresh200K_usfc3_fdiv8_drag'
-%'RCE_nx48_SST300.00K_Tthresh200K_usfc3_fx8_drag'   %skip me! I'm aggregated!
-'RCE_nx24_SST300.00K_Tthresh200K_usfc3_fx8_drag'    %better: no aggregation
-%'RCE_nx48_SST300.00K_Tthresh200K_usfc3_rad0.125K_drag' %dth_max_equil = 2.1 K
+%'RCE_nx48_SST300.00K_Tthresh200K_usfc3_fx8_drag'    %skip me! I'm aggregated!
+'RCE_nx48_SST300.00K_Tthresh200K_usfc3_rad0.125K_drag'
 'RCE_nx48_SST300.00K_Tthresh200K_usfc3_rad0.25K_drag'
-'RCE_nx48_SST300.00K_Tthresh200K_usfc3_rad1.0K_drag' %has dthv = .2 K at lev 1
-'RCE_nx48_SST300.00K_Tthresh220K_usfc3_rad1.0K_drag' %has dthv = .15 K at lev 1 -- changes Vp by 0.13 m/s
+'RCE_nx48_SST300.00K_Tthresh200K_usfc3_rad1.0K_drag'    %has dthv = .2 K at lev 1
 'RCE_nx48_SST300.00K_Tthresh200K_usfc3_rad2.0K_drag'
 'RCE_nx48_SST300.00K_Tthresh200K_usfc4_drag'
 'RCE_nx48_SST300.00K_Tthresh200K_usfc5_drag'
-'RCE_nx48_SST300.00K_Tthresh200K_usfc6_rad1.0K_drag'
+'RCE_nx48_SST300.00K_Tthresh200K_usfc6.4_rad1.0K_drag'
+'RCE_nx48_SST300.00K_Tthresh220K_usfc3_rad1.0K_drag'    %has dthv = .15 K at lev 1 -- changes Vp by 0.13 m/s
 'RCE_nx48_SST300.00K_Tthresh225K_usfc3_drag'
+'RCE_nx48_SST300.00K_Tthresh237K_usfc3_rad2.0K_drag'
+'RCE_nx48_SST300.00K_Tthresh248K_usfc3_rad4.0K_drag'
 'RCE_nx48_SST300.00K_Tthresh250K_usfc3_drag'
 'RCE_nx48_SST305.00K_Tthresh200K_usfc3_drag'
 'RCE_nx48_SST310.00K_Tthresh200K_usfc3_drag'
-'RCE_nx48_SST300.00K_Tthresh150K_usfc3_rad0.125K_drag'
-'RCE_nx48_SST300.00K_Tthresh237K_usfc3_rad2.0K_drag'
+
 }; %name of sub-directory with nc files
 %}
 %%Or just use all subdirectories in RCE/
@@ -355,8 +359,10 @@ for rr=1:numruns
 
         if(max_instab<0)    %there is an instability to remove
 
-            assert(abs(max_instab)<.3,'WARNING: THERE IS A LARGE INSTABILITY IN MOIST RCE PROFILE')
-            assert(z_instab>=2 || abs(max_instab)<.3,'WARNING: THERE IS A LARGE NEAR-SURFACE INSTABILITY IN MOIST RCE PROFILE')
+            if(override_instab~=1)
+                assert(z_instab>=2 || abs(max_instab)<.3,'WARNING: THERE IS A LARGE NEAR-SURFACE INSTABILITY IN MOIST RCE PROFILE')
+                assert(abs(max_instab)<.3,'WARNING: THERE IS A LARGE INSTABILITY IN MOIST RCE PROFILE')
+            end
 
             RCE_instab_remove = 1;   %the profile will be adjusted
             

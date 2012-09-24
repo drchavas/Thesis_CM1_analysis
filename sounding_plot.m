@@ -11,10 +11,10 @@ clf(1)
 
 %% USER INPUT %%%%%%%%%%%%%%%%%%
 dz = .625;  %desired vertical resolution
-z_top = 30000;  %[m]
+z_top = 35000;  %[m]
 
 snd_files = {
-'input_sounding_3dRCE_nx48_SST300.00K_Tthresh200K_usfc3_rad0.125K'
+'input_sounding_3dRCE_nx48_SST300.00K_Tthresh125K_usfc3_rad0.125K_drag'
 %'stratcnst/input_sounding_stratcnstT200K_T300.00'
 }
 
@@ -97,7 +97,9 @@ Ttpp = str2num(snd_file(strfind(snd_file,'Tthresh')+7:strfind(snd_file,'Tthresh'
 if(isempty(Ttpp))
     Ttpp = 200;
 end
-ztpp = zz00(find(T00<Ttpp,1)-1)/1000+dz*(T00(find(T00<Ttpp,1)-1)-Ttpp)/(T00(find(T00<Ttpp,1)-1)-T00(find(T00<Ttpp,1)))
+ztpp = zz00(find(T00<Ttpp,1)-1)/1000+dz*(T00(find(T00<Ttpp,1)-1)-Ttpp)/(T00(find(T00<Ttpp,1)-1)-T00(find(T00<Ttpp,1))) %[km]
+dp = pp00(find(T00<Ttpp,1)-1) - pp00(find(T00<Ttpp,1)); 
+ptpp = (pp00(find(T00<Ttpp,1)-1)+dp*(T00(find(T00<Ttpp,1)-1)-Ttpp)/(T00(find(T00<Ttpp,1)-1)-T00(find(T00<Ttpp,1))))/100   %[Pa]
 %TEST T00
 
 assert(std(T00(end-5:end))<.1,'WARNING: DAMPING LAYER MAY NOT BE ISOTHERMAL!')

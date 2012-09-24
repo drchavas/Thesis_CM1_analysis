@@ -46,7 +46,7 @@ set(h,'PaperUnits','centimeters');
 set(h,'PaperPosition',hpos);
 set(h,'PaperSize',hpos(3:4));
 
-ax1=axes('position',[0.1    0.1    0.85    0.85]);
+ax1=axes('position',[0.1    0.2    0.85    0.75]);
 
 %%Determine output subdirectory pathname for given sim_set
 if(equil_dynamic == 1)
@@ -147,11 +147,10 @@ grid on
 set(ax1,'YTick',[-4 -3 -2 -1 0 1 2 3 4],'XTick',[-4 -3 -2 -1 0 1 2 3 4])
 box on
 %h=legend(sim_sets_str,'Orientation','horizontal','Position',[1 0.1  0.2    0.02],'EdgeColor','black','FontSize',18)
-%h=legend(sim_sets_str,'Orientation','horizontal','Location','SouthOutside','EdgeColor','black','FontSize',18)
-%set(h,'Position',get(h,'Position')+[0 -.18 0 0])
-
+h=legend(sim_sets_str,'Orientation','horizontal','Location','SouthOutside','EdgeColor','black','FontSize',18)
+set(h,'Position',get(h,'Position')+[0 -.18 0 0])
 grid on
 
 cd /Users/drchavas/Documents/Research/Thesis/CM1/v15/Thesis_CM1_analysis/Papers/RCE_equilibrium/Latex/TC_RCE_equilibrium_v2.0/FIGURES_TC_RCE_equilibrium_v2.0
 
-%print -dpdf -r300 Fig5half_LR_nocollapse_r0ctrlwcool.pdf
+print -dpdf -r300 Fig5half_LR_nocollapse_r0ctrlwcool.pdf

@@ -9,8 +9,8 @@ clc
 clf
 
 %% USER INPUT %%%%%%%%%%%%%%%%%%
-T_sfc_out = 310.00;    %[K]; T_sfc = T_sfc_out - 5
-T_tpp = 200;   %[K]; temp set constant at and above height of this temp
+T_sfc_out = 300.00;    %[K]; T_sfc = T_sfc_out - 5
+T_tpp = 237;   %[K]; temp set constant at and above height of this temp
 moist = 1;    %if 0, appends '_DRY' to end of sounding file
 dT_sfc = 2; %[K]; surface potential temperature disequilibrium (with lowest model level)
 

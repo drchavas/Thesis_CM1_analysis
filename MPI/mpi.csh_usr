@@ -6,6 +6,7 @@
 gfortran -o mpi.exe mpi.F -ffixed-line-length-none
 
 ## Copy over desired input_sounding and corresponding pressure file
+rm input_sounding input_sounding_pres.txt
 cp ../input_soundings/$1 input_sounding
 cp ../input_soundings/$1_pressures input_sounding_pres.txt
 
