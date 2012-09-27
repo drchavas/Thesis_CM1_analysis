@@ -36,12 +36,7 @@ zmin_subsub = 0.5000;
 zmax_subsub = 1;
 %}
 
-function [junk] = TC_stats(subdir_pre,ext_hd,run_type,t0,tf,tmean0_usr,tmeanf_usr,v_usr_fracVp,T_mean,dt_equil,dt_final,save_file,subdir,x0,xf,y0,yf,z0,zf,rmin_sub,rmax_sub,zmin_subsub,zmax_subsub,dir_home,moist,dir_in_dat);
-
-%for calculating the outer radius using control values of the constant parameters
-wrad_ctrl = .0027;   %control run value
-Cd_in_ctrl = .0015;
-fcor_ctrl = 5e-5;   %%THIS IS NO LONGER USED IN CALCULATION OF r0Lil_Lilctrl* !!
+function [junk] = TC_stats(subdir_pre,ext_hd,run_type,t0,tf,tmean0_usr,tmeanf_usr,v_usr_fracVp,T_mean,dt_equil,dt_final,save_file,subdir,x0,xf,y0,yf,z0,zf,rmin_sub,rmax_sub,zmin_subsub,zmax_subsub,dir_home,moist,dir_in_dat,wrad_ctrl,Cd_in_ctrl);
 
 %%Write out to screen whats going on
 sprintf('TC_stats for: %s',subdir)
@@ -920,7 +915,7 @@ for ii=1:i_tf-i_t0+1
             v_out = v_r_mean_temp(i_vusr_out);   %v at first point where v<=v_usr
             v_in = v_r_mean_temp(i_vusr_out-1);  %v at last point where v>=v_usr
             r_usr_movave = xres*(i_vusr_out-(v_out-v_usr)/(v_out-v_in)) - .5*xres;   %r=dr/2 @ i=1
-            if(r_usr_movave<0 || r_usr_movave>1000000 || max(v_r_mean)<Vrad)
+            if(r_usr_movave<0 || r_usr_movave>1000000 || max(v_r_mean)<Vrad)    %note: r_usr_movave is in [km]
                 r_usr_movave=NaN;
             end
         else
@@ -958,7 +953,7 @@ for ii=1:i_tf-i_t0+1
             v_out = v_r_mean_temp(i_vusr_out);   %v at first point where v<=v_usr
             v_in = v_r_mean_temp(i_vusr_out-1);  %v at last point where v>=v_usr
             r_usr_movave = xres*(i_vusr_out-(v_out-v_usr)/(v_out-v_in)) - .5*xres;   %r=dr/2 @ i=1
-            if(r_usr_movave<0 || r_usr_movave>1000000 || max(v_r_mean)<Vrad)
+            if(r_usr_movave<0 || r_usr_movave>1000000 || max(v_r_mean)<Vrad)    %note: r_usr_movave is in [km]
                 r_usr_movave=NaN;
             end
         else
@@ -970,7 +965,7 @@ for ii=1:i_tf-i_t0+1
 
 %}  
     %%Save all radial profile data (i.e. with no averaging)
-%    v_r_all(1:length(data_sub),ii) = data_sub;
+    v_r_all(1:length(data_sub),ii) = data_sub;
     
     %%CALCULATE days tmean0-tmeanf TIME-AVERAGED xz-cross-section
     if(t_day(ii)>=tmean0_usr & t_day(ii)<=tmeanf_usr)

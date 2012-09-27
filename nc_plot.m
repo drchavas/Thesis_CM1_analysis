@@ -16,14 +16,14 @@ clf(1)
 run_type=3; %1=axisym; 3=3d; 10/30=initial condition test (subdir 'code_test')
 
 %subdir_pre='CTRL_icRCE/';    %general subdir that includes multiple runs within
-%subdir_pre='TRANSFER/';
-subdir_pre='RCE/';    %general subdir that includes multiple runs within
+subdir_pre='TRANSFER/';
+%subdir_pre='RCE/';    %general subdir that includes multiple runs within
 %subdir_pre='';    %general subdir that includes multiple runs within
 ext_hd = 1; %0=local hard drive; 1='CHAVAS_CM1_FINAL'; 2='CHAVAS_CM1_FINAL_nodrag'
 
 
-subdir = 'RCE_nx48_SST300.00K_Tthresh200K_usfc3_fx8_drag'; %name of sub-directory with nc files
-t_file=100;  %file timestep
+subdir = 'TEST_3d_hop'; %name of sub-directory with nc files
+t_file=1;  %file timestep
 
 plot_type = 1;  %0=no plotd
                 %1=single plot of [var] in domain defined below
@@ -48,12 +48,12 @@ plot_type = 1;  %0=no plotd
     z0=0;  %first z grid point [0,end]
     zf=40;  %last z grid point [0,end]
  elseif(run_type==3 || run_type==30)   %3d
-    x0=-1000;   %first x grid point [0,end]
+    x0=0;   %first x grid point [0,end]
     xf=1000;   %first y grid point [0,end]
-    y0=-1000;   %first y grid point [0,end]
-    yf=1000;   %last y grid point [0,end]
-    z0=1;  %first z grid point [0,end]
-    zf=1;  %last z grid point [0,end]
+    y0=96;   %first y grid point [0,end]
+    yf=96;   %last y grid point [0,end]
+    z0=0;  %first z grid point [0,end]
+    zf=20;  %last z grid point [0,end]
  end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -423,6 +423,8 @@ switch plot_type
         elseif(ny_sub==1 && nx_sub>1 && nz_sub>1)   %XZ cross-section
             %MAKE X AND Z MATRICES
             xmat = repmat(xvals,length(zvals),1);
+            %load zvalstemp.mat     %load zvals data for base state since
+                                    %it's not working for some reason
             zmat = repmat(zvals,length(xvals),1)';
 
             %ORIENT DATA CORRECTLY FOR PLOTTING

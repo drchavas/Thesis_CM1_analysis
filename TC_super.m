@@ -13,19 +13,20 @@ tic
 %name out output subdir (within simsets_Tmean#/PLOTS/[sim_set]/) where plots will be saved
 %sim_sets_all = {'Lx' 'dx' 'dz' 'lh' 'lv' 'qro' 'ro' 'fcor' 'Tsst' 'Ttpp' 'usfc' 'usfc_drag' 'Qcool' 'nondim' 'nondim1.5' 'nondim2' 'mpi' 'Cd' 'QcoolVpcnst' 'QcoolVplvHcnst'}; 
 %sim_sets_all = {'Ttpp_DRY' 'lh_DRY' 'fcor_DRY'}; 
-%sim_sets_all = {'nondim_all'}; 
+sim_sets_all = {'Tsst_drag' 'Ttpp_drag' 'usfc_drag' 'Qcool_drag' 'nondim2_drag'}; 
+%sim_sets_all = {'test'}; 
 sim_sets_all = {'single'}; 
     %IF 'single'
-    sim_single = 'CTRLv0qrhSATqdz5000_nx3072';    %runs only this simulation
+    sim_single = 'CTRLv0qrhSATqdz5000_nx3072_drag';    %runs only this simulation
 moist = 1;  %1 = moist; else = dry
     
 %% Which scripts should I run?
 run_TC_stats = 1;
-    save_file = 0;  %for TC_stats only; note: program will not overwrite old file
-run_TC_stats_dynamicequil = 0;  %overwrites old file automatically
-run_TC_structure_ts = 0;    %overwrites old plot automatically
-run_TC_stats_plot = 0;  %overwrites old [simset].mat file and plots automatically
-    run_TC_stats_plot_dynamicequil = 0; %also run for dynamic equilibrium
+    save_file = 1;  %for TC_stats only; note: program will not overwrite old file
+run_TC_stats_dynamicequil = 1;  %overwrites old file automatically
+run_TC_structure_ts = 1;    %overwrites old plot automatically
+run_TC_stats_plot = 1;  %overwrites old [simset].mat file and plots automatically
+    run_TC_stats_plot_dynamicequil = 1; %also run for dynamic equilibrium
 
 %% Parameters for scripts
 v_usr_fracVp = .1;  %wind speed as fraction of Vp; beyond this radius, radiative subsidence radial wind profile should apply.
@@ -41,11 +42,15 @@ dt_equil = 30;  %[days]; how long must be quasi-steady to define equilibrium
 rmin_plot = 0;  %[km]
 rmax_plot = 1500;    %[km]
 
+%IMPORTANT: for calculating the outer radius using control values of the constant parameters
+wrad_ctrl = .0026;   %control run RCE value
+Cd_in_ctrl = .0015;
+t_start_dynequil = 60;   %[days]; start here and move forward to find dynamic equilibrium
 
 %% Basic crap
-subdir_pre='CTRL_icRCE_nodrag/';    %general subdir that includes multiple runs within
+subdir_pre='CTRL_icRCE/';    %general subdir that includes multiple runs within
 %subdir_pre='';    %general subdir that includes multiple runs within
-ext_hd = 2; %0=local hard drive; 1='CHAVAS_CM1_FINAL'; 2='CHAVAS_CM1_FINAL_nodrag'
+ext_hd = 1; %0=local hard drive; 1='CHAVAS_CM1_FINAL'; 2='CHAVAS_CM1_FINAL_nodrag'
 run_types=ones(1000,1); %[1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]; %1=axisym; 3=3D
 
 %%Data time range (want data for entire simulation)
@@ -79,6 +84,45 @@ for jj = 1:length(sim_sets_all)
     run_type = run_types(jj);
 
     switch sim_set
+        case 'test'
+            CTRL_val = 1; %CTRL value of quantity varied across simulations
+            units = '-';
+            subdirs_set = {
+%'CTRLv0qrhSATqdz5000_nx3072_Cddiv2_drag'
+'CTRLv0qrhSATqdz5000_nx3072_Cddiv4_drag'
+'CTRLv0qrhSATqdz5000_nx3072_Cddiv8_drag'
+'CTRLv0qrhSATqdz5000_nx3072_Cdx2_drag'
+'CTRLv0qrhSATqdz5000_nx3072_Cdx4_drag'
+'CTRLv0qrhSATqdz5000_nx3072_SST275.00K_drag'
+'CTRLv0qrhSATqdz5000_nx3072_SST285.00K_drag'
+'CTRLv0qrhSATqdz5000_nx3072_SST290.00K_drag'
+'CTRLv0qrhSATqdz5000_nx3072_SST295.00K_drag'
+'CTRLv0qrhSATqdz5000_nx3072_SST305.00K_drag'
+'CTRLv0qrhSATqdz5000_nx3072_SST310.00K_drag'
+'CTRLv0qrhSATqdz5000_nx3072_Tthresh225K_drag'
+'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_drag'
+'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fx2_drag'
+'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fx2_lh3000_drag'
+'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_lh3000_drag'
+'CTRLv0qrhSATqdz5000_nx3072_drag'
+'CTRLv0qrhSATqdz5000_nx3072_fdiv2_lh750_drag'
+'CTRLv0qrhSATqdz5000_nx3072_fx2_lh3000_drag'
+'CTRLv0qrhSATqdz5000_nx3072_rad0.25K_drag'
+'CTRLv0qrhSATqdz5000_nx3072_rad1.0K_drag'
+'CTRLv0qrhSATqdz5000_nx3072_rad2.0K_drag'
+'CTRLv0qrhSATqdz5000_nx3072_usfc.5_drag'
+'CTRLv0qrhSATqdz5000_nx3072_usfc10_drag'
+'CTRLv0qrhSATqdz5000_nx3072_usfc1_drag'
+'CTRLv0qrhSATqdz5000_nx3072_usfc2_drag'
+'CTRLv0qrhSATqdz5000_nx3072_rad0.125K_drag'
+'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_drag'
+'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fdiv2_drag'
+'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fdiv2_lh750_drag'
+'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_lh750_drag'
+'CTRLv0qrhSATqdz5000_nx3072_Tthresh175K_drag'
+'CTRLv0qrhSATqdz5000_nx3072_usfc5_drag'
+            }
+            multipliers = ones(length(subdirs_set),1);
         case 'DRY'
             CTRL_val = 1
             units = '-';
@@ -125,17 +169,6 @@ for jj = 1:length(sim_sets_all)
             'CTRLv0qrhSATqdz5000_nx3072_Tthresh175K_DRY'
             'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_DRY'
             }
-        
-        case 'test'
-            CTRL_val = 1; %CTRL value of quantity varied across simulations
-            units = '-';
-            subdirs_set = {
-                %%DOMAIN SIZE
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_lh12000'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_lh12000'
-                'CTRLv0qrhSATqdz5000_nx3072_SST175.00K_DRY_nz32'
-            }
-            multipliers = ones(length(subdirs_set),1);
         case 'Lx'
             CTRL_val = 12288; %CTRL value of quantity varied across simulations
             units = 'km';
@@ -243,75 +276,63 @@ for jj = 1:length(sim_sets_all)
                 'CTRLv0qrhSATqdz5000_nx3072_fx4'
                 'CTRLv0qrhSATqdz5000_nx3072_fx8'
             }
-        case 'Tsst'
+        case 'Tsst_drag'
             CTRL_val = 300; %CTRL value of quantity varied across simulations
             units = 'K';
-            multipliers = log2([285 287.5 290 292.5 295 297.5 300 302.5 305 310]/CTRL_val);
+            %multipliers = log2([285 287.5 290 292.5 295 297.5 300 302.5 305 310]/CTRL_val);
+            multipliers = log2([275 285 290 295 300 305 310]/CTRL_val);
             subdirs_set = {
                 %%Tsst
-                %%'CTRLv0qrhSATqdz5000_nx3072_SST275.00K' %behaves differently, perhaps ice is important here
-                'CTRLv0qrhSATqdz5000_nx3072_SST285.00K' %-- medium rmax oscillation
-                'CTRLv0qrhSATqdz5000_nx3072_SST287.50K'
-                'CTRLv0qrhSATqdz5000_nx3072_SST290.00K'
-                'CTRLv0qrhSATqdz5000_nx3072_SST292.50K'
-                'CTRLv0qrhSATqdz5000_nx3072_SST295.00K'
-                'CTRLv0qrhSATqdz5000_nx3072_SST297.50K'
-                'CTRLv0qrhSATqdz5000_nx3072'
-                'CTRLv0qrhSATqdz5000_nx3072_SST302.50K'
-                'CTRLv0qrhSATqdz5000_nx3072_SST305.00K'
-                'CTRLv0qrhSATqdz5000_nx3072_SST310.00K'
+                'CTRLv0qrhSATqdz5000_nx3072_SST275.00K_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_SST285.00K_drag' %-- medium rmax oscillation
+                %'CTRLv0qrhSATqdz5000_nx3072_SST287.50K'
+                'CTRLv0qrhSATqdz5000_nx3072_SST290.00K_drag'
+                %'CTRLv0qrhSATqdz5000_nx3072_SST292.50K'
+                'CTRLv0qrhSATqdz5000_nx3072_SST295.00K_drag'
+                %'CTRLv0qrhSATqdz5000_nx3072_SST297.50K'
+                'CTRLv0qrhSATqdz5000_nx3072_drag'
+                %'CTRLv0qrhSATqdz5000_nx3072_SST302.50K'
+                'CTRLv0qrhSATqdz5000_nx3072_SST305.00K_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_SST310.00K_drag'
             }
-        case 'Ttpp'
+        case 'Ttpp_drag'
             CTRL_val = 200; %CTRL value of quantity varied across simulations
             units = 'K';
             multipliers = log2([250 225 200 175 150]/CTRL_val);
             subdirs_set = {
                 %%Ttpp
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh225K'
-                'CTRLv0qrhSATqdz5000_nx3072'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh175K'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K'
-            }
-        case 'usfc'
-            CTRL_val = 3; %CTRL value of quantity varied across simulations
-            units = 'ms^{-1}';
-            multipliers = log2([.5 1 2 3 4 5 10]/CTRL_val);
-            subdirs_set = {
-                %%usfc
-                'CTRLv0qrhSATqdz5000_nx3072_usfc.5'
-                'CTRLv0qrhSATqdz5000_nx3072_usfc1'
-                'CTRLv0qrhSATqdz5000_nx3072_usfc2'
-                'CTRLv0qrhSATqdz5000_nx3072'
-                'CTRLv0qrhSATqdz5000_nx3072_usfc4'
-                'CTRLv0qrhSATqdz5000_nx3072_usfc5'
-                'CTRLv0qrhSATqdz5000_nx3072_usfc10'
+                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_Tthresh225K_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_Tthresh175K_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_drag'
             }
         case 'usfc_drag'
             CTRL_val = 3; %CTRL value of quantity varied across simulations
             units = 'ms^{-1}';
-            multipliers = log2([.5 1 2 3 4 5 10]/CTRL_val);
+            %multipliers = log2([.5 1 2 3 4 5 10]/CTRL_val);
+            multipliers = log2([.5 1 2 3 5 10]/CTRL_val);
             subdirs_set = {
-                %%u_sfc_drag
+                %%usfc
                 'CTRLv0qrhSATqdz5000_nx3072_usfc.5_drag'
                 'CTRLv0qrhSATqdz5000_nx3072_usfc1_drag'
                 'CTRLv0qrhSATqdz5000_nx3072_usfc2_drag'
                 'CTRLv0qrhSATqdz5000_nx3072_drag'
-                'CTRLv0qrhSATqdz5000_nx3072_usfc4_drag'
+                %'CTRLv0qrhSATqdz5000_nx3072_usfc4_drag'
                 'CTRLv0qrhSATqdz5000_nx3072_usfc5_drag'
                 'CTRLv0qrhSATqdz5000_nx3072_usfc10_drag'
             }
-        case 'Qcool'
+        case 'Qcool_drag'
             CTRL_val = 1; %CTRL value of quantity varied across simulations
             units = 'K day^{-1}';
             multipliers = [-2 -1 0 1 2];
             subdirs_set = {
                 %%Qcool
-                'CTRLv0qrhSATqdz5000_nx3072_rad0.125K'
-                'CTRLv0qrhSATqdz5000_nx3072_rad0.25K'
-                'CTRLv0qrhSATqdz5000_nx3072'
-                'CTRLv0qrhSATqdz5000_nx3072_rad1.0K'
-                'CTRLv0qrhSATqdz5000_nx3072_rad2.0K'
+                'CTRLv0qrhSATqdz5000_nx3072_rad0.125K_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_rad0.25K_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_rad1.0K_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_rad2.0K_drag'
             }
         case 'Cd'
             CTRL_val = 1.5; %CTRL value of quantity varied across simulations
@@ -325,7 +346,7 @@ for jj = 1:length(sim_sets_all)
                 'CTRLv0qrhSATqdz5000_nx3072'
                 'CTRLv0qrhSATqdz5000_nx3072_Cdx2'
                 'CTRLv0qrhSATqdz5000_nx3072_Cdx4'
-                'CTRLv0qrhSATqdz5000_nx3072_Cdx8'
+                %'CTRLv0qrhSATqdz5000_nx3072_Cdx8'
             }
         case 'QcoolVpcnst'
             CTRL_val = 1; %CTRL value of quantity varied across simulations
@@ -356,102 +377,20 @@ for jj = 1:length(sim_sets_all)
                 %'CTRLv0qrhSATqdz5000_nx3072_Tthresh255K_rad8.0K_lv26'
                 %'CTRLv0qrhSATqdz5000_nx3072_Tthresh257K_rad16.0K_lv19'
             }
-        case 'mpi'
-            CTRL_val = 93.0; %CTRL value of quantity varied across simulations
-            units = 'm s^{-1}';
-
-            subdirs_set = {
-
-              %%Tsst
-                %'CTRLv0qrhSATqdz5000_nx3072_SST275.00K' %-- large rmax oscillation
-                'CTRLv0qrhSATqdz5000_nx3072_SST285.00K' %-- medium rmax oscillation
-                'CTRLv0qrhSATqdz5000_nx3072_SST287.50K'
-                'CTRLv0qrhSATqdz5000_nx3072_SST290.00K'
-                'CTRLv0qrhSATqdz5000_nx3072_SST292.50K'
-                'CTRLv0qrhSATqdz5000_nx3072_SST295.00K'
-                'CTRLv0qrhSATqdz5000_nx3072_SST297.50K'
-                'CTRLv0qrhSATqdz5000_nx3072'
-                'CTRLv0qrhSATqdz5000_nx3072_SST302.50K'
-                'CTRLv0qrhSATqdz5000_nx3072_SST305.00K'
-                'CTRLv0qrhSATqdz5000_nx3072_SST310.00K'
-%}            
-                %%Ttpp
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh225K'
-                %'CTRLv0qrhSATqdz5000_nx3072'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh175K'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K'
-           
-                %%usfc
-                'CTRLv0qrhSATqdz5000_nx3072_usfc.5'
-                'CTRLv0qrhSATqdz5000_nx3072_usfc1'
-                'CTRLv0qrhSATqdz5000_nx3072_usfc2'
-                %'CTRLv0qrhSATqdz5000_nx3072'
-                'CTRLv0qrhSATqdz5000_nx3072_usfc4'
-                'CTRLv0qrhSATqdz5000_nx3072_usfc5'
-                'CTRLv0qrhSATqdz5000_nx3072_usfc10'
-                
-                %%Qcool
-                'CTRLv0qrhSATqdz5000_nx3072_rad0.125K'
-                'CTRLv0qrhSATqdz5000_nx3072_rad0.25K'
-                %'CTRLv0qrhSATqdz5000_nx3072'
-                'CTRLv0qrhSATqdz5000_nx3072_rad1.0K'
-                'CTRLv0qrhSATqdz5000_nx3072_rad2.0K'
-               
-            }
-            multipliers = ones(length(subdirs_set),1);
-        case 'nondim2'
+        case 'nondim2_drag'
             CTRL_val = 1; %CTRL value of quantity varied across simulations
             units = '-';
 
             subdirs_set = {
-                'CTRLv0qrhSATqdz5000_nx3072'
-                
-                %'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fdiv4_lh375'
-                %'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fdiv2_lh187.5'
-                %%bad'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fdiv4_lh375'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fdiv2_lh187.5'
-
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fdiv4_lh750'
-                %'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_lh187.5'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fdiv4_lh750'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_lh187.5'
-
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fdiv4'
-                %'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fx2_lh187.5'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fdiv4'
-                %%bad'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fx2_lh187.5'
-
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fdiv4_lh3000'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fx4_lh187.5'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fdiv4_lh3000'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fx4_lh187.5'
-
-                %'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fdiv4_lh6000'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fx4_lh375'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fdiv4_lh6000'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fx4_lh375'
-
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fdiv4_lh12000'
-                %%bad'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fx4_lh750'
-                %%bad'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fdiv4_lh12000'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fx4_lh750'
-
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fdiv2_lh12000'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fx4'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fdiv2_lh12000'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fx4'
-
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_lh12000'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fx4_lh3000'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_lh12000'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fx4_lh3000'
-
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fx2_lh12000'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fx4_lh6000'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fx2_lh12000'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fx4_lh6000'
-                
+                'CTRLv0qrhSATqdz5000_nx3072_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fdiv2_lh750_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fdiv2_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_lh750_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_fdiv2_lh750_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_fx2_lh3000_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_lh3000_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fx2_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fx2_lh3000_drag'
             }
             multipliers = ones(length(subdirs_set),1);
         case 'nondim'
@@ -631,11 +570,11 @@ for jj = 1:length(sim_sets_all)
         subdir = subdirs_set{ii};
         
         if(run_TC_stats == 1)
-            [junk] = TC_stats(subdir_pre,ext_hd,run_type,t0,tf,tmean0_usr,tmeanf_usr,v_usr_fracVp,T_mean,dt_equil,dt_final,save_file,subdir,x0,xf,y0,yf,z0,zf,rmin_sub,rmax_sub,zmin_subsub,zmax_subsub,dir_home,moist,dir_in_dat);
+            [junk] = TC_stats(subdir_pre,ext_hd,run_type,t0,tf,tmean0_usr,tmeanf_usr,v_usr_fracVp,T_mean,dt_equil,dt_final,save_file,subdir,x0,xf,y0,yf,z0,zf,rmin_sub,rmax_sub,zmin_subsub,zmax_subsub,dir_home,moist,dir_in_dat,wrad_ctrl,Cd_in_ctrl);
         end
         
         if(run_TC_stats_dynamicequil == 1)
-            [junk] = TC_stats_dynamicequil(tf,T_mean,dt_final,dt_final_dynamic,subdir,dir_home,dir_in_dat,dir_in_dat_dyn);
+            [junk] = TC_stats_dynamicequil(tf,T_mean,dt_final,dt_final_dynamic,subdir,dir_home,dir_in_dat,dir_in_dat_dyn,t_start_dynequil);
         end
         
         if(run_TC_structure_ts == 1)

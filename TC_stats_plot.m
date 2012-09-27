@@ -123,7 +123,7 @@ for ss=1:numruns
     r0ER11_equil_g(ss) = r0ER11_equil_g_sim;
     r0Lil_equil_g(ss) = r0Lil_equil_g_sim;
     r0Lil_Lilctrl_equil_g(ss) = r0Lil_Lilctrl_equil_g_sim;
-    
+ 
     %timescales to those values
     Vmax_tau_equil(ss) = Vmax_tau_equil_sim;
     rmax_tau_equil(ss) = rmax_tau_equil_sim;
@@ -178,6 +178,28 @@ for ss=1:numruns
 %    r0Lil_tau_max(ss) = r0Lil_tau_max_sim; %defined using the GRADIENT wind
 %    r0Lil_max(ss) = r0Lil_max_sim;
     
+    %Variability during equilibration period about those values
+    if(equil_dynamic==1)
+        Vmax_equil_g_ts_max(ss) = max(Vmax_equil_g_ts);
+        Vmax_equil_g_ts_min(ss) = min(Vmax_equil_g_ts);
+        Vmax_equil_g_ts_var(ss) = nanvar(Vmax_equil_g_ts);
+        rmax_equil_g_ts_max(ss) = max(rmax_equil_g_ts);
+        rmax_equil_g_ts_min(ss) = min(rmax_equil_g_ts);
+        rmax_equil_g_ts_var(ss) = nanvar(rmax_equil_g_ts);
+        rrad_equil_g_ts_max(ss) = max(rrad_equil_g_ts);
+        rrad_equil_g_ts_min(ss) = min(rrad_equil_g_ts);
+        rrad_equil_g_ts_var(ss) = nanvar(rrad_equil_g_ts);
+        r0_equil_g_ts_max(ss) = max(r0_equil_g_ts);
+        r0_equil_g_ts_min(ss) = min(r0_equil_g_ts);
+        r0_equil_g_ts_var(ss) = nanvar(r0_equil_g_ts);
+        r0Lil_equil_g_ts_max(ss) = max(r0Lil_equil_g_ts);
+        r0Lil_equil_g_ts_min(ss) = min(r0Lil_equil_g_ts);
+        r0Lil_equil_g_ts_var(ss) = nanvar(r0Lil_equil_g_ts);
+        r0Lil_Lilctrl_equil_g_ts_max(ss) = max(r0Lil_Lilctrl_equil_g_ts);
+        r0Lil_Lilctrl_equil_g_ts_min(ss) = min(r0Lil_Lilctrl_equil_g_ts);
+        r0Lil_Lilctrl_equil_g_ts_var(ss) = nanvar(r0Lil_Lilctrl_equil_g_ts);
+    end    
+
     %% Save data for all simulations
 %    Vmax_movave_all(:,ss)=Vmax_movave_sim;
 %    rmax_movave_all(:,ss)=rmax_movave_sim;

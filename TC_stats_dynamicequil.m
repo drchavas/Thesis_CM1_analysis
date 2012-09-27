@@ -10,7 +10,7 @@
 
 %NOTE: data at varying x (i.e. zonal cross-sec) = matrix COLUMN in MATLAB!
 
-function [junk] = TC_stats_dynamicequil(tf,T_mean,dt_final,dt_final_dynamic,subdir,dir_home,dir_in_dat,dir_in_dat_dyn);
+function [junk] = TC_stats_dynamicequil(tf,T_mean,dt_final,dt_final_dynamic,subdir,dir_home,dir_in_dat,dir_in_dat_dyn,t_start_dynequil);
 
 %%Write out to screen whats going on
 sprintf('TC_stats_dynamicequil for: %s',subdir)
@@ -67,9 +67,8 @@ if(stop_overwrite == 0)
         load(file_in_dyn);
 
         %%Find most stable [dt_final_dynamic]-day period after day 60 in the timeseries for Vmax
-        t_start = 60;   %[days]
-        i_start = t_start/(dt/60/60/24) + 1;    %index of day [t_start]
-        t_end = min(tf,(numfiles-1)/4);    %[days]
+        i_start = t_start_dynequil/(dt/60/60/24) + 1;    %index of day [t_start_dynequil]
+        t_end = min(tf,(numfiles-1)*(dt/60/60/24));    %[days]
         i_end = t_end/(dt/60/60/24) + 1;    %index of day [t_end]
         ni_final_dynamic = dt_final_dynamic/(dt/60/60/24)+1;    %number of points needed to cover period
         
@@ -80,8 +79,22 @@ if(stop_overwrite == 0)
             indices = i_start+ii-1:i_start+ii-1+(ni_final_dynamic-1);
             
             Vmax_movave_g_temp = Vmax_movave_g(indices);
+            rmax_movave_g_temp = rmax_movave_g(indices);
+            rrad_movave_g_temp = rrad_movave_g(indices);
+            r0_movave_g_temp = r0_movave_g(indices);
+            r0Lil_movave_g_temp = r0Lil_movave_g(indices);
+            r0Lil_Lilctrl_movave_g_temp = r0Lil_Lilctrl_movave_g(indices);
             clear indices
-            Vmax_equil_g_temp(ii) = nanmean(Vmax_movave_g_temp);
+
+            %%Save all [dt_equil]-day running mean values
+            Vmax_equil_g_ts(ii) = nanmean(Vmax_movave_g_temp); 
+            rmax_equil_g_ts(ii) = nanmean(rmax_movave_g_temp); 
+            rrad_equil_g_ts(ii) = nanmean(rrad_movave_g_temp); 
+            r0_equil_g_ts(ii) = nanmean(r0_movave_g_temp); 
+            r0Lil_equil_g_ts(ii) = nanmean(r0Lil_movave_g_temp); 
+            r0Lil_Lilctrl_equil_g_ts(ii) = nanmean(r0Lil_Lilctrl_movave_g_temp); 
+
+            %%Calculate and save timeseries of variances in Vmax
             Vmax_variance_g_temp(ii) = nanvar(Vmax_movave_g_temp);
 
         end
@@ -89,7 +102,7 @@ if(stop_overwrite == 0)
         %%Determine timeperiod of minimum variance and set equilibrium value accordingly
         i_start_equil = find(Vmax_variance_g_temp==min(Vmax_variance_g_temp));
         indices_equil = i_start+i_start_equil-1:i_start+i_start_equil-1+(ni_final_dynamic-1);
-        Vmax_equil_g_dynamic = Vmax_equil_g_temp(i_start_equil);
+        Vmax_equil_g_dynamic = Vmax_equil_g_ts(i_start_equil);
         t0_equil = t_day(indices_equil(1));
         tf_equil = t_day(indices_equil(end));
         
