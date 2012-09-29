@@ -123,8 +123,26 @@ for ss=1:numruns
     r0ER11_equil_g(ss) = r0ER11_equil_g_sim;
     r0Lil_equil_g(ss) = r0Lil_equil_g_sim;
     r0Lil_Lilctrl_equil_g(ss) = r0Lil_Lilctrl_equil_g_sim;
- 
-    %timescales to those values
+    
+    if(equil_dynamic==1)
+        %equilibrium values based on independent equilibration of each variable
+        Vmax_equil_g_dynamic_all(ss) = Vmax_equil_g_dynamic;
+        rmax_equil_g_dynamic_all(ss) = rmax_equil_g_dynamic;
+        rrad_equil_g_dynamic_all(ss) = rrad_equil_g_dynamic;
+        r0_equil_g_dynamic_all(ss) = r0_equil_g_dynamic;
+        r0Lil_equil_g_dynamic_all(ss) = r0Lil_equil_g_dynamic;
+        r0Lil_Lilctrl_equil_g_dynamic_all(ss) = r0Lil_Lilctrl_equil_g_dynamic;
+    
+        %equilibrium start times associated with above independent equilibration values
+        t0_equil_Vmax_all(ss) = t0_equil_Vmax;
+        t0_equil_rmax_all(ss) = t0_equil_rmax;
+        t0_equil_rrad_all(ss) = t0_equil_rrad;
+        t0_equil_r0_all(ss) = t0_equil_r0;
+        t0_equil_r0Lil_all(ss) = t0_equil_r0Lil;
+        t0_equil_r0Lil_Lilctrl_all(ss) = t0_equil_r0Lil_Lilctrl;
+    end
+    
+    %Equilibration time-scales
     Vmax_tau_equil(ss) = Vmax_tau_equil_sim;
     rmax_tau_equil(ss) = rmax_tau_equil_sim;
     rrad_tau_equil(ss) = rrad_tau_equil_sim;
@@ -220,10 +238,11 @@ for ss=1:numruns
 %    data_tmean_usr_all{ss} = data_tmean_usr_sim;
     data_tmean_usr_g_all{ss} = data_tmean_usr_g_sim;
 
-    %% Extract and keep mpi and fcor%%%%%
+    %% Extract and keep mpi, fcor, Cd, L_R%%%%%
     mpi_all(ss) = mpi;
     fcor_all(ss) = fcor;
     Cd_all(ss) = Cd_in;
+    L_R_all(ss) = L_R;
 
     %% Extract H, tropospheric depth from RCE sounding
     Ttpp = str2num(subdir(strfind(subdir,'Tthresh')+7:strfind(subdir,'Tthresh')+9));

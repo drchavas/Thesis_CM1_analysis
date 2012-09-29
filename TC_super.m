@@ -12,19 +12,18 @@ tic
 %% Which simula tions (or sets) should I run?
 %name out output subdir (within simsets_Tmean#/PLOTS/[sim_set]/) where plots will be saved
 %sim_sets_all = {'Lx' 'dx' 'dz' 'lh' 'lv' 'qro' 'ro' 'fcor' 'Tsst' 'Ttpp' 'usfc' 'usfc_drag' 'Qcool' 'nondim' 'nondim1.5' 'nondim2' 'mpi' 'Cd' 'QcoolVpcnst' 'QcoolVplvHcnst'}; 
-%sim_sets_all = {'Ttpp_DRY' 'lh_DRY' 'fcor_DRY'}; 
-sim_sets_all = {'Tsst_drag' 'Ttpp_drag' 'usfc_drag' 'Qcool_drag' 'nondim2_drag'}; 
-%sim_sets_all = {'test'}; 
+%sim_sets_all = {'Tsst_drag' 'Ttpp_drag' 'usfc_drag' 'Qcool_drag' 'nondim2_drag' 'Cd_drag'}; 
+%sim_sets_all = {'Tsst_drag'}; 
 sim_sets_all = {'single'}; 
     %IF 'single'
     sim_single = 'CTRLv0qrhSATqdz5000_nx3072_drag';    %runs only this simulation
 moist = 1;  %1 = moist; else = dry
     
 %% Which scripts should I run?
-run_TC_stats = 1;
-    save_file = 1;  %for TC_stats only; note: program will not overwrite old file
-run_TC_stats_dynamicequil = 1;  %overwrites old file automatically
-run_TC_structure_ts = 1;    %overwrites old plot automatically
+run_TC_stats = 0;
+    save_file = 0;  %for TC_stats only; note: program will not overwrite old file
+run_TC_stats_dynamicequil = 0;  %overwrites old file automatically
+run_TC_structure_ts = 0;    %overwrites old plot automatically
 run_TC_stats_plot = 1;  %overwrites old [simset].mat file and plots automatically
     run_TC_stats_plot_dynamicequil = 1; %also run for dynamic equilibrium
 
@@ -89,38 +88,7 @@ for jj = 1:length(sim_sets_all)
             units = '-';
             subdirs_set = {
 %'CTRLv0qrhSATqdz5000_nx3072_Cddiv2_drag'
-'CTRLv0qrhSATqdz5000_nx3072_Cddiv4_drag'
-'CTRLv0qrhSATqdz5000_nx3072_Cddiv8_drag'
-'CTRLv0qrhSATqdz5000_nx3072_Cdx2_drag'
-'CTRLv0qrhSATqdz5000_nx3072_Cdx4_drag'
-'CTRLv0qrhSATqdz5000_nx3072_SST275.00K_drag'
-'CTRLv0qrhSATqdz5000_nx3072_SST285.00K_drag'
-'CTRLv0qrhSATqdz5000_nx3072_SST290.00K_drag'
-'CTRLv0qrhSATqdz5000_nx3072_SST295.00K_drag'
-'CTRLv0qrhSATqdz5000_nx3072_SST305.00K_drag'
-'CTRLv0qrhSATqdz5000_nx3072_SST310.00K_drag'
-'CTRLv0qrhSATqdz5000_nx3072_Tthresh225K_drag'
-'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_drag'
-'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fx2_drag'
-'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fx2_lh3000_drag'
-'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_lh3000_drag'
-'CTRLv0qrhSATqdz5000_nx3072_drag'
-'CTRLv0qrhSATqdz5000_nx3072_fdiv2_lh750_drag'
-'CTRLv0qrhSATqdz5000_nx3072_fx2_lh3000_drag'
-'CTRLv0qrhSATqdz5000_nx3072_rad0.25K_drag'
-'CTRLv0qrhSATqdz5000_nx3072_rad1.0K_drag'
-'CTRLv0qrhSATqdz5000_nx3072_rad2.0K_drag'
-'CTRLv0qrhSATqdz5000_nx3072_usfc.5_drag'
-'CTRLv0qrhSATqdz5000_nx3072_usfc10_drag'
-'CTRLv0qrhSATqdz5000_nx3072_usfc1_drag'
-'CTRLv0qrhSATqdz5000_nx3072_usfc2_drag'
-'CTRLv0qrhSATqdz5000_nx3072_rad0.125K_drag'
-'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_drag'
-'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fdiv2_drag'
-'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fdiv2_lh750_drag'
-'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_lh750_drag'
-'CTRLv0qrhSATqdz5000_nx3072_Tthresh175K_drag'
-'CTRLv0qrhSATqdz5000_nx3072_usfc5_drag'
+
             }
             multipliers = ones(length(subdirs_set),1);
         case 'DRY'
@@ -280,11 +248,11 @@ for jj = 1:length(sim_sets_all)
             CTRL_val = 300; %CTRL value of quantity varied across simulations
             units = 'K';
             %multipliers = log2([285 287.5 290 292.5 295 297.5 300 302.5 305 310]/CTRL_val);
-            multipliers = log2([275 285 290 295 300 305 310]/CTRL_val);
+            multipliers = log2([285 290 295 300 305 310]/CTRL_val);
             subdirs_set = {
                 %%Tsst
-                'CTRLv0qrhSATqdz5000_nx3072_SST275.00K_drag'
-                'CTRLv0qrhSATqdz5000_nx3072_SST285.00K_drag' %-- medium rmax oscillation
+                %'CTRLv0qrhSATqdz5000_nx3072_SST275.00K_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_SST285.00K_drag'
                 %'CTRLv0qrhSATqdz5000_nx3072_SST287.50K'
                 'CTRLv0qrhSATqdz5000_nx3072_SST290.00K_drag'
                 %'CTRLv0qrhSATqdz5000_nx3072_SST292.50K'
@@ -334,19 +302,20 @@ for jj = 1:length(sim_sets_all)
                 'CTRLv0qrhSATqdz5000_nx3072_rad1.0K_drag'
                 'CTRLv0qrhSATqdz5000_nx3072_rad2.0K_drag'
             }
-        case 'Cd'
+        case 'Cd_drag'
             CTRL_val = 1.5; %CTRL value of quantity varied across simulations
             units = '**10^-3';
-            multipliers = [-3 -2 -1 0 1 2 3];
+            %multipliers = [-3 -2 -1 0 1 2 3];
+            multipliers = [-3 -2 0 1 2];
             subdirs_set = {
                 %%DRAG COEFFICIENT
-                'CTRLv0qrhSATqdz5000_nx3072_Cddiv8'
-                'CTRLv0qrhSATqdz5000_nx3072_Cddiv4'
-                'CTRLv0qrhSATqdz5000_nx3072_Cddiv2'
-                'CTRLv0qrhSATqdz5000_nx3072'
-                'CTRLv0qrhSATqdz5000_nx3072_Cdx2'
-                'CTRLv0qrhSATqdz5000_nx3072_Cdx4'
-                %'CTRLv0qrhSATqdz5000_nx3072_Cdx8'
+                'CTRLv0qrhSATqdz5000_nx3072_Cddiv8_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_Cddiv4_drag'
+                %%'CTRLv0qrhSATqdz5000_nx3072_Cddiv2_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_Cdx2_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_Cdx4_drag'
+                %'CTRLv0qrhSATqdz5000_nx3072_Cdx8_drag'
             }
         case 'QcoolVpcnst'
             CTRL_val = 1; %CTRL value of quantity varied across simulations
