@@ -1664,7 +1664,8 @@ if(plot_ts_multi==1)
     %title(input_title)
     ylabel(input_title);
     xlabel('time [days]')
-    axis([0 tf 0 1.1*max(max(r0Lil_movave_g_all(20:end,:)/(mpi_all(i)/fcor_all(i)/1000)))])
+    %axis([0 tf 0 1.1*max(max(r0Lil_movave_g_all(20:end,:)/(mpi_all(i)/fcor_all(i)/1000)))])
+    axis([0 tf 0 1.5])
 
     for i=1:numruns
         

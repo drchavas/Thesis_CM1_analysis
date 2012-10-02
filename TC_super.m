@@ -13,29 +13,29 @@ tic
 %name out output subdir (within simsets_Tmean#/PLOTS/[sim_set]/) where plots will be saved
 %sim_sets_all = {'Lx' 'dx' 'dz' 'lh' 'lv' 'qro' 'ro' 'fcor' 'Tsst' 'Ttpp' 'usfc' 'usfc_drag' 'Qcool' 'nondim' 'nondim1.5' 'nondim2' 'mpi' 'Cd' 'QcoolVpcnst' 'QcoolVplvHcnst'}; 
 %sim_sets_all = {'Tsst_drag' 'Ttpp_drag' 'usfc_drag' 'Qcool_drag' 'nondim2_drag' 'Cd_drag'}; 
-sim_sets_all = {'Cd_drag'}; 
-%sim_sets_all = {'single'}; 
+%sim_sets_all = {'test'}; 
+sim_sets_all = {'transient'}; 
     %IF 'single'
     sim_single = 'CTRLv0qrhSATqdz5000_nx3072_Cddiv2_drag';    %runs only this simulation
 moist = 1;  %1 = moist; else = dry
     
 %% Which scripts should I run?
-run_TC_stats = 1;
-    save_file = 1;  %for TC_stats only; note: program will not overwrite old file
-run_TC_stats_dynamicequil = 1;  %overwrites old file automatically
-run_TC_structure_ts = 1;    %overwrites old plot automatically
+run_TC_stats = 0;
+    save_file = 0;  %for TC_stats only; note: program will not overwrite old file
+run_TC_stats_dynamicequil = 0;  %overwrites old file automatically
+run_TC_structure_ts = 0;    %overwrites old plot automatically
 run_TC_stats_plot = 1;  %overwrites old [simset].mat file and plots automatically
     run_TC_stats_plot_dynamicequil = 1; %also run for dynamic equilibrium
 
 %% Parameters for scripts
 v_usr_fracVp = .1;  %wind speed as fraction of Vp; beyond this radius, radiative subsidence radial wind profile should apply.
 T_mean = 2; %[days]; averaging time period used to calculate moving time-average radial profile from which rmax and r0 are calculated
-dt_equil = 30;  %[days]; how long must be quasi-steady to define equilibrium
+dt_equil = 10;  %[days]; how long must be quasi-steady to define equilibrium
     %%For static equilibrium (equil_dynamic = 0):
-    dt_final = 50;  %[day]; length of static equilibrium period
-    tf = 150;   %[day]; end of static equilibrium period
+    dt_final = 30;  %[day]; length of static equilibrium period
+    tf = 100;   %[day]; end of static equilibrium period
     %%For dynamic (most stable) equilibrium (equil_dynamic = 1):
-    dt_final_dynamic = 30;  %[days]; length of most stable period after day 60 over which equilibrium is calculated
+    dt_final_dynamic = 10;  %[days]; length of most stable period after day 60 over which equilibrium is calculated
 
 %Plotting domain (TC_stats_plot.m only)
 rmin_plot = 0;  %[km]
@@ -307,16 +307,16 @@ for jj = 1:length(sim_sets_all)
             CTRL_val = 1.5; %CTRL value of quantity varied across simulations
             units = '**10^-3';
             %multipliers = [-3 -2 -1 0 1 2 3];
-            multipliers = [-3 -2 0 1 2 3];
+            multipliers = [-3 -2 -1 0 1];
             subdirs_set = {
                 %%DRAG COEFFICIENT
                 'CTRLv0qrhSATqdz5000_nx3072_Cddiv8_drag'
                 'CTRLv0qrhSATqdz5000_nx3072_Cddiv4_drag'
-                %%'CTRLv0qrhSATqdz5000_nx3072_Cddiv2_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_Cddiv2_drag'
                 'CTRLv0qrhSATqdz5000_nx3072_drag'
                 'CTRLv0qrhSATqdz5000_nx3072_Cdx2_drag'
-                'CTRLv0qrhSATqdz5000_nx3072_Cdx4_drag'
-                'CTRLv0qrhSATqdz5000_nx3072_Cdx8_drag'
+                %%'CTRLv0qrhSATqdz5000_nx3072_Cdx4_drag' % -- wildly out of equilibrium
+                %%'CTRLv0qrhSATqdz5000_nx3072_Cdx8_drag' % -- wildly out of equilibrium
             }
         case 'QcoolVpcnst'
             CTRL_val = 1; %CTRL value of quantity varied across simulations

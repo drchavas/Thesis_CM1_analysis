@@ -985,6 +985,8 @@ for ii=1:i_tf-i_t0+1
     
 end
 
+save latest_sim_temp.mat    %in case of error below
+    
 %% Transient statistics %%%%%%%%%%
 %%Find time to genesis, tau_gen, defined as the first time vmax_g  > vmax_equil_g
 
@@ -1046,9 +1048,15 @@ r0Lil_Lilctrl_tau_max_g_sim = t_day(i_peak); %defined using the GRADIENT wind
 r0Lil_Lilctrl_max_g_sim = r0Lil_Lilctrl_movave_g(i_peak);
 
 indices = find(r0ER11_movave_g(i_gen:end)==max(r0ER11_movave_g(i_gen:end)));
-i_peak = i_gen-1+indices(1);
-r0ER11_tau_max_g_sim = t_day(i_peak); %defined using the GRADIENT wind
-r0ER11_max_g_sim = r0ER11_movave_g(i_peak);
+if(~isempty(indices))
+    i_peak = i_gen-1+indices(1);
+    r0ER11_tau_max_g_sim = t_day(i_peak); %defined using the GRADIENT wind
+    r0ER11_max_g_sim = r0ER11_movave_g(i_peak);
+else
+    i_peak = NaN;
+    r0ER11_tau_max_g_sim = NaN; %defined using the GRADIENT wind
+    r0ER11_max_g_sim = NaN;    
+end
 
 %{
 indices = find(Vmax_movave(i_gen:end)==max(Vmax_movave(i_gen:end)));
@@ -1077,6 +1085,7 @@ r0Lil_tau_max_sim = t_day(i_peak); %defined using the GRADIENT wind
 r0Lil_max_sim = r0Lil_movave(i_peak);
 %}
 
+delete('latest_sim_temp.mat')
 save latest_sim_temp.mat    %in case of error below
     
 numvars = 12;     %Vmax, rmax, rrad, r0, r0Lil, Vmax_g, rmax_g, rrad_g, r0_g, r0Lil_g
@@ -1179,7 +1188,7 @@ for l=6:numvars     %SKIP THE FULL WIND ONES FOR NOW
     if(t_day_equilf > 0)
         var_tau_equil(l) = t_day_equilf;
     else
-        var_tau_equil(l) = NaN;
+        var_tau_equil(l) = NaN; %never equilibrates
     end
 
 end
