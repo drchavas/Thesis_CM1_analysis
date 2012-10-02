@@ -1077,6 +1077,8 @@ r0Lil_tau_max_sim = t_day(i_peak); %defined using the GRADIENT wind
 r0Lil_max_sim = r0Lil_movave(i_peak);
 %}
 
+save latest_sim_temp.mat    %in case of error below
+    
 numvars = 12;     %Vmax, rmax, rrad, r0, r0Lil, Vmax_g, rmax_g, rrad_g, r0_g, r0Lil_g
 for l=6:numvars     %SKIP THE FULL WIND ONES FOR NOW
 
@@ -1137,8 +1139,13 @@ for l=6:numvars     %SKIP THE FULL WIND ONES FOR NOW
     t_day_temp = t_day;
     var_movave_temp = var_movave;
     dt_equil_temp = dt_equil;
-
+    
+    t_day_equilf = NaN;
     while(dt_equil_temp > T_mean)
+        %%ERROR OCCURS HERE!!!%%% data saved at this pt as Cdx8_temp.mat
+        if(ceil(dt_equil_temp/(dt/60/60/24))+istep > i_tf)
+            break
+        end
         tdat_sub = t_day_temp(istep:ceil(dt_equil_temp/(dt/60/60/24))+istep);
         var_dat_sub = var_movave_temp(istep:ceil(dt_equil_temp/(dt/60/60/24))+istep);
         
@@ -1169,12 +1176,12 @@ for l=6:numvars     %SKIP THE FULL WIND ONES FOR NOW
         istep = istep + 1;    %shift up 1 timestep at a time until reach equilibrium
     end
 
-    var_tau_equil(l) = t_day_equilf;
+    if(t_day_equilf > 0)
+        var_tau_equil(l) = t_day_equilf;
+    else
+        var_tau_equil(l) = NaN;
+    end
 
-%        else
-%            var_tau_equil(l) = NaN;
-
-%        end
 end
 
 %% Equilibrium data %%%%%%%%%%%%%%%%%%%%%%%%
@@ -1242,5 +1249,7 @@ if(save_file == 1)
 end
 
 end
+
+    delete('latest_sim_temp.mat')
 
 end

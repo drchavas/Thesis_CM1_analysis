@@ -58,7 +58,14 @@ while(abs(res)>100*dr && n_iter<iter_thresh)  %repeat loop until solution conver
     
     r_0_old=r_0;    %save old one
     r_0=r_0_new;    %set new one
+    delt_r = abs(r_0 - r_0_old);
+    
+    if(n_iter > 50 && delt_r<10)  %[m]; tiny change in calculation indicates code has converged to desired value
+        sprintf('breaking r_0 calculation loop at %i; r0_Lil = %5.2f km',n_iter,r_0/1000)
+        break
+    end
 
+    
     r2=r_user:dr:r_0;    %[m]; r>=r_user
     V=0*r2;  %initialize V
     V(1)=V_user;    %[ms-1]
@@ -122,7 +129,7 @@ V_full=[V_inner(1:end-1) V];
 % residual=2*C_D.*r.^2.*V.^2./(w_rad.*(r_0_full^2-r.^2))-f.*r-V-r.*dVdr2;
 res_error=0;
 if(res > .1*r_0)    %give error message of the residual is approaching the same order as the solution
-    sprintf('WARNING: Large Residual on Lilly numerical solution')
+%    sprintf('WARNING: Large Residual on Lilly numerical solution')
     res_error=1;    %saved in final output All_data.mat
 
 i_error = 1;

@@ -72,7 +72,7 @@ if(stop_overwrite == 0)
         i_end = t_end/(dt/60/60/24) + 1;    %index of day [t_end]
         ni_final_dynamic = dt_final_dynamic/(dt/60/60/24)+1;    %number of points needed to cover period
         
-        %%Extract data for [dt_final_dynamic]-day period at end of simulation and calculate its mean
+        %%Extract data for [dt_final_dynamic]-day period and calculate its mean
         for ii = 1:((i_end-ni_final_dynamic)-i_start+2)
             %Note: ii corresponds to index for FIRST timestep in period (relative to i_start)
             
@@ -105,42 +105,42 @@ if(stop_overwrite == 0)
         end
         
         %%Determine timeperiod of minimum variance and set equilibrium value accordingly
-        i_start_equil = find(Vmax_variance_g_temp==min(Vmax_variance_g_temp));
+        i_start_equil = find(Vmax_variance_g_temp==min(Vmax_variance_g_temp),1);
         indices_equil_Vmax = i_start+i_start_equil-1:i_start+i_start_equil-1+(ni_final_dynamic-1);
         Vmax_equil_g_dynamic = Vmax_equil_g_ts(i_start_equil);
         t0_equil_Vmax = t_day(indices_equil_Vmax(1));
         tf_equil_Vmax = t_day(indices_equil_Vmax(end));
         
         %%Determine timeperiod of minimum variance and set equilibrium value accordingly
-        i_start_equil = find(rmax_variance_g_temp==min(rmax_variance_g_temp));
+        i_start_equil = find(rmax_variance_g_temp==min(rmax_variance_g_temp),1);
         indices_equil_rmax = i_start+i_start_equil-1:i_start+i_start_equil-1+(ni_final_dynamic-1);
         rmax_equil_g_dynamic = rmax_equil_g_ts(i_start_equil);
         t0_equil_rmax = t_day(indices_equil_rmax(1));
         tf_equil_rmax = t_day(indices_equil_rmax(end));
 
         %%Determine timeperiod of minimum variance and set equilibrium value accordingly
-        i_start_equil = find(rrad_variance_g_temp==min(rrad_variance_g_temp));
+        i_start_equil = find(rrad_variance_g_temp==min(rrad_variance_g_temp),1);
         indices_equil_rrad = i_start+i_start_equil-1:i_start+i_start_equil-1+(ni_final_dynamic-1);
         rrad_equil_g_dynamic = rrad_equil_g_ts(i_start_equil);
         t0_equil_rrad = t_day(indices_equil_rrad(1));
         tf_equil_rrad = t_day(indices_equil_rrad(end));
         
         %%Determine timeperiod of minimum variance and set equilibrium value accordingly
-        i_start_equil = find(r0_variance_g_temp==min(r0_variance_g_temp));
+        i_start_equil = find(r0_variance_g_temp==min(r0_variance_g_temp),1);
         indices_equil_r0 = i_start+i_start_equil-1:i_start+i_start_equil-1+(ni_final_dynamic-1);
         r0_equil_g_dynamic = r0_equil_g_ts(i_start_equil);
         t0_equil_r0 = t_day(indices_equil_r0(1));
         tf_equil_r0 = t_day(indices_equil_r0(end));
         
         %%Determine timeperiod of minimum variance and set equilibrium value accordingly
-        i_start_equil = find(r0Lil_variance_g_temp==min(r0Lil_variance_g_temp));
+        i_start_equil = find(r0Lil_variance_g_temp==min(r0Lil_variance_g_temp),1);
         indices_equil_r0Lil = i_start+i_start_equil-1:i_start+i_start_equil-1+(ni_final_dynamic-1);
         r0Lil_equil_g_dynamic = r0Lil_equil_g_ts(i_start_equil);
         t0_equil_r0Lil = t_day(indices_equil_r0Lil(1));
         tf_equil_r0Lil = t_day(indices_equil_r0Lil(end));
         
         %%Determine timeperiod of minimum variance and set equilibrium value accordingly
-        i_start_equil = find(r0Lil_Lilctrl_variance_g_temp==min(r0Lil_Lilctrl_variance_g_temp));
+        i_start_equil = find(r0Lil_Lilctrl_variance_g_temp==min(r0Lil_Lilctrl_variance_g_temp),1);
         indices_equil_r0Lil_Lilctrl = i_start+i_start_equil-1:i_start+i_start_equil-1+(ni_final_dynamic-1);
         r0Lil_Lilctrl_equil_g_dynamic = r0Lil_Lilctrl_equil_g_ts(i_start_equil);
         t0_equil_r0Lil_Lilctrl = t_day(indices_equil_r0Lil_Lilctrl(1));
