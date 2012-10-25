@@ -72,8 +72,8 @@ for i=1:numruns
     hl1 = line(1000*[qv00],[zz00/1000],'Color','b');
     ax1 = gca;
     set(ax1,'XColor','b','YColor','k')
-    xlabel('water vapor mixing ratio [g/kg]')
-    ylabel('altitude [km]')
+    xlabel('water vapor mixing ratio [g/kg]','FontSize',18)
+    ylabel('altitude [km]','FontSize',18)
 
     ax2 = axes('Position',get(ax1,'Position'),...
                'XAxisLocation','top',...
@@ -83,7 +83,7 @@ for i=1:numruns
     hl2 = line([th00],[zz00/1000],'Color','r','Parent',ax2);
     hl3 = line([T00],[zz00/1000],'Color','r','LineStyle','--','Parent',ax2);
     %title('Control RCE sounding')
-    xlabel('Temperature (dash) / Potential temperature (solid) [K]')
+    xlabel('temperature (dash) / potential temperature (solid) [K]','FontSize',18)
 
     %%Remove the top altitude label (overlaps with x-axis)
     temp = get(ax1,'YTick');

@@ -1,9 +1,6 @@
 %Fig9_CkCd_scaling_VmVp.m
 
-%Compare the scaling of V_m/V_p with C_k/C_d (ER11 Eqn 41)
-
-%Created: 26 Mar 2012, Dan Chavas
-%Updated: 19 Sep 2012, Dan Chavas
+%Created: 19 Sep 2012, Dan Chavas
 
 clear
 clc
@@ -13,11 +10,12 @@ clf(1)
 cd /Users/drchavas/Documents/Research/Thesis/CM1/v15/Thesis_CM1_analysis
 
 %% USER INPUT %%%%%%%%%%%%%%%%%%
+
 subdir_pre='CTRL_icRCE/';    %general subdir that includes multiple runs within
 ext_hd = 1; %0=local hard drive; 1=external hard drive
 
-sim_sets = {'Cd'};
-T_mean = 500; %[day]
+sim_sets = {'Cd_drag'};    %nondim=single-parm; nondim2=extremes
+T_mean = 2; %[day]
 equil_dynamic = 1;  %1 = use dynamic equilibrium
     %%IF 0:
     dt_final = 50;
@@ -25,6 +23,8 @@ equil_dynamic = 1;  %1 = use dynamic equilibrium
     %%IF 1:
     dt_final_dynamic = 30;  %[days]; new length of period over which equilibrium is calculated
 wrad_const = 0; %1 = use CTRL value for wrad
+
+Ck = .0015;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -34,13 +34,13 @@ h=figure(1)
 
 %resize the figure to be pdf print-ready
 set(h,'Units','centimeters');
-hpos = [0 0 20 20];
+hpos = [0 0 15 15];
 set(h,'Position',hpos);
 set(h,'PaperUnits','centimeters');
 set(h,'PaperPosition',hpos);
 set(h,'PaperSize',hpos(3:4));
 
-ax1=axes('position',[0.1    0.1    0.85    0.85]);
+ax1=axes('position',[0.15    0.15    0.80    0.80]);
 
 %%Determine output subdirectory pathname for given sim_set
 if(equil_dynamic == 1)
@@ -62,6 +62,13 @@ if(wrad_const == 1)
 else
     wrad_str = 'rce';
 end
+
+xvals_pl = nan(2,1000);
+data_pl = nan(2,1000);
+xvals_all = [];
+Vm_all = [];
+rm_all = [];
+r0_all = [];
 
 sim_set=sim_sets{1};
 load(sprintf('%s/%s',subdir_out,sim_set))
@@ -107,22 +114,49 @@ for m=1:length(sim_sets)
 
     end
 %}    
+%%TESTING%%%%
+%mpi_all = [261.1 200.5 133.1 mpi_all(4) 63.6 44.7 31.6];
+%Cd_all = .0015*[0.125 .25 .501 1 2 4 8];   %THIS SHOULD BE INCLUDED AUTOMATICALLY
+%%%%%%%%%%%%%
+CkCd = Ck./Cd_all;
 
-%clearvars -except Vmax_equil_g mpi_all
+
+
+%% Calculate non-dim number, C
+C = CkCd;
+i_ctrl = find(CkCd==1,1);
+C_ctrl = C(i_ctrl);
+multipliers = log2(C/C_ctrl);
+
+%% PLOTTING %%%%%%%%%%%%%%%%
 
 xvals_pl(1:numruns,m) = multipliers;        %values defined by user at top
+xvals_pl = xvals_pl(1:numruns,m);
 
-%%NEED CORRECT MPI VALUES!
-mpi_all = [261.1 200.5 133.1 mpi_all(4) 63.6 44.7 31.6];
-Ck = .0015;
-Cd_all = .0015*[0.125 .25 .3501 1 2 4 8];
-CkCd = Ck./Cd_all;
+if(m==length(sim_sets))
+    xvals_all = [xvals_all;xvals_pl(1:numruns,m)];
+end
+
+dat_max=0;
+dat_min=0;
 
 %make Vmax_equil_g/Vp match the predicted value by tuning lh -- but don't
 %need to rerun the model, just use the scaling law
 %lh_orig = 1500; %[m]
 %lh_new = lh_orig*(mpi_all(4)/(sqrt(2)*Vmax_equil_g(4)))^1.15
-Vm_adj = mpi_all(4)/(sqrt(2)*Vmax_equil_g(4))   %equals fractional adjustment due to scaling of Vm with lh
+Vm_adj = mpi_all(i_ctrl)/(sqrt(2)*Vmax_equil_g(i_ctrl))   %equals fractional adjustment due to scaling of Vm with lh
+
+%%%%TESTING%%%%%%
+%Vmax_equil_g_ts_max = 1.2*Vmax_equil_g;
+%Vmax_equil_g_ts_min = .8*Vmax_equil_g;
+%%%%%%%%%%%%%%%%%%%%
+    
+    Vmax_equil_g_ts_max_ctrl = Vmax_equil_g_ts_max(i_ctrl);
+    Vmax_equil_g_ts_min_ctrl = Vmax_equil_g_ts_min(i_ctrl);
+
+    data_pl = Vm_adj.*Vmax_equil_g./mpi_all;
+    L = data_pl - Vm_adj.*Vmax_equil_g_ts_min./mpi_all;
+    U = Vm_adj.*Vmax_equil_g_ts_max./mpi_all - data_pl;
 
 pl_edge = max([abs(floor(min(xvals_pl(1:numruns,m)))) abs(ceil(max(xvals_pl(1:numruns,m)))) 3]);
 
@@ -135,15 +169,24 @@ ER11_eq41 = ((CkCd_smooth)./2).^((CkCd_smooth)./(2*(2-(CkCd_smooth))));
 
 clr1 = [0 0 1];
 
-plot(x_smooth,ER11_eq41,'k--',x,Vm_adj.*Vmax_equil_g./mpi_all,'x','MarkerEdgeColor',clr1,'MarkerSize',20,'LineWidth',2)
-xlabel('$\\log_2(C_k/C_d)$','Interpreter','Latex','FontSize',18)
+%% Plot error bars
+h1 = errorbar(x,data_pl,L,U,'LineStyle','none','Color',[.5 .5 .5])
+hold on
+
+h2 = plot(x_smooth,ER11_eq41,'k',x,data_pl,'x','MarkerEdgeColor',clr1,'MarkerSize',10,'LineWidth',2)
+xlabel('$\\log_2(\frac{C_k}{C_d})$','Interpreter','Latex','FontSize',18)
 ylabel(sprintf('$V_m/V_p$'),'Interpreter','Latex','FontSize',18)
-legend('ER11','CM1','FontSize',18,'FontWeight','bold')
+legend([h2],'ER11','CM1','FontSize',18,'FontWeight','bold')
 %title('Testing ER11 Eq 41 scaling for V_m/V_p : l_h-adjusted')
 %axis([-pl_edge pl_edge -pl_edge pl_edge])
+grid on
+hold on
+
+%set(ax1,'YTick',[-4 -3 -2 -1 0 1 2 3 4],'XTick',[-4 -3 -2 -1 0 1 2 3 4])
+box on        
+    
 
 end
-%}
 
 cd /Users/drchavas/Documents/Research/Thesis/CM1/v15/Thesis_CM1_analysis/Papers/RCE_equilibrium/Latex/TC_RCE_equilibrium_v2.0/FIGURES_TC_RCE_equilibrium_v2.0
 

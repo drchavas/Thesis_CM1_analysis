@@ -22,11 +22,11 @@ moist = 1;  %1 = moist; 0 = dry
 RH_sfc = .8;    %air-sea latent disequilibrium
 dT_sfc = 2; %[K]; air-sea thermal disequilibrium
 dth_max_equil = 1; %[K] maximum allowable integrated change in theta at any level over equilibrium period
-override_instab = 1;    %if 1, will not stop calculation even if there is a large instability
+override_instab = 0;    %if 1, will not stop calculation even if there is a large instability
 
 run_types=3*ones(100,1);    %[1 1 1 1 1 1 1 1 1]; %1=axisym; 3=3d
 subdirs = {
-'RCE_nx48_SST300.00K_Tthresh125K_usfc3_rad0.125K_drag'  
+'RCE_nx48_SST300.00K_Tthresh200K_usfc3_drag'
 };
 %{
 %%List last updated: 11am Thu 20 Sep

@@ -91,10 +91,18 @@ else
             CkCd_str = '_CkCd8.0';
         case 'div4'
             CkCd_str = '_CkCd4.0';
+        case 'div2sqrt2'
+            CkCd_str = '_CkCd2.828';
         case 'div2'
             CkCd_str = '_CkCd2.0';
+        case 'divsqrt2'
+            CkCd_str = '_CkCd1.414';
+        case 'xsqrt2'
+            CkCd_str = '_CkCd0.707';
         case 'x2'
             CkCd_str = '_CkCd0.5';
+        case 'x2sqrt2'
+            CkCd_str = '_CkCd0.354';
         case 'x4'
             CkCd_str = '_CkCd0.25';
         case 'x8'

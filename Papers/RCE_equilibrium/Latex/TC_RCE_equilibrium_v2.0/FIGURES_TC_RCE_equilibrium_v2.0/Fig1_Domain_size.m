@@ -23,7 +23,7 @@ run_types=ones(1000,1); %[1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]; %1=axisym; 3=3D
 t0 = 0;
 
 T_mean = 2; %[days]; averaging time period used to calculate moving time-average radial profile from which rmax and r0 are calculated
-equil_dynamic = 1;  %1 = use dynamic equilibrium
+equil_dynamic = 0;  %1 = use dynamic equilibrium
     %%IF 0:
     dt_final = 50;
     tf = 150;
@@ -40,7 +40,7 @@ datamin_plot = -5000;   %minimum data value plotted
 datamax_plot = 5000;   %minimum data value plotted
 
 %%Simulations
-sim_sets = {'Lx'};  %name out output subdir (within simsets_Tmean#/PLOTS/[sim_set]/) where plots will be saved
+sim_sets = {'Lx_drag'};  %name out output subdir (within simsets_Tmean#/PLOTS/[sim_set]/) where plots will be saved
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

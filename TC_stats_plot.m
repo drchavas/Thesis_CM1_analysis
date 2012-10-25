@@ -241,6 +241,7 @@ for ss=1:numruns
     %% Extract and keep mpi, fcor, Cd, L_R%%%%%
     mpi_all(ss) = mpi;
     fcor_all(ss) = fcor;
+    lh_all(ss) = lh;
     Cd_all(ss) = Cd_in;
     L_R_all(ss) = L_R;
 
@@ -1567,7 +1568,8 @@ if(plot_ts_multi==1)
     %title(input_title)
     ylabel(input_title);
 %    xlabel('time [days]')
-    axis([0 tf 0 1.1*max(max(rmax_movave_g_all(20:end,:)/(mpi_all(i)/fcor_all(i)/1000)))])
+    %axis([0 tf 0 1.1*max(max(rmax_movave_g_all(20:end,:)/(mpi_all(i)/fcor_all(i)/1000)))])
+    axis([0 tf 0 1.1*max(rmax_equil_g(i)/(mpi_all(i)/fcor_all(i)/1000))])
 
     for i=1:numruns
         

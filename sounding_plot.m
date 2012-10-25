@@ -11,10 +11,11 @@ clf(1)
 
 %% USER INPUT %%%%%%%%%%%%%%%%%%
 dz = .625;  %desired vertical resolution
-z_top = 35000;  %[m]
+z_top = 25000;  %[m]
 
 snd_files = {
-'input_sounding_3dRCE_nx48_SST300.00K_Tthresh125K_usfc3_rad0.125K_drag'
+'input_sounding_3dRCE_nx48_SST285.00K_Tthresh200K_usfc3_dz312.5_drag'
+'input_sounding_3dRCE_nx48_SST285.00K_Tthresh200K_usfc3_drag'
 %'stratcnst/input_sounding_stratcnstT200K_T300.00'
 }
 

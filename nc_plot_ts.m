@@ -28,12 +28,12 @@ run_types= 3*[1 1 1 1]; %1=axisym; 3=3D
     div_dat_by=ones(30,1);
 subdirs = {
 
-'TEST'
+'RCE_nx48_SST285.00K_Tthresh200K_usfc3_dz312.5_drag'
 
 }; %name of sub-directory with nc files
 
 t0 = 0;    %[day], starting time for timeseries plot
-tf = 150;   %[day], ending time for timeseries plot
+tf = 100;   %[day], ending time for timeseries plot
 
 numruns=length(subdirs);  %total number of runs you want to plot (taken from below)
 %numruns=6;  %total number of runs you want to plot (taken from below)
@@ -50,7 +50,7 @@ plot_type = 1;  %0=no plot
 %    pl_clrs={'b' 'r' 'g' 'c' 'k' 'y' 'b--' 'r--' 'g--' 'c--' 'k--' 'y--' 'm--'};
     %pl_clrs={'b' 'k' 'r' 'g' 'c' 'y' 'm' 'b--' 'k--' 'r--' 'g--' 'c--' 'y--' 'm--'};
     use_stats = 1;  %0=extract from original data; 1=use cm1out_stats.nc
-    var = 'svmax';  %variable of interest    
+    var = 'massqv';  %variable of interest    
     v_scale = 1; %scale the y-axis variable by this value (note: units will be wrong)
     use_smooth = 1; %0=raw data; 1=smoothed (N-pt moving average)
         numpt_sm = 50;  %smoother uses this number of points

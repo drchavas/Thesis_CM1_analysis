@@ -14,8 +14,8 @@ cd /Users/drchavas/Documents/Research/Thesis/CM1/v15/Thesis_CM1_analysis
 subdir_pre='CTRL_icRCE/';    %general subdir that includes multiple runs within
 ext_hd = 1; %0=local hard drive; 1=external hard drive
 
-sim_sets = {'Cd'};    %nondim=single-parm; nondim2=extremes
-T_mean = 500; %[day]
+sim_sets = {'Cd_drag'};    %nondim=single-parm; nondim2=extremes
+T_mean = 2; %[day]
 equil_dynamic = 1;  %1 = use dynamic equilibrium
     %%IF 0:
     dt_final = 50;
@@ -23,6 +23,8 @@ equil_dynamic = 1;  %1 = use dynamic equilibrium
     %%IF 1:
     dt_final_dynamic = 30;  %[days]; new length of period over which equilibrium is calculated
 wrad_const = 0; %1 = use CTRL value for wrad
+
+Ck = .0015;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -61,8 +63,8 @@ else
     wrad_str = 'rce';
 end
 
-xvals_pl = nan(1000,2);
-data_pl = nan(1000,2);
+xvals_pl = nan(2,1000);
+data_pl = nan(2,1000);
 xvals_all = [];
 Vm_all = [];
 rm_all = [];
@@ -112,10 +114,10 @@ for m=1:length(sim_sets)
 
     end
 %}    
-%%NEED CORRECT MPI VALUES!
-mpi_all = [261.1 200.5 133.1 mpi_all(4) 63.6 44.7 31.6];
-Ck = .0015;
-Cd_all = .0015*[0.125 .25 .501 1 2 4 8];   %THIS SHOULD BE INCLUDED AUTOMATICALLY
+%%TESTING%%%%
+%mpi_all = [261.1 200.5 133.1 mpi_all(4) 63.6 44.7 31.6];
+%Cd_all = .0015*[0.125 .25 .501 1 2 4 8];   %THIS SHOULD BE INCLUDED AUTOMATICALLY
+%%%%%%%%%%%%%
 CkCd = Ck./Cd_all;
 
 %% Calculate non-dim number, C
@@ -126,39 +128,55 @@ multipliers = log2(C/C_ctrl);
 
 %% PLOTTING %%%%%%%%%%%%%%%%
 
-xvals_pl(1:numruns,m) = multipliers;        %values defined by user at top
-[junk isort] = sort(xvals_pl(1:numruns,m));
-clear junk
-list=(1:length(xvals_pl(1:numruns,m)))';
+xvals_pl(m,1:numruns) = multipliers;        %values defined by user at top
+xvals_pl = xvals_pl(m,1:numruns);
 
 if(m==length(sim_sets))
-    xvals_all = [xvals_all;xvals_pl(1:numruns,m)];
+    xvals_all = [xvals_all;xvals_pl(m,1:numruns)];
 end
 
 dat_max=0;
 dat_min=0;
 
-pl_edge = max([abs(floor(min(xvals_pl(1:numruns,m)))) abs(ceil(max(xvals_pl(1:numruns,m)))) 3]);
+pl_edge = max([abs(floor(min(xvals_pl(m,1:numruns)))) abs(ceil(max(xvals_pl(m,1:numruns)))) 3]);
 
+%r0Lil_equil_g = r0Lil_Lilctrl_equil_g;
+%r0Lil_equil_g_ts_max = r0Lil_Lilctrl_equil_g_ts_max;
+%r0Lil_equil_g_ts_min = r0Lil_Lilctrl_equil_g_ts_min;
 
-%% R0
+%%%%TESTING%%%%%%
+%r0Lil_equil_g_ts_max = 1.2*r0Lil_equil_g;
+%r0Lil_equil_g_ts_min = .8*r0Lil_equil_g;
+%%%%%%%%%%%%%%%%%%%%
+    
+    r0Lil_equil_g_ts_max_ctrl = r0Lil_equil_g_ts_max(i_ctrl);
+    r0Lil_equil_g_ts_min_ctrl = r0Lil_equil_g_ts_min(i_ctrl);
+        
+%% r0Lil
 %subplot(3,1,1)
 axes(ax1)
-data_temp = rmax_equil_g./(mpi_all./fcor_all);
-data_pl(1:numruns,m) = log2(data_temp./data_temp(i_ctrl));
-dat_max = max(dat_max,max(data_pl(1:numruns,m)));
-dat_min = min(dat_min,min(data_pl(1:numruns,m)));
+data_temp = r0Lil_equil_g./mpi_all;
+L_temp = r0Lil_equil_g_ts_min./mpi_all;
+U_temp = r0Lil_equil_g_ts_max./mpi_all;
 
-stats = regstats(data_pl(1:numruns,m),xvals_pl(1:numruns,m),'linear'); %fit to y=beta1+beta2*x
+data_pl(m,1:numruns) = log2(data_temp./data_temp(i_ctrl));
+data_pl = data_pl(m,1:numruns);
+L = data_pl - log2(L_temp./data_temp(i_ctrl));
+U = data_pl - log2(U_temp./data_temp(i_ctrl));
+
+dat_max = max(dat_max,max(data_pl(m,1:numruns)));
+dat_min = min(dat_min,min(data_pl(m,1:numruns)));
+
+stats = regstats(data_pl(m,1:numruns),xvals_pl(m,1:numruns),'linear'); %fit to y=beta1+beta2*x
 coefs = stats.beta %coefs(1) = beta1, coefs(2) = beta2
 p1 = stats.tstat.pval   %two-sided t-test: p(1) = p-value of beta1; p(2) = p-value of beta2; p<.025 = value is significantly different from zero at 95% CI (i.e. can reject null hypothesis of value = 0)
 %rsq1 = stats.adjrsquare -- not useful for a simple linear fit
-exp_rmVpf = coefs(2);
+exp_r0Vpf = coefs(2);
 hold on
 xfit = -pl_edge:.1:pl_edge;
 
 %clr1 = [0 0 1];
-clr1 = [1 0 0];
+clr1 = [0 0 1];
 clr2 = [0 1 0];
 clr3 = [1 0 0];
 %clr3 = [0 0 1];
@@ -166,37 +184,48 @@ clr3 = [1 0 0];
 %clr1 = clr2 + .4*[1 1 0];
 switch m
     case 1,
-        plot(xvals_pl(1:numruns,m),data_pl(1:numruns,m),'x','MarkerEdgeColor',clr1,'MarkerSize',20,'LineWidth',2)
+        %% Plot error bars
+        h2 = errorbar(xvals_pl,data_pl,L,U,'LineStyle','none','Color',[.5 .5 .5])
         hold on
-        plot(xfit,coefs(1)+coefs(2).*xfit,'--','Color',clr1,'LineWidth',2)
+    
+        %% Plot data        
+        h1(m) = plot(xvals_pl(m,1:numruns),data_pl(m,1:numruns),'x','MarkerEdgeColor',clr1,'MarkerSize',10,'LineWidth',2)
+        hold on
+        plot(xfit,coefs(1)+coefs(2).*xfit,'--','Color','k','LineWidth',2)
         
-        text1=text(1.5,2.5,sprintf('$\\alpha_3 = $ %5.2f',exp_rmVpf),'fontweight','bold','FontSize',24,'Color',clr1)
+        text1=text(1.5,2.5,sprintf('$\\alpha_3 = $ %5.2f',exp_r0Vpf),'fontweight','bold','FontSize',24,'Color',clr1)
         set(text1,'HorizontalAlignment','center','VerticalAlignment','middle','Interpreter','Latex');
+        text2=text(1.5,2.0,sprintf('(p = %5.2f)',p1(2)),'fontweight','bold','FontSize',24,'Color',clr1)
+        set(text2,'HorizontalAlignment','center','VerticalAlignment','middle','Interpreter','Latex');
 
     case 2,
-        plot(xvals_pl(1:numruns,m),data_pl(1:numruns,m),'x','MarkerEdgeColor',clr2,'MarkerSize',20,'LineWidth',2)
+        plot(xvals_pl(m,1:numruns),data_pl(m,1:numruns),'x','MarkerEdgeColor',clr2,'MarkerSize',20,'LineWidth',2)
         hold on
         plot(xfit,coefs(1)+coefs(2).*xfit,'--','Color',clr2,'LineWidth',2)
 
-        text1=text(2,3.1,sprintf('$\\alpha_2 = $ %5.2f',exp_rmVpf),'fontweight','bold','FontSize',24,'Color',clr2)
+        text1=text(2,3.1,sprintf('$\\alpha_2 = $ %5.2f',exp_r0Vpf),'fontweight','bold','FontSize',24,'Color',clr2)
         set(text1,'HorizontalAlignment','center','VerticalAlignment','middle','Interpreter','Latex');    
+        text2=text(1.5,2.6,sprintf('(p = %5.2f)',p1(2)),'fontweight','bold','FontSize',24,'Color',clr1)
+        set(text2,'HorizontalAlignment','center','VerticalAlignment','middle','Interpreter','Latex');
 
     case 3,
-        plot(xvals_pl(1:numruns,m),data_pl(1:numruns,m),'x','MarkerFaceColor',clr3,'MarkerEdgeColor',clr3,'MarkerSize',20,'LineWidth',2)
+        plot(xvals_pl(m,1:numruns),data_pl(m,1:numruns),'x','MarkerFaceColor',clr3,'MarkerEdgeColor',clr3,'MarkerSize',20,'LineWidth',2)
         hold on
         plot(xfit,coefs(1)+coefs(2).*xfit,'--','Color',clr3,'LineWidth',2)
         
-        text1=text(2,3.7,sprintf('$\\alpha_1 = $ %5.2f',exp_rmVpf),'fontweight','bold','FontSize',24,'Color',clr3)
+        text1=text(2,3.7,sprintf('$\\alpha_1 = $ %5.2f',exp_r0Vpf),'fontweight','bold','FontSize',24,'Color',clr3)
         set(text1,'HorizontalAlignment','center','VerticalAlignment','middle','Interpreter','Latex');    
+        text2=text(1.5,3.2,sprintf('(p = %5.2f)',p1(2)),'fontweight','bold','FontSize',24,'Color',clr1)
+        set(text2,'HorizontalAlignment','center','VerticalAlignment','middle','Interpreter','Latex');
 
 end
 
-input_title1=sprintf('$\\frac{r_m}{V_p/f}$');
+input_title1=sprintf('$\\frac{r_0}{V_p/f}$');
 text1=text(-2.75,-2.75,input_title1,'FontSize',30);
 set(text1,'HorizontalAlignment','left','VerticalAlignment','bottom','Interpreter','Latex','BackgroundColor','white','EdgeColor','k');
 axis([-pl_edge pl_edge -pl_edge pl_edge])
-ylabel('$\\log_2(\widetilde{r}_m/\widetilde{r}_m^*)$','Interpreter','Latex','FontSize',18)
-xlabel('$\\log_2(C/C^*)$','Interpreter','Latex','FontSize',18)
+ylabel('$\\log_2(\widetilde{r}_0/\widetilde{r}_0^*)$','Interpreter','Latex','FontSize',18)
+xlabel('$\\log_2(\frac{C_k}{C_d}/{\frac{C_k}{C_d}}^*)$','Interpreter','Latex','FontSize',18)
 %xlabh = get(gca,'XLabel');
 %set(xlabh,'Position',get(xlabh,'Position') - [0 .1 0])
 grid on

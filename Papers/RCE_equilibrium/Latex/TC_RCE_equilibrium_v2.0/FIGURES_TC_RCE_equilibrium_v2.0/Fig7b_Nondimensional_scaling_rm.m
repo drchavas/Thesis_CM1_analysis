@@ -1,6 +1,6 @@
 %Fig7b_Nondimensional_scaling_rm.m
 
-%Created: 7 Sep 2012, Dan Chavas
+%Created: 6 Sep 2012, Dan Chavas
 
 clear
 clc
@@ -10,11 +10,7 @@ clf(1)
 cd /Users/drchavas/Documents/Research/Thesis/CM1/v15/Thesis_CM1_analysis
 
 %% USER INPUT %%%%%%%%%%%%%%%%%%
-subdir_pre='CTRL_icRCE/';    %general subdir that includes multiple runs within
-ext_hd = 1; %0=local hard drive; 1=external hard drive
-
-%sim_sets = {'nondim2' 'nondim1.5' 'nondim'};    %nondim=single-parm; nondim2=extremes
-sim_sets = {'nondim_all'};    %nondim=single-parm; nondim2=extremes
+sim_sets = {'nondim_all_drag'};    %nondim=single-parm; nondim2=extremes
 T_mean = 2; %[day]
 equil_dynamic = 1;  %1 = use dynamic equilibrium
     %%IF 0:
@@ -111,38 +107,52 @@ for m=1:length(sim_sets)
     
 %% Calculate non-dim number, C
 C = mpi_all./(fcor_all.*lh_all);
-i_ctrl = find(strcmp(subdirs_set,'CTRLv0qrhSATqdz5000_nx3072')==1,1);
+i_ctrl = find(strcmp(subdirs_set,'CTRLv0qrhSATqdz5000_nx3072_drag')==1,1);
 C_ctrl = C(i_ctrl);
 multipliers = log2(C/C_ctrl);
 
 %% PLOTTING %%%%%%%%%%%%%%%%
 
-xvals_pl(1:numruns,m) = multipliers;        %values defined by user at top
-[junk isort] = sort(xvals_pl(1:numruns,m));
+xvals_pl = multipliers;        %values defined by user at top
+[junk isort] = sort(xvals_pl);
 clear junk
-list=(1:length(xvals_pl(1:numruns,m)))';
+list=(1:length(xvals_pl))';
 
 if(m==length(sim_sets))
-    xvals_all = [xvals_all;xvals_pl(1:numruns,m)];
+    xvals_all = [xvals_all;xvals_pl];
 end
 
 dat_max=0;
 dat_min=0;
 
-pl_edge = max([abs(floor(min(xvals_pl(1:numruns,m)))) abs(ceil(max(xvals_pl(1:numruns,m)))) 5]);
-
+pl_edge = max([abs(floor(min(xvals_pl))) abs(ceil(max(xvals_pl))) 5]);
 
 %% RMAX
 %subplot(3,1,1)
 axes(ax1)
 data_temp = rmax_equil_g./(mpi_all./fcor_all);
-data_pl(1:numruns,m) = log2(data_temp./data_temp(i_ctrl));
-dat_max = max(dat_max,max(data_pl(1:numruns,m)));
-dat_min = min(dat_min,min(data_pl(1:numruns,m)));
+data_pl = log2(data_temp./data_temp(i_ctrl));
+dat_max = max(dat_max,max(data_pl));
+dat_min = min(dat_min,min(data_pl));
 
-rm_all = [rm_all;data_pl(1:numruns,m)];
+%% ERROR BAR DATA
+%%%%TESTING%%%%%%
+%rmax_equil_g_ts_max = 1.2*rmax_equil_g;
+%rmax_equil_g_ts_min = .8*rmax_equil_g;
+%%%%%%%%%%%%%%%%%%%%
+    
+data_temp_max = rmax_equil_g_ts_max./(mpi_all./fcor_all);
+data_pl_max = log2(data_temp_max./data_temp(i_ctrl));
 
-stats = regstats(data_pl(1:numruns,m),xvals_pl(1:numruns,m),'linear'); %fit to y=beta1+beta2*x
+data_temp_min = rmax_equil_g_ts_min./(mpi_all./fcor_all);
+data_pl_min = log2(data_temp_min./data_temp(i_ctrl));
+
+L = data_pl - data_pl_min;
+U = data_pl_max - data_pl;
+
+rm_all = [rm_all;data_pl];
+
+stats = regstats(data_pl,xvals_pl,'linear'); %fit to y=beta1+beta2*x
 coefs = stats.beta %coefs(1) = beta1, coefs(2) = beta2
 p1 = stats.tstat.pval   %two-sided t-test: p(1) = p-value of beta1; p(2) = p-value of beta2; p<.025 = value is significantly different from zero at 95% CI (i.e. can reject null hypothesis of value = 0)
 %rsq1 = stats.adjrsquare -- not useful for a simple linear fit
@@ -150,39 +160,31 @@ exp_rmVpf = coefs(2);
 hold on
 xfit = -pl_edge:.1:pl_edge;
 
-%clr1 = [0 0 1];
 clr1 = [1 0 0];
-clr2 = [0 1 0];
-clr3 = [1 0 0];
-%clr3 = [0 0 1];
-%clr2 = clr3 + .4*[1 1 0];
-%clr1 = clr2 + .4*[1 1 0];
-switch m
-    case 1,
-        plot(xvals_pl(1:numruns,m),data_pl(1:numruns,m),'x','MarkerEdgeColor',clr1,'MarkerSize',20,'LineWidth',2)
-        hold on
-        plot(xfit,coefs(1)+coefs(2).*xfit,'--','Color',clr1,'LineWidth',2)
-        
-        text1=text(1.5,2.5,sprintf('$\\alpha_3 = $ %5.2f',exp_rmVpf),'fontweight','bold','FontSize',24,'Color',clr1)
-        set(text1,'HorizontalAlignment','center','VerticalAlignment','middle','Interpreter','Latex');
 
-    case 2,
-        plot(xvals_pl(1:numruns,m),data_pl(1:numruns,m),'x','MarkerEdgeColor',clr2,'MarkerSize',20,'LineWidth',2)
-        hold on
-        plot(xfit,coefs(1)+coefs(2).*xfit,'--','Color',clr2,'LineWidth',2)
+%% Plot error bars
+errorbar(xvals_pl,data_pl,L,U,'LineStyle','none','Color',[.5 .5 .5])
+hold on
 
-        text1=text(1.5,3.1,sprintf('$\\alpha_2 = $ %5.2f',exp_rmVpf),'fontweight','bold','FontSize',24,'Color',clr2)
-        set(text1,'HorizontalAlignment','center','VerticalAlignment','middle','Interpreter','Latex');    
+%% Plot values + best fit line
+plot(xvals_pl,data_pl,'x','MarkerEdgeColor',clr1,'MarkerSize',10,'LineWidth',2)
+hold on
 
-    case 3,
-        plot(xvals_pl(1:numruns,m),data_pl(1:numruns,m),'x','MarkerFaceColor',clr3,'MarkerEdgeColor',clr3,'MarkerSize',20,'LineWidth',2)
-        hold on
-        plot(xfit,coefs(1)+coefs(2).*xfit,'--','Color',clr3,'LineWidth',2)
-        
-        text1=text(1.5,3.7,sprintf('$\\alpha_1 = $ %5.2f',exp_rmVpf),'fontweight','bold','FontSize',24,'Color',clr3)
-        set(text1,'HorizontalAlignment','center','VerticalAlignment','middle','Interpreter','Latex');    
+%%%%% TEST DRC: Vp effect %%
+%plot(xvals_pl(mpi_all>92),data_pl(mpi_all>92),'x','MarkerEdgeColor','r','MarkerSize',10,'LineWidth',2)
+%hold on
+%plot(xvals_pl(mpi_all<90),data_pl(mpi_all<90),'x','MarkerEdgeColor','g','MarkerSize',10,'LineWidth',2)
+%title('red = high MPI, green = low MPI, blue = ctrl mpi')
+%%%%% TEST DRC %%
 
-end
+plot(xfit,coefs(1)+coefs(2).*xfit,'--','Color','k','LineWidth',2)
+
+%% Print best fit slope and p-value
+text1=text(1.5,3.5,sprintf('$\\alpha_3 = $ %5.2f',exp_rmVpf),'fontweight','bold','FontSize',24,'Color',clr1)
+set(text1,'HorizontalAlignment','center','VerticalAlignment','middle','Interpreter','Latex');
+text2=text(1.5,2.5,sprintf('(p = %5.2f)',p1(2)),'fontweight','bold','FontSize',24,'Color',clr1)
+set(text2,'HorizontalAlignment','center','VerticalAlignment','middle','Interpreter','Latex');
+
 
 input_title1=sprintf('$\\frac{r_m}{V_p/f}$');
 text1=text(-4.75,-4.75,input_title1,'FontSize',30);
@@ -198,11 +200,10 @@ hold on
 set(ax1,'YTick',[-4 -3 -2 -1 0 1 2 3 4],'XTick',[-4 -3 -2 -1 0 1 2 3 4])
 box on
 
-VmVpf=[list list(isort) xvals_pl(isort,m) data_pl(isort,m) mpi_all(isort)' fcor_all(isort)'*10^5 lh_all(isort)'/1000];
+VmVp=[list list(isort) xvals_pl(isort)' data_pl(isort)' mpi_all(isort)' fcor_all(isort)'*10^5 lh_all(isort)'/1000];
 
 end
 
 cd /Users/drchavas/Documents/Research/Thesis/CM1/v15/Thesis_CM1_analysis/Papers/RCE_equilibrium/Latex/TC_RCE_equilibrium_v2.0/FIGURES_TC_RCE_equilibrium_v2.0
 
 print -dpdf -r300 Fig7b_Nondimensional_scaling_rm.pdf
-

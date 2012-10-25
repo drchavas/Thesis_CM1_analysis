@@ -1,0 +1,20 @@
+\begin{table*}
+[t]
+\caption{Parameter values for the Control simulation. See text for details.}\label{t1}
+\label{table:parameters_ctrl}
+\begin{center}
+\begin{tabular}{cccccc}
+\hline\hline
+Model & Value & Environment & Value & Initial condition & Value \\
+\hline
+$l_h$ & $1500 \; m$ & $T_{sst}$ & $300 \; K$ & $r_{0_q}$ & $200 \; km$ \\
+$l_v$ & $100 \; m$ & $T_{tpp}$ & $200 \; K$ & $r_{0_u}$ & $400 \; km$ \\
+$C_k, C_d$ & $.0015$ & $Q_{cool}$ & $1 \; K \; day^{-1}$ & \\
+$H_{domain}$ & $25 \; km$ & $u_{sfc}$ & $3 \; m \; s^{-1}$ & \\
+$L_{domain}$ & $12288 \; km$ & $f$ & $5*10^{-5} \; s^{-1}$ & \\
+\hline
+\end{tabular}
+\end{center}
+\end{table*}
+\efloatseparator
+ 

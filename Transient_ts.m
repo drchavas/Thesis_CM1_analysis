@@ -21,20 +21,27 @@ dt_final_dynamic = 10;
 CTRL_val = 1; %CTRL value of quantity varied across simulations
 units = '-';    %for simset
 subdirs_set = {
-    'CTRLv0qrhSATqro400000qdz5000_nx3072_fdiv2_lh3000_drag'
-    'CTRLv0qrhSATqro100000qdz5000_nx3072_fx2_lh750_drag'
+    'CTRLv0qrhSATqdz5000_nx3072_drag'   %150 days
+    'CTRLv0qrhSATqro110000qdz5000_nx3072_Tthresh250K_lh825_drag'    %150 days
+    'CTRLv0qrhSATqro400000qdz5000_nx3072_fdiv2_lh3000_drag' %100 days
+    'CTRLv0qrhSATqro100000qdz5000_nx3072_fx2_lh750_drag'    %100 days
+    'CTRLv0qrhSATqro296000qdz5000_nx3072_usfc.5_lh2220_drag'    %150 days
     };
+legend_info = {'CTRL' 'qro110Tthresh250lh825' 'qro400fdiv2lh3000' 'qro100fx2lh750' 'qro296usfc.5lh2220'}
 sim_set = 'transient';
 multipliers = ones(length(subdirs_set),1);
 Vmax_pl = 100;
-rmmax_pl = 100;
-r0max_pl = 1500;
+rmmax_pl = 150;
+r0max_pl = 3500;
 Vmax_nd_pl = 1.5;
 rmmax_nd_pl = .1;
 r0max_nd_pl = 1.5;
 %}
 
-time_rescale = [1/2 1]; %rescale simulation time by these factors
+time_rescale = [1 .55 1/2 1 1]; %rescale simulation time by these factors
+%time_rescale = ones(length(subdirs_set),1); %rescale simulation time by these factors
+
+numday_smooth = 0;  %CHECK ME!! [day]; 0 = no smoothing;
 %%%%%%%%%%%%%%%%%%%%%%%%
 
 dir_in_dat = sprintf('/Users/drchavas/Documents/Research/Thesis/CM1/v15/CM1_postproc_data/simdata_Tmean%i_%i_%i/',T_mean,tf-dt_final,dt_final);
@@ -47,6 +54,12 @@ plot_full = 0;  %1=make plots with full wind (note: can do both)
 %pl_clrs={'b' 'b--' 'r' 'r--' 'g' 'g--' 'c' 'c--' 'k' 'k--' 'y' 'y--'};
 pl_clrs={'b' 'r' 'g' 'c' 'k' 'y' 'm' 'b--' 'r--' 'g--' 'c--' 'k--' 'y--' 'm--' 'b' 'r' 'g' 'c' 'k' 'y' 'm' 'b--' 'r--' 'g--' 'c--' 'k--' 'y--' 'm--' 'b' 'r' 'g' 'c' 'k' 'y' 'm' 'b--' 'r--' 'g--' 'c--' 'k--' 'y--' 'm--'};
     
+
+
+
+
+
+
 numruns=length(subdirs_set);  %total number of runs you want to plot (taken from below)
 
 %%Append ax or 3d to subdir names for plot
@@ -240,6 +253,12 @@ end
 
 %% PLOTTING %%%%%%%%%%%%%%%%
 
+if(numday_smooth == 0)
+    numpt_smooth = 1;
+else
+    numpt_smooth = numday_smooth*86400/dt;
+end
+
 set(0,'defaultaxesfontsize',8,'defaultaxesfontweight','bold','defaultlinelinewidth',1)
 
 %% RESCALE TIME
@@ -249,6 +268,7 @@ for i=1:numruns
 end
 
 %Multi simulation: plot time-series of each variable
+%{
 if(plot_full == 1)
     %% FULL WIND %%%%%%%%%%%
     %Plot time series
@@ -306,7 +326,7 @@ if(plot_full == 1)
         hold on
     end
     grid on
-    legend(input_legend,'Location','EastOutside')
+%    legend(input_legend,'Location','EastOutside')
     input_title=sprintf('rmax [km]');
     title(input_title)
     ylabel(input_title);
@@ -373,7 +393,7 @@ if(plot_full == 1)
         hold on
     end
     grid on
-    legend(input_legend,'Location','EastOutside')
+%    legend(input_legend,'Location','EastOutside')
     input_title=sprintf('r0Lil [km]');
     title(input_title)
     ylabel(input_title);
@@ -405,12 +425,13 @@ if(plot_full == 1)
     grid on
     
 end
-
+%}
 if(plot_gradient == 1)
     %% GRADIENT WIND %%%%%%%%
     
     %%Plot time series
     figure(15)
+    hold off
     
     %legend info
     runs_pl = CTRL_val*(2.^multipliers);        %values defined by user at top
@@ -426,13 +447,13 @@ if(plot_gradient == 1)
     %Vmax
     for i=1:numruns
         
-        subplot(4,1,1)
-        plot(t_day(i,:),Vmax_movave_g_all(:,i),pl_clrs{i})
+        subplot(3,1,1)
+        plot(t_day(i,:),smooth(Vmax_movave_g_all(:,i),numpt_smooth),pl_clrs{i})
         hold on
         
     end
     grid on
-    legend(input_legend,'Location','EastOutside')
+%    legend(input_legend,'Location','EastOutside')
     input_title=sprintf('Vmax [m/s]');
     title(input_title)
     ylabel(input_title);
@@ -441,7 +462,7 @@ if(plot_gradient == 1)
     
     for i=1:numruns
         
-        subplot(4,1,1)
+        subplot(3,1,1)
         hold on
         if(~isnan(tau_gen(i)))
             h=plot(t_day(i,round(tau_gen(i)/(dt/60/60/24))),Vmax_gen_g(i),'d');
@@ -459,13 +480,13 @@ if(plot_gradient == 1)
     
     %rmax
     for i=1:numruns
-        
-        subplot(4,1,2)
-        plot(t_day(i,:),rmax_movave_g_all(:,i),pl_clrs{i})
+        rmax_movave_g_all(rmax_movave_g_all(:,i)>rmax_max_g(i),i) = NaN;    %get rid of very high values at beginning
+        subplot(3,1,2)
+        plot(t_day(i,:),smooth(rmax_movave_g_all(:,i),numpt_smooth),pl_clrs{i})
         hold on
     end
     grid on
-    legend(input_legend,'Location','EastOutside')
+%    legend(input_legend,'Location','EastOutside')
     input_title=sprintf('rmax [km]');
     title(input_title)
     ylabel(input_title);
@@ -523,6 +544,7 @@ if(plot_gradient == 1)
     end
     %}
     %r0Lil_Lilctrl
+%{
     for i=1:numruns
         
         subplot(4,1,3)
@@ -530,13 +552,13 @@ if(plot_gradient == 1)
         hold on
     end
     grid on
-    legend(input_legend,'Location','EastOutside')
+%    legend(input_legend,'Location','EastOutside')
     input_title=sprintf('r0Lil_{ctrl} [km]');
     title(input_title)
     ylabel(input_title);
     %    xlabel('time [days]')
     axis([0 tf 0 r0max_pl])
-    
+%}    
     for i=1:numruns
         
         hold on
@@ -556,13 +578,14 @@ if(plot_gradient == 1)
     
     %r0Lil
     for i=1:numruns
-        
-        subplot(4,1,4)
-        plot(t_day(i,:),r0Lil_movave_g_all(:,i),pl_clrs{i})
+        r0Lil_movave_g_all(r0Lil_movave_g_all(:,i)>r0Lil_max_g(i),i) = NaN;    %get rid of very high values at beginning
+        subplot(3,1,3)
+        plot(t_day(i,:),smooth(r0Lil_movave_g_all(:,i),numpt_smooth),pl_clrs{i})
         hold on
     end
     grid on
-    legend(input_legend,'Location','EastOutside')
+%    legend(input_legend,'Location','EastOutside')
+    legend(legend_info,'Location','EastOutside')
     input_title=sprintf('r0Lil [km]');
     title(input_title)
     ylabel(input_title);
@@ -593,8 +616,14 @@ if(plot_gradient == 1)
     suptitle({input_title1,input_title2,input_title3})
     grid on
     
-    %%Plot non-dimensional time series
+    runnames=subdirs_set;
+    text1=text(-4.75,-4.75,runnames,'FontSize',30);
+    set(text1,'HorizontalAlignment','left','VerticalAlignment','bottom','Interpreter','Latex','BackgroundColor','white','EdgeColor','k');
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Plot non-dimensional time series %%%%%%%%%%%%%%%%
     figure(151)
+    hold off
     
     %legend info
     runs_pl = CTRL_val*(2.^multipliers);        %values defined by user at top
@@ -610,13 +639,13 @@ if(plot_gradient == 1)
     %Vmax
     for i=1:numruns
         
-        subplot(4,1,1)
-        plot(t_day(i,:),Vmax_movave_g_all(:,i)/mpi_all(i),pl_clrs{i})
+        subplot(3,1,1)
+        plot(t_day(i,:),smooth(Vmax_movave_g_all(:,i)/mpi_all(i),numpt_smooth),pl_clrs{i})
         hold on
         
     end
     grid on
-    legend(input_legend,'Location','EastOutside')
+%    legend(input_legend,'Location','EastOutside')
     input_title=sprintf('V_m / V_p');
     %title(input_title)
     ylabel(input_title);
@@ -625,7 +654,7 @@ if(plot_gradient == 1)
     
     for i=1:numruns
         
-        subplot(4,1,1)
+        subplot(3,1,1)
         hold on
         if(~isnan(tau_gen(i)))
             h=plot(t_day(i,round(tau_gen(i)/(dt/60/60/24))),Vmax_gen_g(i)/mpi_all(i),'d');
@@ -644,12 +673,12 @@ if(plot_gradient == 1)
     %rmax
     for i=1:numruns
         
-        subplot(4,1,2)
-        plot(t_day(i,:),rmax_movave_g_all(:,i)/(mpi_all(i)/fcor_all(i)/1000),pl_clrs{i})
+        subplot(3,1,2)
+        plot(t_day(i,:),smooth(rmax_movave_g_all(:,i)/(mpi_all(i)/fcor_all(i)/1000),numpt_smooth),pl_clrs{i})
         hold on
     end
     grid on
-    legend(input_legend,'Location','EastOutside')
+%    legend(input_legend,'Location','EastOutside')
     input_title=sprintf('r_m / (V_p / f)');
     %title(input_title)
     ylabel(input_title);
@@ -707,6 +736,7 @@ if(plot_gradient == 1)
     end
     %}
     %r0Lil_Lilctrl
+%{
     for i=1:numruns
         
         subplot(4,1,3)
@@ -714,13 +744,13 @@ if(plot_gradient == 1)
         hold on
     end
     grid on
-    legend(input_legend,'Location','EastOutside')
+%    legend(input_legend,'Location','EastOutside')
     input_title=sprintf('r_{0 ctrl} / (V_p / f)');
     %title(input_title)
     ylabel(input_title);
     %    xlabel('time [days]')
     axis([0 tf 0 r0max_nd_pl])
-    
+%}    
     for i=1:numruns
         
         hold on
@@ -741,12 +771,13 @@ if(plot_gradient == 1)
     %r0Lil
     for i=1:numruns
         
-        subplot(4,1,4)
-        plot(t_day(i,:),r0Lil_movave_g_all(:,i)/(mpi_all(i)/fcor_all(i)/1000),pl_clrs{i})
+        subplot(3,1,3)
+        plot(t_day(i,:),smooth(r0Lil_movave_g_all(:,i)/(mpi_all(i)/fcor_all(i)/1000),numpt_smooth),pl_clrs{i})
         hold on
     end
     grid on
-    legend(input_legend,'Location','EastOutside')
+%    legend(input_legend,'Location','EastOutside')
+    legend(legend_info,'Location','EastOutside')
     input_title=sprintf('r_0 / (V_p / f)');
     %title(input_title)
     ylabel(input_title);
@@ -772,7 +803,7 @@ if(plot_gradient == 1)
     end
     
     hold on
-    input_title1=sprintf('BLUE TIME HALVED GRADIENT non-dimensional storm evolutions for variable %s [%s]',sim_set,units);
+    input_title1=sprintf('TIME-MOD GRADIENT non-dimensional storm evolutions for variable %s [%s]',sim_set,units);
     input_title2=sprintf('%i -day moving averages',T_mean);
     input_title3='';
     suptitle({input_title1,input_title2,input_title3})

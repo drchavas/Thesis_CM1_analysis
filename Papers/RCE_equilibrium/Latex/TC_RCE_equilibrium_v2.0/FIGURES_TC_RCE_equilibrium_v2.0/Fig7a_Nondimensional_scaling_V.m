@@ -4,17 +4,13 @@
 
 clear
 clc
-figure(1)
-clf(1)
+figure(2)
+clf(2)
 
 cd /Users/drchavas/Documents/Research/Thesis/CM1/v15/Thesis_CM1_analysis
 
 %% USER INPUT %%%%%%%%%%%%%%%%%%
-subdir_pre='CTRL_icRCE/';    %general subdir that includes multiple runs within
-ext_hd = 1; %0=local hard drive; 1=external hard drive
-
-%sim_sets = {'nondim2' 'nondim1.5' 'nondim'};    %nondim=single-parm; nondim2=extremes
-sim_sets = {'nondim_all'};    %nondim=single-parm; nondim2=extremes
+sim_sets = {'nondim_all_drag'};    %nondim=single-parm; nondim2=extremes
 T_mean = 2; %[day]
 equil_dynamic = 1;  %1 = use dynamic equilibrium
     %%IF 0:
@@ -28,7 +24,7 @@ wrad_const = 0; %1 = use CTRL value for wrad
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 set(0,'defaultaxesfontsize',12,'defaultaxesfontweight','bold','defaultlinelinewidth',1)
-h=figure(1)
+h=figure(2)
 
 %resize the figure to be pdf print-ready
 set(h,'Units','centimeters');
@@ -111,77 +107,137 @@ for m=1:length(sim_sets)
     
 %% Calculate non-dim number, C
 C = mpi_all./(fcor_all.*lh_all);
-i_ctrl = find(strcmp(subdirs_set,'CTRLv0qrhSATqdz5000_nx3072')==1,1);
+i_ctrl = find(strcmp(subdirs_set,'CTRLv0qrhSATqdz5000_nx3072_drag')==1,1);
 C_ctrl = C(i_ctrl);
 multipliers = log2(C/C_ctrl);
 
 %% PLOTTING %%%%%%%%%%%%%%%%
 
-xvals_pl(1:numruns,m) = multipliers;        %values defined by user at top
-[junk isort] = sort(xvals_pl(1:numruns,m));
+xvals_pl = multipliers;        %values defined by user at top
+[junk isort] = sort(xvals_pl);
 clear junk
-list=(1:length(xvals_pl(1:numruns,m)))';
+list=(1:length(xvals_pl))';
 
 if(m==length(sim_sets))
-    xvals_all = [xvals_all;xvals_pl(1:numruns,m)];
+    xvals_all = [xvals_all;xvals_pl];
 end
 
 dat_max=0;
 dat_min=0;
 
-pl_edge = max([abs(floor(min(xvals_pl(1:numruns,m)))) abs(ceil(max(xvals_pl(1:numruns,m)))) 5]);
-
+pl_edge = max([abs(floor(min(xvals_pl))) abs(ceil(max(xvals_pl))) 5]);
 
 %% VMAX
 %subplot(3,1,1)
 axes(ax1)
 data_temp = Vmax_equil_g./mpi_all;
-data_pl(1:numruns,m) = log2(data_temp./data_temp(i_ctrl));
-dat_max = max(dat_max,max(data_pl(1:numruns,m)));
-dat_min = min(dat_min,min(data_pl(1:numruns,m)));
+data_pl = log2(data_temp./data_temp(i_ctrl));
+dat_max = max(dat_max,max(data_pl));
+dat_min = min(dat_min,min(data_pl));
 
-Vm_all = [Vm_all;data_pl(1:numruns,m)];
+%% ERROR BAR DATA
+%%%%TESTING%%%%%%
+%Vmax_equil_g_ts_max = 1.2*Vmax_equil_g;
+%Vmax_equil_g_ts_min = .8*Vmax_equil_g;
+%%%%%%%%%%%%%%%%%%%%
+    
+data_temp_max = Vmax_equil_g_ts_max./mpi_all;
+data_pl_max = log2(data_temp_max./data_temp(i_ctrl));
 
-stats = regstats(data_pl(1:numruns,m),xvals_pl(1:numruns,m),'linear'); %fit to y=beta1+beta2*x
+data_temp_min = Vmax_equil_g_ts_min./mpi_all;
+data_pl_min = log2(data_temp_min./data_temp(i_ctrl));
+
+L = data_pl - data_pl_min;
+U = data_pl_max - data_pl;
+
+Vm_all = [Vm_all;data_pl];
+
+
+
+%% FIT DATA TO FUNCTIONAL RELATIONSHIP
+%% OPTION 1: Best fit curve to data
+
+%http://www.mathworks.com/matlabcentral/fileexchange/29545-power-law-exponential-and-logarithmic-fit
+% logfit(X,Y), will search through all the possible axis scalings and 
+%              finish with the one that incurs the least error (with error 
+%              measured as least squares on the linear-linear data.)
+
+%Let the code tell you which relationship is best
+%{
+[graphType, slope, intercept, R2, S] = logfit(xvals_pl,ydat);
+graphType
+switch graphType
+    case 'loglog'
+        y_fit = (10^intercept)*x_fit.^(slope);
+    case 'logx'
+        y_fit = (intercept)+(slope)*log10(x_fit);
+    otherwise
+        'FAIL'
+end
+%}
+%A power law relationship 
+%[slope, intercept] = logfit(xvals_pl,ydat,'loglog'); 
+%           y_fit = (10^intercept)*x_fit.^(slope);
+           
+%An exponential relationship 
+figure(1)
+xfit1 = 2.^(-pl_edge:.1:pl_edge);
+[slope, intercept] = logfit(C./C_ctrl,data_temp./data_temp(i_ctrl),'logx');
+    y_fit = (intercept)+(slope)*log10(xfit1);
+    
+%[slope, intercept] = logfit(C./C_ctrl,data_temp./data_temp(i_ctrl),'logy');
+%           yApprox = (10^intercept)*(10^slope).^x;
+%}
+
+
+%% Manual method
+%%POWER LAW: y = a*x^b --> log(y) = log(a) + b*log(x)  on a log-log
+xfit2 = -pl_edge:.1:pl_edge;
+stats = regstats(data_pl,xvals_pl,'linear'); %fit to y=beta1+beta2*x
 coefs = stats.beta %coefs(1) = beta1, coefs(2) = beta2
 p1 = stats.tstat.pval   %two-sided t-test: p(1) = p-value of beta1; p(2) = p-value of beta2; p<.025 = value is significantly different from zero at 95% CI (i.e. can reject null hypothesis of value = 0)
 %rsq1 = stats.adjrsquare -- not useful for a simple linear fit
+intercept_VmVp = coefs(1);
 exp_VmVp = coefs(2);
-hold on
-xfit = -pl_edge:.1:pl_edge;
+
+%{
+%%DOESNT WORK! EXPONENTIAL: x = a*exp(b*y) --> log(x) = log(a) + b*y  on a log-log
+stats = regstats(xvals_pl,data_temp./data_temp(i_ctrl),'linear'); %fit to y=beta1+beta2*x
+coefs = stats.beta %coefs(1) = beta1, coefs(2) = beta2
+%p1 = stats.tstat.pval   %two-sided t-test: p(1) = p-value of beta1; p(2) = p-value of beta2; p<.025 = value is significantly different from zero at 95% CI (i.e. can reject null hypothesis of value = 0)
+%rsq1 = stats.adjrsquare -- not useful for a simple linear fit
+intercept_VmVpexp = coefs(1);
+exp_VmVpexp = coefs(2);
+y_fit = log2((1/exp_VmVpexp)*log2(xfit2/intercept_VmVpexp));
+%}
 
 clr1 = [0 0 1];
-clr2 = [0 1 0];
-clr3 = [1 0 0];
-%clr3 = [0 0 1];
-%clr2 = clr3 + .4*[1 1 0];
-%clr1 = clr2 + .4*[1 1 0];
-switch m
-    case 1,
-        plot(xvals_pl(1:numruns,m),data_pl(1:numruns,m),'x','MarkerEdgeColor',clr1,'MarkerSize',20,'LineWidth',2)
-        hold on
-        plot(xfit,coefs(1)+coefs(2).*xfit,'--','Color',clr1,'LineWidth',2)
-        
-        text1=text(1.5,2.5,sprintf('$\\alpha_3 = $ %5.2f',exp_VmVp),'fontweight','bold','FontSize',24,'Color',clr1)
-        set(text1,'HorizontalAlignment','center','VerticalAlignment','middle','Interpreter','Latex');
 
-    case 2,
-        plot(xvals_pl(1:numruns,m),data_pl(1:numruns,m),'x','MarkerEdgeColor',clr2,'MarkerSize',20,'LineWidth',2)
-        hold on
-        plot(xfit,coefs(1)+coefs(2).*xfit,'--','Color',clr2,'LineWidth',2)
+%% Plot error bars
+figure(2)
+errorbar(xvals_pl,data_pl,L,U,'LineStyle','none','Color',[.5 .5 .5])
+hold on
 
-        text1=text(1.5,3.1,sprintf('$\\alpha_2 = $ %5.2f',exp_VmVp),'fontweight','bold','FontSize',24,'Color',clr2)
-        set(text1,'HorizontalAlignment','center','VerticalAlignment','middle','Interpreter','Latex');    
+%% Plot values + best fit line
+plot(xvals_pl,data_pl,'x','MarkerEdgeColor',clr1,'MarkerSize',10,'LineWidth',2)
+hold on
 
-    case 3,
-        plot(xvals_pl(1:numruns,m),data_pl(1:numruns,m),'x','MarkerFaceColor',clr3,'MarkerEdgeColor',clr3,'MarkerSize',20,'LineWidth',2)
-        hold on
-        plot(xfit,coefs(1)+coefs(2).*xfit,'--','Color',clr3,'LineWidth',2)
-        
-        text1=text(1.5,3.7,sprintf('$\\alpha_1 = $ %5.2f',exp_VmVp),'fontweight','bold','FontSize',24,'Color',clr3)
-        set(text1,'HorizontalAlignment','center','VerticalAlignment','middle','Interpreter','Latex');    
+%%%%% TEST DRC: Vp effect %%
+%plot(xvals_pl(mpi_all>92),data_pl(mpi_all>92),'x','MarkerEdgeColor','r','MarkerSize',10,'LineWidth',2)
+%hold on
+%plot(xvals_pl(mpi_all<90),data_pl(mpi_all<90),'x','MarkerEdgeColor','g','MarkerSize',10,'LineWidth',2)
+%title('red = high MPI, green = low MPI, blue = ctrl mpi')
+%%%%% TEST DRC %%
 
-end
+plot(xfit2,intercept_VmVp+exp_VmVp.*xfit2,'--','Color','k','LineWidth',2)
+plot(xfit2,log2(y_fit),'-.','Color','k','LineWidth',2)
+
+%% Print best fit slope and p-value
+text1=text(1.5,3.5,sprintf('$\\alpha_3 = $ %5.2f',exp_VmVp),'fontweight','bold','FontSize',24,'Color',clr1)
+set(text1,'HorizontalAlignment','center','VerticalAlignment','middle','Interpreter','Latex');
+text2=text(1.5,2.5,sprintf('(p = %5.2f)',p1(2)),'fontweight','bold','FontSize',24,'Color',clr1)
+set(text2,'HorizontalAlignment','center','VerticalAlignment','middle','Interpreter','Latex');
+
 
 input_title1=sprintf('$\\frac{V_m}{V_p}$');
 text1=text(-4.75,-4.75,input_title1,'FontSize',30);
@@ -197,7 +253,7 @@ hold on
 set(ax1,'YTick',[-4 -3 -2 -1 0 1 2 3 4],'XTick',[-4 -3 -2 -1 0 1 2 3 4])
 box on
 
-VmVp=[list list(isort) xvals_pl(isort,m) data_pl(isort,m) mpi_all(isort)' fcor_all(isort)'*10^5 lh_all(isort)'/1000];
+VmVp=[list list(isort) xvals_pl(isort)' data_pl(isort)' mpi_all(isort)' fcor_all(isort)'*10^5 lh_all(isort)'/1000];
 
 end
 

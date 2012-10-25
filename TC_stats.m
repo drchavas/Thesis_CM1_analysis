@@ -900,6 +900,13 @@ for ii=1:i_tf-i_t0+1
             rmax_movave_g_temp=NaN;
         end
         rmax_movave_g(ii-floor(nfile_mean/2))=rmax_movave_g_temp;
+        
+        %%issue with 3 time steps where rmax is ~1000 km when otherwise at equilibrium ~ 10km DRC 23 Oct 2012
+        if(strcmp(subdir,'CTRLv0qrhSATqdz5000_nx3072_Cdx2sqrt2_drag'))
+            if(rmax_movave_g(ii-floor(nfile_mean/2))>1000)
+                rmax_movave_g(ii-floor(nfile_mean/2)) = NaN;
+            end
+        end
 
         assert(i_max<i_temp,'WARNING: rmax IS AT OUTER EDGE OF SEARCH AREA (R=R_WALL/8)')
         

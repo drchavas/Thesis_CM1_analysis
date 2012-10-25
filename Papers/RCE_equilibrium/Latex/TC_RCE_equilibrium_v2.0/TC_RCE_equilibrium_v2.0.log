@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009) (format=pdflatex 2009.11.7)  24 SEP 2012 16:21
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009) (format=pdflatex 2009.11.7)  24 OCT 2012 15:20
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -227,26 +227,23 @@ nd (jdm)
 (/usr/local/texlive/2009/texmf-dist/tex/latex/comment/comment.sty
 \CommentStream=\write5
 
-Excluding comment 'comment') (./TC_RCE_equilibrium_v2.0.aux
-
-LaTeX Warning: Label `eq:scalings' multiply defined.
-
-)
+Excluding comment 'comment') (./TC_RCE_equilibrium_v2.0.aux)
 \openout1 = `TC_RCE_equilibrium_v2.0.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 32.
-LaTeX Font Info:    ... okay on input line 32.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 32.
-LaTeX Font Info:    ... okay on input line 32.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 32.
-LaTeX Font Info:    ... okay on input line 32.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 32.
-LaTeX Font Info:    ... okay on input line 32.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 32.
-LaTeX Font Info:    ... okay on input line 32.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 32.
-LaTeX Font Info:    ... okay on input line 32.
- (/usr/local/texlive/2009/texmf-dist/tex/context/base/supp-pdf.mkii
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 39.
+LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 39.
+LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 39.
+LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 39.
+LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 39.
+LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 39.
+LaTeX Font Info:    ... okay on input line 39.
+
+(/usr/local/texlive/2009/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count115
 \scratchdimen=\dimen123
@@ -299,11 +296,11 @@ driver: dvips
 
 (1in=72.27pt, 1cm=28.45pt)
 -----------------------
-LaTeX Font Info:    Try loading font information for U+msa on input line 83.
+LaTeX Font Info:    Try loading font information for U+msa on input line 90.
 (/usr/local/texlive/2009/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2009/06/22 v3.00 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 83.
+LaTeX Font Info:    Try loading font information for U+msb on input line 90.
 
 (/usr/local/texlive/2009/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2009/06/22 v3.00 AMS symbols B
@@ -318,238 +315,219 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
 Non-PDF special ignored!{/usr/local/texlive/2009/texmf-var/fonts/map/pdftex/upd
 map/pdftex.map}
 
-] [1] [2] [3] [4] [5] [6] [7] [8] [9] [10] [11] [12] [13]
-[14] [15]
-Overfull \hbox (0.51218pt too wide) in paragraph at lines 225--226
-\OT1/cmr/m/n/12 given the di-men-sional pa-ram-e-ters $\OML/cmm/m/it/12 V[]$\OT
-1/cmr/m/n/12 , $\OML/cmm/m/it/12 f$\OT1/cmr/m/n/12 , and $\OML/cmm/m/it/12 l[]$
-\OT1/cmr/m/n/12 , there ex-ists only one rel-e-vant non-dimensional
- []
+] [1] [2] [3] [4] [5] [6] [7] [8]
+\openout4 = `TC_RCE_equilibrium_v2.0.ttt'.
 
-[16] [17] [18] [19]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 305.
+ (TC_RCE_equilibrium_v2.0.ttt)
+[9] [10] [11] [12] [13] [14] [15] [16] [17] [18] [19] [20] [21] [22] [23]
+[24] [25] [26]
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 450.
 
-
-(/usr/local/texlive/2009/texmf-dist/tex/latex/base/omscmr.fd
+ (/usr/local/texlive/2009/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 305.
- [20] [21]
-[22] [23] (./TC_RCE_equilibrium_v2.0.bbl [24
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 450.
 
-] [25]
+[27] [28] [29] (./TC_RCE_equilibrium_v2.0.bbl [30
+
+]
+Underfull \hbox (badness 2165) in paragraph at lines 79--84
+\OT1/cmr/m/n/12 TFANOT [] 2 . 0 . CO ; 2$, URL $\OT1/cmtt/m/n/12 http : / / dx 
+. doi . org / 10 . 1175 / 1520-[]0469(1989 ) 046<[]3431 :
+ []
+
+[31]
 Missing character: There is no Ð in font cmr12!
 Missing character: There is no Ð in font cmr12!
- [26]
-Underfull \hbox (badness 2111) in paragraph at lines 164--167
+ [32]
+Underfull \hbox (badness 2111) in paragraph at lines 183--186
 []\OT1/cmr/m/n/12 Smagorinsky, J., 1963: Gen-eral cir-cu-la-tion ex-per-i-ments
  with the prim-i-tive equa-
  []
 
-)
+[33])
 \openout3 = `TC_RCE_equilibrium_v2.0.fff'.
 
  (TC_RCE_equilibrium_v2.0.fff)
-AED endfloat: Processing end Figures and Tables [27]
-(./TC_RCE_equilibrium_v2.0.lof [28
+AED endfloat: Processing end Figures and Tables [34]
+(./TC_RCE_equilibrium_v2.0.lot)
+\tf@lot=\write6
+\openout6 = `TC_RCE_equilibrium_v2.0.lot'.
+
+ [35
 
 
 
-]
-
-LaTeX Warning: Reference `fig:mpicollapse' on page 38 undefined on input line 9
-.
+] (./TC_RCE_equilibrium_v2.0.ttt [36])
+(./TC_RCE_equilibrium_v2.0.lof [37
 
 
-Overfull \hbox (2.15665pt too wide) in paragraph at lines 9--9
- [][] []\OT1/cmr/m/n/12 Scaling of the equi-lib-rium value of each struc-tural 
-vari-able non-dimensionalized 
- []
 
-)
-\tf@lof=\write6
-\openout6 = `TC_RCE_equilibrium_v2.0.lof'.
+])
+\tf@lof=\write7
+\openout7 = `TC_RCE_equilibrium_v2.0.lof'.
 
- [29] (./TC_RCE_equilibrium_v2.0.fff
-<FIGURES_TC_RCE_equilibrium_v2.0/Fig0half_Sounding_ctrl.pdf, id=114, 569.12625p
+ [38] (./TC_RCE_equilibrium_v2.0.fff
+<FIGURES_TC_RCE_equilibrium_v2.0/Fig0half_Sounding_ctrl.pdf, id=145, 569.12625p
 t x 569.12625pt>
 File: FIGURES_TC_RCE_equilibrium_v2.0/Fig0half_Sounding_ctrl.pdf Graphic file (
 type pdf)
 
-<use FIGURES_TC_RCE_equilibrium_v2.0/Fig0half_Sounding_ctrl.pdf> [30
+<use FIGURES_TC_RCE_equilibrium_v2.0/Fig0half_Sounding_ctrl.pdf> [39
 
  <./FIGURES_TC_RCE_equilibrium_v2.0/Fig0half_Sounding_ctrl.pdf>]
-<FIGURES_TC_RCE_equilibrium_v2.0/Fig1_Domain_size.pdf, id=122, 569.12625pt x 45
+<FIGURES_TC_RCE_equilibrium_v2.0/Fig1_Domain_size.pdf, id=152, 569.12625pt x 45
 5.7025pt>
 File: FIGURES_TC_RCE_equilibrium_v2.0/Fig1_Domain_size.pdf Graphic file (type p
 df)
- <use FIGURES_TC_RCE_equilibrium_v2.0/Fig1_Domain_size.pdf> [31
+ <use FIGURES_TC_RCE_equilibrium_v2.0/Fig1_Domain_size.pdf> [40
 
  <./FIGURES_TC_RCE_equilibrium_v2.0/Fig1_Domain_size.pdf>]
-<FIGURES_TC_RCE_equilibrium_v2.0/Fig2_Control_run.pdf, id=131, 569.12625pt x 45
+<FIGURES_TC_RCE_equilibrium_v2.0/Fig2_Control_run.pdf, id=161, 569.12625pt x 45
 5.7025pt>
 File: FIGURES_TC_RCE_equilibrium_v2.0/Fig2_Control_run.pdf Graphic file (type p
 df)
- <use FIGURES_TC_RCE_equilibrium_v2.0/Fig2_Control_run.pdf> [32
+ <use FIGURES_TC_RCE_equilibrium_v2.0/Fig2_Control_run.pdf> [41
 
  <./FIGURES_TC_RCE_equilibrium_v2.0/Fig2_Control_run.pdf>]
-<FIGURES_TC_RCE_equilibrium_v2.0/Fig3_MPI_collapse_V.pdf, id=150, 569.12625pt x
+<FIGURES_TC_RCE_equilibrium_v2.0/Fig3_MPI_collapse_V.pdf, id=180, 569.12625pt x
  569.12625pt>
 File: FIGURES_TC_RCE_equilibrium_v2.0/Fig3_MPI_collapse_V.pdf Graphic file (typ
 e pdf)
  <use FIGURES_TC_RCE_equilibrium_v2.0/Fig3_MPI_collapse_V.pdf>
-[33
+[42
 
  <./FIGURES_TC_RCE_equilibrium_v2.0/Fig3_MPI_collapse_V.pdf>]
-<FIGURES_TC_RCE_equilibrium_v2.0/Fig4a_MPI_collapse_rm.pdf, id=170, 569.12625pt
+<FIGURES_TC_RCE_equilibrium_v2.0/Fig4a_MPI_collapse_rm.pdf, id=201, 569.12625pt
  x 569.12625pt>
 File: FIGURES_TC_RCE_equilibrium_v2.0/Fig4a_MPI_collapse_rm.pdf Graphic file (t
 ype pdf)
 
 <use FIGURES_TC_RCE_equilibrium_v2.0/Fig4a_MPI_collapse_rm.pdf>
-<FIGURES_TC_RCE_equilibrium_v2.0/Fig4b_MPI_collapse_r0.pdf, id=171, 569.12625pt
+<FIGURES_TC_RCE_equilibrium_v2.0/Fig4b_MPI_collapse_r0.pdf, id=202, 569.12625pt
  x 569.12625pt>
 File: FIGURES_TC_RCE_equilibrium_v2.0/Fig4b_MPI_collapse_r0.pdf Graphic file (t
 ype pdf)
 
-<use FIGURES_TC_RCE_equilibrium_v2.0/Fig4b_MPI_collapse_r0.pdf> [34
+<use FIGURES_TC_RCE_equilibrium_v2.0/Fig4b_MPI_collapse_r0.pdf> [43
 
  <./FIGURES_TC_RCE_equilibrium_v2.0/Fig4a_MPI_collapse_rm.pdf> <./FIGURES_TC_RC
 E_equilibrium_v2.0/Fig4b_MPI_collapse_r0.pdf>]
-<FIGURES_TC_RCE_equilibrium_v2.0/Fig5_MPI_collapse_r0ctrlwcool.pdf, id=206, 569
+<FIGURES_TC_RCE_equilibrium_v2.0/Fig5_MPI_collapse_r0ctrlwcool.pdf, id=237, 569
 .12625pt x 569.12625pt>
 File: FIGURES_TC_RCE_equilibrium_v2.0/Fig5_MPI_collapse_r0ctrlwcool.pdf Graphic
  file (type pdf)
 
 <use FIGURES_TC_RCE_equilibrium_v2.0/Fig5_MPI_collapse_r0ctrlwcool.pdf>
-[35
+[44
 
  <./FIGURES_TC_RCE_equilibrium_v2.0/Fig5_MPI_collapse_r0ctrlwcool.pdf>]
-<FIGURES_TC_RCE_equilibrium_v2.0/Fig5half_LR_nocollapse_r0ctrlwcool.pdf, id=230
-, 569.12625pt x 569.12625pt>
-File: FIGURES_TC_RCE_equilibrium_v2.0/Fig5half_LR_nocollapse_r0ctrlwcool.pdf Gr
-aphic file (type pdf)
-
-<use FIGURES_TC_RCE_equilibrium_v2.0/Fig5half_LR_nocollapse_r0ctrlwcool.pdf>
-[36
-
- <./FIGURES_TC_RCE_equilibrium_v2.0/Fig5half_LR_nocollapse_r0ctrlwcool.pdf>]
-<FIGURES_TC_RCE_equilibrium_v2.0/Fig6_Dimensional_scaling.pdf, id=255, 426.5937
+<FIGURES_TC_RCE_equilibrium_v2.0/Fig6_Dimensional_scaling.pdf, id=261, 426.5937
 5pt x 853.1875pt>
 File: FIGURES_TC_RCE_equilibrium_v2.0/Fig6_Dimensional_scaling.pdf Graphic file
  (type pdf)
 
-<use FIGURES_TC_RCE_equilibrium_v2.0/Fig6_Dimensional_scaling.pdf> [37
+<use FIGURES_TC_RCE_equilibrium_v2.0/Fig6_Dimensional_scaling.pdf> [45
 
  <./FIGURES_TC_RCE_equilibrium_v2.0/Fig6_Dimensional_scaling.pdf>]
-<FIGURES_TC_RCE_equilibrium_v2.0/Fig7a_Nondimensional_scaling_V.pdf, id=275, 42
+<FIGURES_TC_RCE_equilibrium_v2.0/Fig7a_Nondimensional_scaling_V.pdf, id=281, 42
 6.59375pt x 426.59375pt>
 File: FIGURES_TC_RCE_equilibrium_v2.0/Fig7a_Nondimensional_scaling_V.pdf Graphi
 c file (type pdf)
 
 <use FIGURES_TC_RCE_equilibrium_v2.0/Fig7a_Nondimensional_scaling_V.pdf>
-<FIGURES_TC_RCE_equilibrium_v2.0/Fig7b_Nondimensional_scaling_rm.pdf, id=276, 4
+<FIGURES_TC_RCE_equilibrium_v2.0/Fig7b_Nondimensional_scaling_rm.pdf, id=282, 4
 26.59375pt x 426.59375pt>
 File: FIGURES_TC_RCE_equilibrium_v2.0/Fig7b_Nondimensional_scaling_rm.pdf Graph
 ic file (type pdf)
 
 <use FIGURES_TC_RCE_equilibrium_v2.0/Fig7b_Nondimensional_scaling_rm.pdf>
-<FIGURES_TC_RCE_equilibrium_v2.0/Fig7c_Nondimensional_scaling_r0.pdf, id=277, 4
+<FIGURES_TC_RCE_equilibrium_v2.0/Fig7c_Nondimensional_scaling_r0.pdf, id=283, 4
 26.59375pt x 426.59375pt>
 File: FIGURES_TC_RCE_equilibrium_v2.0/Fig7c_Nondimensional_scaling_r0.pdf Graph
 ic file (type pdf)
 
 <use FIGURES_TC_RCE_equilibrium_v2.0/Fig7c_Nondimensional_scaling_r0.pdf>
-
-LaTeX Warning: Reference `fig:mpicollapse' on page 38 undefined on input line 9
-3.
-
-
-LaTeX Warning: Reference `fig:mpicollapse' on page 38 undefined on input line 9
-3.
-
-[38
+[46
 
  <./FIGURES_TC_RCE_equilibrium_v2.0/Fig7a_Nondimensional_scaling_V.pdf> <./FIGU
 RES_TC_RCE_equilibrium_v2.0/Fig7b_Nondimensional_scaling_rm.pdf> <./FIGURES_TC_
 RCE_equilibrium_v2.0/Fig7c_Nondimensional_scaling_r0.pdf>]
-<FIGURES_TC_RCE_equilibrium_v2.0/Fig8a_CkCd_nondimensional_scaling_V.pdf, id=35
-0, 426.59375pt x 426.59375pt>
-File: FIGURES_TC_RCE_equilibrium_v2.0/Fig8a_CkCd_nondimensional_scaling_V.pdf G
-raphic file (type pdf)
+<FIGURES_TC_RCE_equilibrium_v2.0/Fig5half_LR_nocollapse_r0ctrlwcool.pdf, id=356
+, 569.12625pt x 569.12625pt>
+File: FIGURES_TC_RCE_equilibrium_v2.0/Fig5half_LR_nocollapse_r0ctrlwcool.pdf Gr
+aphic file (type pdf)
 
-<use FIGURES_TC_RCE_equilibrium_v2.0/Fig8a_CkCd_nondimensional_scaling_V.pdf>
+<use FIGURES_TC_RCE_equilibrium_v2.0/Fig5half_LR_nocollapse_r0ctrlwcool.pdf>
+[47
+
+ <./FIGURES_TC_RCE_equilibrium_v2.0/Fig5half_LR_nocollapse_r0ctrlwcool.pdf>]
+<FIGURES_TC_RCE_equilibrium_v2.0/Fig9_CkCd_scaling_VmVp.pdf, id=380, 426.59375p
+t x 426.59375pt>
+File: FIGURES_TC_RCE_equilibrium_v2.0/Fig9_CkCd_scaling_VmVp.pdf Graphic file (
+type pdf)
+
+<use FIGURES_TC_RCE_equilibrium_v2.0/Fig9_CkCd_scaling_VmVp.pdf> [48
+
+ <./FIGURES_TC_RCE_equilibrium_v2.0/Fig9_CkCd_scaling_VmVp.pdf>]
 <FIGURES_TC_RCE_equilibrium_v2.0/Fig8b_CkCd_nondimensional_scaling_rm.pdf, id=3
-51, 426.59375pt x 426.59375pt>
+97, 426.59375pt x 426.59375pt>
 File: FIGURES_TC_RCE_equilibrium_v2.0/Fig8b_CkCd_nondimensional_scaling_rm.pdf 
 Graphic file (type pdf)
 
 <use FIGURES_TC_RCE_equilibrium_v2.0/Fig8b_CkCd_nondimensional_scaling_rm.pdf>
 <FIGURES_TC_RCE_equilibrium_v2.0/Fig8c_CkCd_nondimensional_scaling_r0.pdf, id=3
-52, 426.59375pt x 426.59375pt>
+98, 426.59375pt x 426.59375pt>
 File: FIGURES_TC_RCE_equilibrium_v2.0/Fig8c_CkCd_nondimensional_scaling_r0.pdf 
 Graphic file (type pdf)
 
 <use FIGURES_TC_RCE_equilibrium_v2.0/Fig8c_CkCd_nondimensional_scaling_r0.pdf>
-[39
+[49
 
- <./FIGURES_TC_RCE_equilibrium_v2.0/Fig8a_CkCd_nondimensional_scaling_V.pdf> <.
-/FIGURES_TC_RCE_equilibrium_v2.0/Fig8b_CkCd_nondimensional_scaling_rm.pdf> <./F
-IGURES_TC_RCE_equilibrium_v2.0/Fig8c_CkCd_nondimensional_scaling_r0.pdf>]
-<FIGURES_TC_RCE_equilibrium_v2.0/Fig9_CkCd_scaling_VmVp.pdf, id=425, 569.12625p
-t x 569.12625pt>
-File: FIGURES_TC_RCE_equilibrium_v2.0/Fig9_CkCd_scaling_VmVp.pdf Graphic file (
-type pdf)
-
-<use FIGURES_TC_RCE_equilibrium_v2.0/Fig9_CkCd_scaling_VmVp.pdf> [40
-
- <./FIGURES_TC_RCE_equilibrium_v2.0/Fig9_CkCd_scaling_VmVp.pdf>]
-<FIGURES_TC_RCE_equilibrium_v2.0/Fig10_lh_optimize.pdf, id=441, 569.12625pt x 5
+ <./FIGURES_TC_RCE_equilibrium_v2.0/Fig8b_CkCd_nondimensional_scaling_rm.pdf> <
+./FIGURES_TC_RCE_equilibrium_v2.0/Fig8c_CkCd_nondimensional_scaling_r0.pdf>]
+<FIGURES_TC_RCE_equilibrium_v2.0/Fig10_lh_optimize.pdf, id=448, 569.12625pt x 5
 69.12625pt>
 File: FIGURES_TC_RCE_equilibrium_v2.0/Fig10_lh_optimize.pdf Graphic file (type 
 pdf)
  <use FIGURES_TC_RCE_equilibrium_v2.0/Fig10_lh_optimize.pdf>
-[41
+[50
 
  <./FIGURES_TC_RCE_equilibrium_v2.0/Fig10_lh_optimize.pdf>])
-(./TC_RCE_equilibrium_v2.0.aux)
-
-LaTeX Warning: There were undefined references.
-
-
-LaTeX Warning: There were multiply-defined labels.
-
- ) 
+(./TC_RCE_equilibrium_v2.0.aux) ) 
 Here is how much of TeX's memory you used:
- 3532 strings out of 493848
- 50936 string characters out of 3149207
- 105550 words of memory out of 3000000
- 6715 multiletter control sequences out of 15000+200000
- 21781 words of font info for 79 fonts, out of 3000000 for 9000
+ 3558 strings out of 493848
+ 51304 string characters out of 3149207
+ 107560 words of memory out of 3000000
+ 6735 multiletter control sequences out of 15000+200000
+ 21950 words of font info for 80 fonts, out of 3000000 for 9000
  714 hyphenation exceptions out of 8191
- 34i,14n,45p,1813b,326s stack positions out of 5000i,500n,10000p,200000b,50000s
-</usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb
-></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb
-></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb>
-</usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb><
-/usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></u
-sr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr
-/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/l
-ocal/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/loc
-al/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/
-texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/tex
-live/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texliv
-e/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr/local/texlive/
-2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2
-009/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/200
-9/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2009/
-texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2009/te
-xmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2009/tex
-mf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb>
-Output written on TC_RCE_equilibrium_v2.0.pdf (42 pages, 467080 bytes).
+ 34i,14n,45p,2288b,332s stack positions out of 5000i,500n,10000p,200000b,50000s
+</usr/local/texlive/2009/texmf-dist/fonts/type
+1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1
+/public/amsfonts/cm/cmcsc10.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1
+/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/
+public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/p
+ublic/amsfonts/cm/cmmi6.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/pub
+lic/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/publi
+c/amsfonts/cm/cmr10.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/
+amsfonts/cm/cmr12.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/am
+sfonts/cm/cmr6.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfo
+nts/cm/cmr7.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts
+/cm/cmr8.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm
+/cmss8.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/c
+msy10.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cm
+sy6.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy
+7.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.
+pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.p
+fb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pf
+b></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb
+></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10
+.pfb>
+Output written on TC_RCE_equilibrium_v2.0.pdf (51 pages, 513290 bytes).
 PDF statistics:
- 518 PDF objects out of 1000 (max. 8388607)
+ 532 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 86 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 81 words of extra memory for PDF output out of 10000 (max. 10000000)
 

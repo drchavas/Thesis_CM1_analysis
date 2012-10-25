@@ -13,10 +13,10 @@ tic
 %name out output subdir (within simsets_Tmean#/PLOTS/[sim_set]/) where plots will be saved
 %sim_sets_all = {'Lx' 'dx' 'dz' 'lh' 'lv' 'qro' 'ro' 'fcor' 'Tsst' 'Ttpp' 'usfc' 'usfc_drag' 'Qcool' 'nondim' 'nondim1.5' 'nondim2' 'mpi' 'Cd' 'QcoolVpcnst' 'QcoolVplvHcnst'}; 
 %sim_sets_all = {'Tsst_drag' 'Ttpp_drag' 'usfc_drag' 'Qcool_drag' 'nondim2_drag' 'Cd_drag'}; 
-%sim_sets_all = {'test'}; 
-sim_sets_all = {'transient'}; 
+sim_sets_all = {'nondim_drag' 'nondim_all_drag'}; 
+%sim_sets_all = {'single'}; 
     %IF 'single'
-    sim_single = 'CTRLv0qrhSATqdz5000_nx3072_Cddiv2_drag';    %runs only this simulation
+    sim_single = 'CTRLv0qrhSATqdz5000_nx3072_Cdx2sqrt2_drag';    %runs only this simulation
 moist = 1;  %1 = moist; else = dry
     
 %% Which scripts should I run?
@@ -30,12 +30,12 @@ run_TC_stats_plot = 1;  %overwrites old [simset].mat file and plots automaticall
 %% Parameters for scripts
 v_usr_fracVp = .1;  %wind speed as fraction of Vp; beyond this radius, radiative subsidence radial wind profile should apply.
 T_mean = 2; %[days]; averaging time period used to calculate moving time-average radial profile from which rmax and r0 are calculated
-dt_equil = 10;  %[days]; how long must be quasi-steady to define equilibrium
+dt_equil = 30;  %30; [days]; how long must be quasi-steady to define equilibrium
     %%For static equilibrium (equil_dynamic = 0):
-    dt_final = 30;  %[day]; length of static equilibrium period
-    tf = 100;   %[day]; end of static equilibrium period
+    dt_final = 50;  %50; [day]; length of static equilibrium period
+    tf = 150;   %150; [day]; end of static equilibrium period
     %%For dynamic (most stable) equilibrium (equil_dynamic = 1):
-    dt_final_dynamic = 10;  %[days]; length of most stable period after day 60 over which equilibrium is calculated
+    dt_final_dynamic = 30;  %30; [days]; length of most stable period after day 60 over which equilibrium is calculated
 
 %Plotting domain (TC_stats_plot.m only)
 rmin_plot = 0;  %[km]
@@ -88,8 +88,6 @@ for jj = 1:length(sim_sets_all)
             units = '-';
             subdirs_set = {
 
-'CTRLv0qrhSATqdz5000_nx3072_Tthresh248K_rad4.0K_drag'
-
             }
             multipliers = ones(length(subdirs_set),1);
         case 'DRY'
@@ -138,17 +136,17 @@ for jj = 1:length(sim_sets_all)
             'CTRLv0qrhSATqdz5000_nx3072_Tthresh175K_DRY'
             'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_DRY'
             }
-        case 'Lx'
+        case 'Lx_drag'
             CTRL_val = 12288; %CTRL value of quantity varied across simulations
             units = 'km';
             multipliers = [-4 -3 -2 -1 0];
             subdirs_set = {
                 %%DOMAIN SIZE
-                'CTRLv0qrhSATqdz5000_nx192'
-                'CTRLv0qrhSATqdz5000'
-                'CTRLv0qrhSATqdz5000_nx768'
-                'CTRLv0qrhSATqdz5000_nx1536'
-                'CTRLv0qrhSATqdz5000_nx3072'
+                'CTRLv0qrhSATqdz5000_nx192_drag'
+                'CTRLv0qrhSATqdz5000_drag'
+                'CTRLv0qrhSATqdz5000_nx768_drag'
+                'CTRLv0qrhSATqdz5000_nx1536_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_drag'
             }
         case 'dx'
             CTRL_val = 4; %CTRL value of quantity varied across simulations
@@ -175,75 +173,75 @@ for jj = 1:length(sim_sets_all)
                 'CTRLv0qrhSATqdz5000_nx3072_dz1250'
 
             }
-        case 'lh'
+        case 'lh_drag'
             CTRL_val = 1500; %CTRL value of quantity varied across simulations
             units = 'm';
             multipliers = [-3 -2 -1 0 1 2 3];
             subdirs_set = {
                 %%HORIZONTAL MIXING LENGTH
-                'CTRLv0qrhSATqdz5000_nx3072_lh187.5'
-                'CTRLv0qrhSATqdz5000_nx3072_lh375'
-                'CTRLv0qrhSATqdz5000_nx3072_lh750'
-                'CTRLv0qrhSATqdz5000_nx3072'
-                'CTRLv0qrhSATqdz5000_nx3072_lh3000'
-                'CTRLv0qrhSATqdz5000_nx3072_lh6000'
-                'CTRLv0qrhSATqdz5000_nx3072_lh12000'
+                'CTRLv0qrhSATqdz5000_nx3072_lh187.5_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_lh375_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_lh750_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_lh3000_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_lh6000_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_lh12000_drag'
             }
-        case 'lv'
+        case 'lv_drag'
             CTRL_val = 100; %CTRL value of quantity varied across simulations
             units = 'm';
             multipliers = [-3 -2 -1 0 1 2 3];
             subdirs_set = {
                 %%VERTICAL MIXING LENGTH
-                'CTRLv0qrhSATqdz5000_nx3072_lv12.5'
-                'CTRLv0qrhSATqdz5000_nx3072_lv25'
-                'CTRLv0qrhSATqdz5000_nx3072_lv50'
-                'CTRLv0qrhSATqdz5000_nx3072'
-                'CTRLv0qrhSATqdz5000_nx3072_lv200'
-                'CTRLv0qrhSATqdz5000_nx3072_lv400'
-                'CTRLv0qrhSATqdz5000_nx3072_lv800'
+                'CTRLv0qrhSATqdz5000_nx3072_lv12.5_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_lv25_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_lv50_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_lv200_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_lv400_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_lv800_drag'
             }
-        case 'qro'
+        case 'qro_drag'
             CTRL_val = 200; %CTRL value of quantity varied across simulations
             units = 'km';
             multipliers = [-3 -2 -1 0 1 2 3];
             subdirs_set = {
                 %%HORIZ SCALE OF MOISTURE PERTURBATION
-                'CTRLv0qro25000qrhSATqdz5000_nx3072'
-                'CTRLv0qro50000qrhSATqdz5000_nx3072'
-                'CTRLv0qro100000qrhSATqdz5000_nx3072'
-                'CTRLv0qrhSATqdz5000_nx3072'
-                'CTRLv0qro400000qrhSATqdz5000_nx3072'
-                'CTRLv0qro800000qrhSATqdz5000_nx3072'
-                'CTRLv0qro1600000qrhSATqdz5000_nx3072'
+                'CTRLv0qro25000qrhSATqdz5000_nx3072_drag'
+                'CTRLv0qro50000qrhSATqdz5000_nx3072_drag'
+                'CTRLv0qro100000qrhSATqdz5000_nx3072_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_drag'
+                'CTRLv0qro400000qrhSATqdz5000_nx3072_drag'
+                'CTRLv0qro800000qrhSATqdz5000_nx3072_drag'
+                'CTRLv0qro1600000qrhSATqdz5000_nx3072_drag'
             }
-        case 'ro'
+        case 'ro_drag'
             CTRL_val = 400; %CTRL value of quantity varied across simulations
             units = 'km';
             multipliers = [-3 -2 -1 0 1 2 3];
             subdirs_set = {
                 %%HORIZ SCALE OF WIND PERTURBATION
-                'CTRLro50000v12.5qrh0qdz5000_nx3072'
-                'CTRLro100000v12.5qrh0qdz5000_nx3072'
-                'CTRLro200000v12.5qrh0qdz5000_nx3072'
-                'CTRLv12.5qrh0qdz5000_nx3072'
-                'CTRLro800000v12.5qrh0qdz5000_nx3072'
-                'CTRLro1600000v12.5qrh0qdz5000_nx3072'
-                'CTRLro3200000v12.5qrh0qdz5000_nx3072'
+                'CTRLro50000v12.5qrh0qdz5000_nx3072_drag'
+                'CTRLro100000v12.5qrh0qdz5000_nx3072_drag'
+                'CTRLro200000v12.5qrh0qdz5000_nx3072_drag'
+                'CTRLv12.5qrh0qdz5000_nx3072_drag'
+                'CTRLro800000v12.5qrh0qdz5000_nx3072_drag'
+                'CTRLro1600000v12.5qrh0qdz5000_nx3072_drag'
+                'CTRLro3200000v12.5qrh0qdz5000_nx3072_drag'
             }
-        case 'fcor'
+        case 'fcor_drag'
             CTRL_val = 5; %CTRL value of quantity varied across simulations
             units = '**10^{-5} s^{-1}';
-            multipliers = [-2 -1 0 1 2 3];
+            multipliers = [-3 -2 -1 0 1 2 3];
             subdirs_set = {
                 %%CORIOLIS
-                %'CTRLv0qrhSATqdz5000_nx3072_fdiv8' %-- HITS DOMAIN WALL
-                'CTRLv0qrhSATqdz5000_nx3072_fdiv4'
-                'CTRLv0qrhSATqdz5000_nx3072_fdiv2'
-                'CTRLv0qrhSATqdz5000_nx3072'
-                'CTRLv0qrhSATqdz5000_nx3072_fx2'
-                'CTRLv0qrhSATqdz5000_nx3072_fx4'
-                'CTRLv0qrhSATqdz5000_nx3072_fx8'
+                'CTRLv0qrhSATqdz5000_nx3072_fdiv8_drag' %-- HITS DOMAIN WALL?
+                'CTRLv0qrhSATqdz5000_nx3072_fdiv4_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_fdiv2_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_fx2_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_fx4_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_fx8_drag'
             }
         case 'Tsst_drag'
             CTRL_val = 300; %CTRL value of quantity varied across simulations
@@ -307,30 +305,45 @@ for jj = 1:length(sim_sets_all)
             CTRL_val = 1.5; %CTRL value of quantity varied across simulations
             units = '**10^-3';
             %multipliers = [-3 -2 -1 0 1 2 3];
-            multipliers = [-3 -2 -1 0 1];
+            multipliers = [-3 -2 -1.5 -1 -.5 0 .5 1];
             subdirs_set = {
                 %%DRAG COEFFICIENT
                 'CTRLv0qrhSATqdz5000_nx3072_Cddiv8_drag'
                 'CTRLv0qrhSATqdz5000_nx3072_Cddiv4_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_Cddiv2sqrt2_drag'
                 'CTRLv0qrhSATqdz5000_nx3072_Cddiv2_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_Cddivsqrt2_drag'
                 'CTRLv0qrhSATqdz5000_nx3072_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_Cdxsqrt2_drag'
                 'CTRLv0qrhSATqdz5000_nx3072_Cdx2_drag'
+                %%'CTRLv0qrhSATqdz5000_nx3072_Cdx2sqrt2_drag' % -- equilibrates, but way different than all other simulations
                 %%'CTRLv0qrhSATqdz5000_nx3072_Cdx4_drag' % -- wildly out of equilibrium
                 %%'CTRLv0qrhSATqdz5000_nx3072_Cdx8_drag' % -- wildly out of equilibrium
             }
-        case 'QcoolVpcnst'
+        case 'QcoolVpcnst_Ttpp_drag'
             CTRL_val = 1; %CTRL value of quantity varied across simulations
             units = 'K day^{-1}';
-            multipliers = [-1 0 1 2 3 4 5];
+            multipliers = [-1 0 1 2 3];
             subdirs_set = {
-                %%Qcool at constant Vp (can't get Vp ~ 92 m/s with rad0.125)
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh175K_rad0.25K'
-                'CTRLv0qrhSATqdz5000_nx3072'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh220K_rad1.0K'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh237K_rad2.0K'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh247K_rad4.0K'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh255K_rad8.0K'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh257K_rad16.0K'
+                %%Qcool at constant Vp by varying Ttpp
+                'CTRLv0qrhSATqdz5000_nx3072_Tthresh175K_rad0.25K_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_Tthresh220K_rad1.0K_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_Tthresh237K_rad2.0K_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_Tthresh248K_rad4.0K_drag'
+            }
+        case 'QcoolVpcnst_usfc_drag'
+            CTRL_val = 1; %CTRL value of quantity varied across simulations
+            units = 'K day^{-1}';
+            multipliers = [-2 -1 0 1 2 3];
+            subdirs_set = {
+                %%Qcool at constant Vp by varying usfc (= roughly constant H)
+                'CTRLv0qrhSATqdz5000_nx3072_usfc.7_rad0.125K_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_usfc1.5_rad0.25K_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_usfc6.4_rad1.0K_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_usfc15_rad2.0K_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_usfc34_rad4.0K_drag'
             }
         case 'QcoolVplvHcnst'
             CTRL_val = 1; %CTRL value of quantity varied across simulations
@@ -347,11 +360,88 @@ for jj = 1:length(sim_sets_all)
                 %'CTRLv0qrhSATqdz5000_nx3072_Tthresh255K_rad8.0K_lv26'
                 %'CTRLv0qrhSATqdz5000_nx3072_Tthresh257K_rad16.0K_lv19'
             }
-        case 'nondim2_drag'
+        case 'nondim_drag'
             CTRL_val = 1; %CTRL value of quantity varied across simulations
             units = '-';
 
             subdirs_set = {
+                'CTRLv0qrhSATqdz5000_nx3072_drag'
+
+%}            
+                %%Ttpp
+                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_Tthresh225K_drag'
+                %'CTRLv0qrhSATqdz5000_nx3072_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_Tthresh175K_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_drag'
+           
+                %%CORIOLIS
+                %%'CTRLv0qrhSATqdz5000_nx3072_fdiv8_drag' -- DOMAIN WALL?
+                'CTRLv0qrhSATqdz5000_nx3072_fdiv4_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_fdiv2_drag'
+                %'CTRLv0qrhSATqdz5000_nx3072_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_fx2_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_fx4_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_fx8_drag'
+                
+                %%HORIZONTAL MIXING LENGTH
+                'CTRLv0qrhSATqdz5000_nx3072_lh187.5_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_lh375_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_lh750_drag'
+                %'CTRLv0qrhSATqdz5000_nx3072_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_lh3000_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_lh6000_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_lh12000_drag'
+            }
+            multipliers = ones(length(subdirs_set),1);
+        case 'nondim_all_drag'
+            CTRL_val = 1; %CTRL value of quantity varied across simulations
+            units = '-';
+
+            subdirs_set = {
+
+                'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fx2_lh12000_ts8_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fx4_lh6000_ts8_drag'
+
+                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fx2_lh12000_ts8_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_lh12000_ts8_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fdiv4_lh750_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fx4_lh6000_drag'
+            
+                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_lh187.5_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fx4_lh3000_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fdiv4_lh750_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fdiv4_lh375_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fdiv2_lh187.5_drag'
+
+                'CTRLv0qrhSATqdz5000_nx3072_drag'
+
+%}            
+                %%Ttpp
+                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_Tthresh225K_drag'
+                %'CTRLv0qrhSATqdz5000_nx3072_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_Tthresh175K_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_drag'
+           
+                %%CORIOLIS
+                %%'CTRLv0qrhSATqdz5000_nx3072_fdiv8_drag' -- HITS DOMAIN WALL
+                'CTRLv0qrhSATqdz5000_nx3072_fdiv4_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_fdiv2_drag'
+                %'CTRLv0qrhSATqdz5000_nx3072_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_fx2_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_fx4_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_fx8_drag'
+                
+                %%HORIZONTAL MIXING LENGTH
+                'CTRLv0qrhSATqdz5000_nx3072_lh187.5_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_lh375_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_lh750_drag'
+                %'CTRLv0qrhSATqdz5000_nx3072_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_lh3000_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_lh6000_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_lh12000_drag'
+                
                 'CTRLv0qrhSATqdz5000_nx3072_drag'
                 'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fdiv2_lh750_drag'
                 'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fdiv2_drag'
@@ -359,120 +449,9 @@ for jj = 1:length(sim_sets_all)
                 'CTRLv0qrhSATqdz5000_nx3072_fdiv2_lh750_drag'
                 'CTRLv0qrhSATqdz5000_nx3072_fx2_lh3000_drag'
                 'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_lh3000_drag'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fx2_drag'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fx2_lh3000_drag'
-            }
-            multipliers = ones(length(subdirs_set),1);
-        case 'nondim'
-            CTRL_val = 1; %CTRL value of quantity varied across simulations
-            units = '-';
+                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fx2_drag'      %very weak storm
+                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fx2_lh3000_drag' %very weak storm
 
-            subdirs_set = {
-                'CTRLv0qrhSATqdz5000_nx3072'
-
-%}            
-                %%Ttpp
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh225K'
-                %'CTRLv0qrhSATqdz5000_nx3072'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh175K'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K'
-           
-                %%CORIOLIS
-                %%'CTRLv0qrhSATqdz5000_nx3072_fdiv8' -- HITS DOMAIN WALL
-                'CTRLv0qrhSATqdz5000_nx3072_fdiv4'
-                'CTRLv0qrhSATqdz5000_nx3072_fdiv2'
-                %'CTRLv0qrhSATqdz5000_nx3072'
-                'CTRLv0qrhSATqdz5000_nx3072_fx2'
-                'CTRLv0qrhSATqdz5000_nx3072_fx4'
-                'CTRLv0qrhSATqdz5000_nx3072_fx8'
-                
-                %%HORIZONTAL MIXING LENGTH
-                'CTRLv0qrhSATqdz5000_nx3072_lh187.5'
-                'CTRLv0qrhSATqdz5000_nx3072_lh375'
-                'CTRLv0qrhSATqdz5000_nx3072_lh750'
-                %'CTRLv0qrhSATqdz5000_nx3072'
-                'CTRLv0qrhSATqdz5000_nx3072_lh3000'
-                'CTRLv0qrhSATqdz5000_nx3072_lh6000'
-                'CTRLv0qrhSATqdz5000_nx3072_lh12000'
-            }
-            multipliers = ones(length(subdirs_set),1);
-        case 'nondim1.5'
-            CTRL_val = 1; %CTRL value of quantity varied across simulations
-            units = '-';
-
-            subdirs_set = {
-            'CTRLv0qrhSATqdz5000_nx3072'
-            'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fdiv2'
-            'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fx2_lh3000'
-            'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fdiv2_lh750'
-            'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_lh3000'
-            'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_lh750'
-            'CTRLv0qrhSATqdz5000_nx3072_fdiv2_lh750'
-            'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fx2'
-            'CTRLv0qrhSATqdz5000_nx3072_fx2_lh3000'
-            }
-            multipliers = ones(length(subdirs_set),1);
-            
-        case 'nondim_all'
-            CTRL_val = 1; %CTRL value of quantity varied across simulations
-            units = '-';
-
-            subdirs_set = {
-                'CTRLv0qrhSATqdz5000_nx3072'
-            
-                %%1-parm
-                %%Ttpp
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh225K'
-                %'CTRLv0qrhSATqdz5000_nx3072'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh175K'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K'
-           
-                %%CORIOLIS
-                %%'CTRLv0qrhSATqdz5000_nx3072_fdiv8' -- HITS DOMAIN WALL
-                'CTRLv0qrhSATqdz5000_nx3072_fdiv4'
-                'CTRLv0qrhSATqdz5000_nx3072_fdiv2'
-                %'CTRLv0qrhSATqdz5000_nx3072'
-                'CTRLv0qrhSATqdz5000_nx3072_fx2'
-                'CTRLv0qrhSATqdz5000_nx3072_fx4'
-                'CTRLv0qrhSATqdz5000_nx3072_fx8'
-                
-                %%HORIZONTAL MIXING LENGTH
-                'CTRLv0qrhSATqdz5000_nx3072_lh187.5'
-                'CTRLv0qrhSATqdz5000_nx3072_lh375'
-                'CTRLv0qrhSATqdz5000_nx3072_lh750'
-                %'CTRLv0qrhSATqdz5000_nx3072'
-                'CTRLv0qrhSATqdz5000_nx3072_lh3000'
-                'CTRLv0qrhSATqdz5000_nx3072_lh6000'
-                'CTRLv0qrhSATqdz5000_nx3072_lh12000'
-
-                %2-parm
-                'CTRLv0qrhSATqdz5000_nx3072'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fdiv2'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fx2_lh3000'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fdiv2_lh750'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_lh3000'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_lh750'
-                'CTRLv0qrhSATqdz5000_nx3072_fdiv2_lh750'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fx2'
-                'CTRLv0qrhSATqdz5000_nx3072_fx2_lh3000'
-                
-                %3-parm (extreme values of nondim only)
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fdiv2_lh187.5'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fdiv4_lh750'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fdiv4_lh750'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_lh187.5'
-
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fdiv4'
-
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_lh12000'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fx4_lh3000'
-
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fx2_lh12000'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh150K_fx4_lh6000'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fx2_lh12000'
-                'CTRLv0qrhSATqdz5000_nx3072_Tthresh250K_fx4_lh6000'
             }
             multipliers = ones(length(subdirs_set),1);
             
@@ -480,8 +459,13 @@ for jj = 1:length(sim_sets_all)
             CTRL_val = 1; %CTRL value of quantity varied across simulations
             units = '-';
             subdirs_set = {
-                'CTRLv0qrhSATqro400000qdz5000_nx3072_fdiv2_lh3000_drag'
-                'CTRLv0qrhSATqro100000qdz5000_nx3072_fx2_lh750_drag'
+                'CTRLv0qrhSATqdz5000_nx3072_drag'   %150 days
+                'CTRLv0qrhSATqro274000qdz5000_nx3072_Tthresh150K_lh2055_drag'
+                'CTRLv0qrhSATqro140000qdz5000_nx3072_usfc10_lh1050_drag'    %150 days
+                'CTRLv0qrhSATqro110000qdz5000_nx3072_Tthresh250K_lh825_drag'    %150 days
+                'CTRLv0qrhSATqro400000qdz5000_nx3072_fdiv2_lh3000_drag' %100 days
+                'CTRLv0qrhSATqro100000qdz5000_nx3072_fx2_lh750_drag'    %100 days
+                'CTRLv0qrhSATqro296000qdz5000_nx3072_usfc.5_lh2220_drag'    %150 days
             
 %                'CTRLv0qrhSATqdz5000_nx3072'
 %                'CTRLv0qro100000qrhSATqdz5000_nx3072_Tthresh250K_lh750_75day'

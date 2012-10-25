@@ -14,8 +14,7 @@ set(0,'defaultaxesfontsize',12,'defaultaxesfontweight','bold','defaultlinelinewi
 %clf(1)
 
 %'dx' 'dz' 'domain' 'lh' 'lv' 'fcor' 'qro' 'ro' 'Qrad' 'Tsst' 'Ttpp' 'usfc' 'mpi'
-%sim_sets = {'lh' 'lv' 'fcor' 'qro' 'ro' 'mpi' 'Cd'}
-sim_sets = {'lh' 'lv' 'fcor' 'qro' 'ro' 'Ttpp'}
+sim_sets = {'lh_drag' 'lv_drag' 'fcor_drag' 'qro_drag' 'ro_drag' 'Ttpp_drag'}
 
 T_mean = 2; %[day]
 equil_dynamic = 1;  %1 = use dynamic equilibrium
@@ -59,13 +58,17 @@ for m=1:length(sim_sets)
     load(sprintf('%s/%s.mat',subdir_out2,sim_set));
     pl_clrs={'b' 'r' 'g' 'c' 'k' 'm' 'y' 'b--' 'r--' 'g--' 'c--' 'k--' 'm--' 'y--'};
     
-    i_ctrl = find(strcmp(subdirs_set,'CTRLv0qrhSATqdz5000_nx3072')==1,1);
+    if(strcmp(sim_set,'ro_drag'))
+        i_ctrl = find(strcmp(subdirs_set,'CTRLv12.5qrh0qdz5000_nx3072_drag')==1,1);
+    else
+        i_ctrl = find(strcmp(subdirs_set,'CTRLv0qrhSATqdz5000_nx3072')==1,1);
+    end
     if(isempty(i_ctrl))
         i_ctrl = find(multipliers==0,1);
     end
     mpi_ctrl = mpi_all(i_ctrl);
 
-    if(strcmp(sim_set,'Ttpp'))    %sort mpi files in ascending order
+    if(strcmp(sim_set,'Ttpp_drag'))    %sort mpi files in ascending order
         [junk i_sort] = sort(mpi_all);
         clear junk
         multipliers = log2(mpi_all(i_sort)./mpi_ctrl);
@@ -88,7 +91,7 @@ for m=1:length(sim_sets)
     dat_max = max(dat_max,max(data_pl));
     dat_min = min(dat_min,min(data_pl));
 
-    if(strcmp(sim_set,'Ttpp'))    %sort mpi files in ascending order
+    if(strcmp(sim_set,'Ttpp_drag'))    %sort mpi files in ascending order
         plot(xvals_pl,data_pl,'x','Color',pl_clrs{m})
     else
         plot(xvals_pl,data_pl,'x-','Color',pl_clrs{m})
@@ -96,7 +99,7 @@ for m=1:length(sim_sets)
     hold on
 
         %% Add best fit line for mpi (should look identical to MPI_collapse plots)
-    if(strcmp(sim_set,'Ttpp'))    %sort mpi files in ascending order
+    if(strcmp(sim_set,'Ttpp_drag'))    %sort mpi files in ascending order
         %options = fitoptions('Method','Smooth','SmoothingParam',0.3)
         %f = fit(xvals_pl_all', data_pl_all', 'smooth',options)
         f = fit(xvals_pl', data_pl', 'poly1')
@@ -120,7 +123,7 @@ for m=1:length(sim_sets)
     data_pl = log2(data_temp./data_temp(i_ctrl));
     dat_max = max(dat_max,max(data_pl));
     dat_min = min(dat_min,min(data_pl));
-    if(strcmp(sim_set,'Ttpp'))    %sort mpi files in ascending order
+    if(strcmp(sim_set,'Ttpp_drag'))    %sort mpi files in ascending order
         plot(xvals_pl,data_pl,'x','Color',pl_clrs{m})
     else
         plot(xvals_pl,data_pl,'x-','Color',pl_clrs{m})
@@ -128,7 +131,7 @@ for m=1:length(sim_sets)
     hold on
 
     %% Add best fit line for mpi (should look identical to MPI_collapse plots)
-    if(strcmp(sim_set,'Ttpp'))    %sort mpi files in ascending order
+    if(strcmp(sim_set,'Ttpp_drag'))    %sort mpi files in ascending order
         %options = fitoptions('Method','Smooth','SmoothingParam',0.3)
         %f = fit(xvals_pl_all', data_pl_all', 'smooth',options)
         f = fit(xvals_pl', data_pl', 'poly1')
@@ -152,7 +155,7 @@ for m=1:length(sim_sets)
     data_pl = log2(data_temp./data_temp(i_ctrl));
     dat_max = max(dat_max,max(data_pl));
     dat_min = min(dat_min,min(data_pl));
-    if(strcmp(sim_set,'Ttpp'))    %sort mpi files in ascending order
+    if(strcmp(sim_set,'Ttpp_drag'))    %sort mpi files in ascending order
         hpl(m)=plot(xvals_pl,data_pl,'x','Color',pl_clrs{m});
     else
         hpl(m)=plot(xvals_pl,data_pl,'x-','Color',pl_clrs{m});
@@ -160,7 +163,7 @@ for m=1:length(sim_sets)
     hold on
    
     %% Add best fit line for mpi (should look identical to MPI_collapse plots)
-    if(strcmp(sim_set,'Ttpp'))    %sort mpi files in ascending order
+    if(strcmp(sim_set,'Ttpp_drag'))    %sort mpi files in ascending order
         %options = fitoptions('Method','Smooth','SmoothingParam',0.3)
         %f = fit(xvals_pl_all', data_pl_all', 'smooth',options)
         f = fit(xvals_pl', data_pl', 'poly1')
@@ -183,7 +186,7 @@ for m=1:length(sim_sets)
     data_pl = log2(data_temp./data_temp(i_ctrl));
     dat_max = max(dat_max,max(data_pl));
     dat_min = min(dat_min,min(data_pl));
-    if(strcmp(sim_set,'Ttpp'))    %sort mpi files in ascending order
+    if(strcmp(sim_set,'Ttpp_drag'))    %sort mpi files in ascending order
         plot(xvals_pl,data_pl,'x','Color',pl_clrs{m})
     else
         plot(xvals_pl,data_pl,'x-','Color',pl_clrs{m})
@@ -191,7 +194,7 @@ for m=1:length(sim_sets)
     hold on
     
     %% Add best fit line for mpi (should look identical to MPI_collapse plots)
-    if(strcmp(sim_set,'Ttpp'))    %sort mpi files in ascending order
+    if(strcmp(sim_set,'Ttpp_drag'))    %sort mpi files in ascending order
         %options = fitoptions('Method','Smooth','SmoothingParam',0.3)
         %f = fit(xvals_pl_all', data_pl_all', 'smooth',options)
         f = fit(xvals_pl', data_pl', 'poly1')

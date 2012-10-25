@@ -14,18 +14,18 @@ figure(1)
 clf(1)
 
 %% USER INPUT %%%%%%%%%%%%%%%%%%
-%subdir_pre='CTRL_icRCE/';    %general subdir that includes multiple runs within
-subdir_pre='';    %general subdir that includes multiple runs within
-ext_hd = 2; %0=local hard drive; 1='CHAVAS_CM1_FINAL'; 2='CHAVAS_CM1_FINAL_nodrag'
+subdir_pre='CTRL_icRCE/';    %general subdir that includes multiple runs within
+%subdir_pre='';    %general subdir that includes multiple runs within
+ext_hd = 1; %0=local hard drive; 1='CHAVAS_CM1_FINAL'; 2='CHAVAS_CM1_FINAL_nodrag'
 
 run_type=1; %1=axisym; 3=3D
-moist = 0;  %1 = moist; else = dry
+moist = 1;  %1 = moist; else = dry
 
-subdir = 'CTRLv0qrhSATqdz5000_nx3072_DRY'; %name of sub-directory with nc files
+subdir = 'CTRLv0qrhSATqdz5000_nx3072_Cdx4_drag'; %name of sub-directory with nc files
 
-t0a = 145;
+t0a = 30;
 tfa = 150;
-dt_mean = 5;   %[day]
+dt_mean = 10;   %[day]
 
 %pl_clrs={'b' 'r' 'g' 'c' 'k' 'y' 'm' 'b--' 'r--' 'g--' 'c--' 'k--' 'y--' 'm--'};
 vars = {'vinterp'}%'vinterp' 'Ri'};
@@ -33,7 +33,7 @@ vars = {'vinterp'}%'vinterp' 'Ri'};
     
 %%Define subset of points to plot
 rmin_plot = 0;  %[km]; lowest value plotted
-rmax_plot = 20000;    %[km]; highest value plotted
+rmax_plot = 2000;    %[km]; highest value plotted
 zmin_plot = .5;  %[km]; lowest value plotted
 zmax_plot = 1; %[km]; highest value plotted
 datamin_plot = -5000;   %minimum data value plotted
@@ -91,6 +91,10 @@ switch ext_hd
         dir_in=sprintf('/Volumes/CHAVAS_CM1_FINAL/CM1_output/%s/%s',run_type_str,subdir_pre);
     case 2,
         dir_in=sprintf('/Volumes/CHAVAS_CM1_FINAL_nodrag/CM1_output/%s/%s',run_type_str,subdir_pre);
+    case 3,
+        dir_in=sprintf('/Volumes/CHAVAS_CM1_FINAL_3dtrans/CM1_output/%s/%s',run_type_str,subdir_pre);
+    case 4,
+        dir_in=sprintf('/Volumes/CHAVAS_CM1_old/CM1_output/%s/%s',run_type_str,subdir_pre);
     otherwise
         assert(2==3,'Invalid number for ext_hd!')
 end   

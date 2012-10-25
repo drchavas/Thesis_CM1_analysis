@@ -23,12 +23,12 @@ dT_sfc = 2; %[K]; air-sea thermal disequilibrium
 
 run_types=3*ones(100,1);    %[1 1 1 1 1 1 1 1 1]; %1=axisym; 3=3d
 subdirs = {
-'RCE_nx48_SST300.00K_Tthresh125K_usfc3_rad0.125K_drag'
+'RCE_nx48_SST285.00K_Tthresh200K_usfc3_dz312.5_drag'
 }; %name of sub-directory with nc files
 
-t0a = 150;    %[day], starting time for averaging
-tfa = 200;   %[day], ending time for averaging
-interval_day = 10;  %[day], length of intervals
+t0a = 50;    %[day], starting time for averaging
+tfa = 100;   %[day], ending time for averaging
+interval_day = 5;  %[day], length of intervals
 
 save_output_sounding = 0;   %0=no output file created; 1=yes 'input_sounding_[subdir]'
 plot_type = 1;  %0=no plot; 1=plots of RCE vertical profiles of qv [g/kg] and theta [K]

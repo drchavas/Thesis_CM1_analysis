@@ -1,4 +1,4 @@
-\begin{thebibliography}{33}
+\begin{thebibliography}{36}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \providecommand{\urlprefix}{URL }
@@ -13,16 +13,18 @@ Bister, M. and K.~A. Emanuel, 1997: The genesis of hurricane guillermo: Texmex
   analyses and a modeling study. \textit{Monthly Weather Review},
   \textbf{125~(10)}, 2662--2682.
 
-\bibitem[{Bister and Emanuel(1998)}]{Bister_Emanuel_1998}
-Bister, M. and K.~A. Emanuel, 1998: Dissipative heating and hurricane
-  intensity. \textit{Meteorology and Atmospheric Physics}, \textbf{65~(3-4)},
-  233--240.
-
 \bibitem[{Bretherton et~al.(2005)Bretherton, Blossey, and
   Khairoutdinov}]{Bretherton_Blossey_Khairoutdinov_2005}
 Bretherton, C.~S., P.~N. Blossey, and M.~Khairoutdinov, 2005: An energy-balance
   analysis of deep convective self-aggregation above uniform sst.
   \textit{Journal of the Atmospheric Sciences}, \textbf{62~(12)}, 4273--4292.
+
+\bibitem[{Bryan(2011)}]{Bryan_2011}
+Bryan, G.~H., 2011: Effects of surface exchange coefficients and turbulence
+  length scales on the intensity and structure of numerically simulated
+  hurricanes. \textit{Monthly Weather Review}, \textbf{140~(4)}, 1125--1143,
+  \doi{10.1175/MWR-D-11-00231.1},
+  \urlprefix\url{http://dx.doi.org/10.1175/MWR-D-11-00231.1}.
 
 \bibitem[{Bryan and Fritsch(2002)}]{Bryan_Fritsch_2002}
 Bryan, G.~H. and J.~M. Fritsch, 2002: A benchmark simulation for moist
@@ -52,6 +54,10 @@ Cheng-Shang, L., K.~K.~W. Cheung, F.~Wei-Ting, and R.~L. Elsberry, 2010:
   Initial maintenance of tropical cyclone size in the western north pacific.
   \textit{Monthly Weather Review}, \textbf{138~(8)}, 3207--3223.
 
+\bibitem[{Emanuel(1994)}]{Emanuel_1994}
+Emanuel, K., 1994: \textit{Atmospheric Convection}. Oxford University Press,
+  USA, \urlprefix\url{http://books.google.com/books?id=VdaBBHEGAcMC}.
+
 \bibitem[{Emanuel(2010)}]{Emanuel_2010}
 Emanuel, K., 2010: Tropical cyclone activity downscaled from noaa-cires
   reanalysis, 1908-1958. \textit{Journal of Advances in Modeling Earth
@@ -68,6 +74,13 @@ Emanuel, K.~A., 1986: An air-sea interaction theory for tropical cyclones. part
   i: Steady-state maintenance. \textit{Journal of the Atmospheric Sciences},
   \textbf{43~(6)}, 585--605,
   \doi{10.1175/1520-0469(1986)043<0585:AASITF>2.0.CO;2}.
+
+\bibitem[{Emanuel(1989)}]{Emanuel_1989}
+Emanuel, K.~A., 1989: The finite-amplitude nature of tropical cyclogenesis.
+  \textit{Journal of the Atmospheric Sciences}, \textbf{46~(22)}, 3431--3456,
+  \doi{10.1175/1520-0469(1989)046<3431:TFANOT>2.0.CO;2},
+  \urlprefix\url{http://dx.doi.org/10.1175/1520-0469(1989)046<3431:TFANOT>2.0.%
+CO;2}.
 
 \bibitem[{Emanuel(1995{\natexlab{a}})}]{Emanuel_1995a}
 Emanuel, K.~A., 1995{\natexlab{a}}: The behavior of a simple hurricane model
@@ -108,9 +121,9 @@ Hill, K.~A. and G.~M. Lackmann, 2009: Influence of environmental humidity on
   3294--3315, \doi{10.1175/2009MWR2679.1}.
 
 \bibitem[{Iman et~al.(2005)Iman, Johnson, and
-  Watson}]{Iman_Johnson_Watson_2005}
-Iman, R.~L., M.~E. Johnson, and C.~C. Watson, 2005: Sensitivity analysis for
-  computer model projections of hurricane losses. \textit{Risk Analysis},
+  Watson~Jr.}]{Iman_Johnson_Watson_2005}
+Iman, R.~L., M.~E. Johnson, and C.~C. Watson~Jr., 2005: Sensitivity analysis
+  for computer model projections of hurricane losses. \textit{Risk Analysis},
   \textbf{25~(5)}, 1277--1297.
 
 \bibitem[{Irish et~al.(2008)Irish, Resio, and
@@ -118,6 +131,12 @@ Iman, R.~L., M.~E. Johnson, and C.~C. Watson, 2005: Sensitivity analysis for
 Irish, J.~L., D.~T. Resio, and J.~J. Ratcliff, 2008: The influence of storm
   size on hurricane surge. \textit{Journal of Physical Oceanography},
   \textbf{38~(9)}, 2003--2013.
+
+\bibitem[{Knutson
+  et~al.(2010)}]{Knutson_McBride_Chan_Emanuel_Holland_Landsea_Held_Kossin_Sriv%
+astava_Sugi_2010}
+Knutson, T.~R., et~al., 2010: Tropical cyclones and climate change.
+  \textit{Nature Geoscience}, \textbf{3}, 157--163.
 
 \bibitem[{Lin et~al.(1983)Lin, Farley, and Orville}]{Lin_Farley_Orville_1983}
 Lin, Y.-L., R.~D. Farley, and H.~D. Orville, 1983: Bulk parameterization of the

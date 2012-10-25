@@ -3,44 +3,44 @@ The top-level auxiliary file: TC_RCE_equilibrium_v2.0.aux
 The style file: /Users/drchavas/Documents/LaTeX/AMS_LaTeX/ametsoc.bst
 Database file #1: /Users/drchavas/Documents/LaTeX/refs_CHAVAS.bib
 Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
-You've used 33 entries,
+You've used 36 entries,
             3488 wiz_defined-function locations,
-            928 strings with 11286 characters,
-and the built_in function-call counts, 39587 in all, are:
-= -- 5093
-> -- 829
-< -- 23
-+ -- 609
-- -- 204
-* -- 1973
-:= -- 3609
-add.period$ -- 66
-call.type$ -- 33
-change.case$ -- 233
-chr.to.int$ -- 31
-cite$ -- 33
-duplicate$ -- 4372
-empty$ -- 2069
-format.name$ -- 309
-if$ -- 7983
+            950 strings with 12142 characters,
+and the built_in function-call counts, 42338 in all, are:
+= -- 5441
+> -- 861
+< -- 25
++ -- 639
+- -- 213
+* -- 2098
+:= -- 3891
+add.period$ -- 72
+call.type$ -- 36
+change.case$ -- 249
+chr.to.int$ -- 34
+cite$ -- 36
+duplicate$ -- 4685
+empty$ -- 2241
+format.name$ -- 319
+if$ -- 8541
 int.to.chr$ -- 3
 int.to.str$ -- 1
-missing$ -- 332
-newline$ -- 109
-num.names$ -- 132
-pop$ -- 1560
+missing$ -- 358
+newline$ -- 118
+num.names$ -- 144
+pop$ -- 1660
 preamble$ -- 1
-purify$ -- 200
+purify$ -- 214
 quote$ -- 0
-skip$ -- 2776
+skip$ -- 2966
 stack$ -- 0
-substring$ -- 2223
-swap$ -- 3906
+substring$ -- 2380
+swap$ -- 4161
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 297
+type$ -- 321
 warning$ -- 0
-while$ -- 195
+while$ -- 210
 width$ -- 0
-write$ -- 383
+write$ -- 420

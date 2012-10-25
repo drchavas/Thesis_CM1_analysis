@@ -3,7 +3,7 @@
 \centering
 %  \noindent\includegraphics[width=19pc,angle=0]{FIGURES/Domain_size.pdf}
   \noindent\includegraphics[width=10cm,height=10cm]{FIGURES_TC_RCE_equilibrium_v2.0/Fig0half_Sounding_ctrl.pdf}
-\caption{Radiative-convective equilibrium vertical profile of temperature (red dashed), potential temperature (red solid), and water vapor (blue) for the Control simulation.}
+\caption{Radiative-convective equilibrium vertical profile of temperature (red dashed), potential temperature (red solid), and water vapor mixing ratio (blue) for the Control simulation.}
 \label{fig:ctrlsounding}
 \end{figure*}
 \efloatseparator
@@ -13,7 +13,7 @@
 \centering
 %  \noindent\includegraphics[width=19pc,angle=0]{FIGURES/Domain_size.pdf}
   \noindent\includegraphics[width=15cm,height=10cm]{FIGURES_TC_RCE_equilibrium_v2.0/Fig1_Domain_size.pdf}
-\caption{Equilibrium radial gradient wind profiles as a function of domain width.  Note the convergence beyond $L_{domain} \approx 3000 \; km$.}
+\caption{Equilibrium radial gradient wind profiles as a function of domain width.  Note the convergence in storm size beyond $L_{domain} \approx 3000 \; km$.}
 \label{fig:domainsize}
 \end{figure*}
 \efloatseparator
@@ -23,7 +23,7 @@
 \centering
 %  \noindent\includegraphics[width=19pc,angle=0]{FIGURES/Control_run.pdf}
   \noindent\includegraphics[width=15cm,height=10cm]{FIGURES_TC_RCE_equilibrium_v2.0/Fig2_Control_run.pdf}
-\caption{For the Control simulation, time evolution of the 2-day running mean $V_m$, $r_m$, and $r_0$ normalized by their respective equilibrium values (upper-right corner). For this simulation, $V^*_p =  93 \; ms^{-1}$ and $f = 5*10^{-5} \; s^{-1}$. Pink line denotes 30-day period used for equilibrium calculation. Markers along the x-axis denote respective time-scales to equilibration, defined as time where the 30-day running mean is within 10\% of the equilibrium value (black dashed lines).}
+\caption{For the Control simulation, time evolution of the 2-day running mean $V_m$, $r_m$, and $r_0$ normalized by their respective equilibrium values (upper-right corner). For this simulation, $V^*_p =  92 \; ms^{-1}$ and $f = 5*10^{-5} \; s^{-1}$. Pink line denotes 30-day period used for equilibrium calculation, and black dashed lines denote $\pm10\%$ of the equilibrium value. Markers along the x-axis denote estimated time-scales to equilibration; see text for details.}
 \label{fig:timeseries}.
 \end{figure*}
 \efloatseparator
@@ -33,7 +33,7 @@
 \centering
 %  \noindent\includegraphics[width=19pc,angle=0]{FIGURES/Control_run.pdf}
   \noindent\includegraphics[width=10cm,height=10cm]{FIGURES_TC_RCE_equilibrium_v2.0/Fig3_MPI_collapse_V.pdf}
-\caption{Scaling of the equilibrium value of $V_m$ (ordinate) with the potential intensity (abscissa). Both quantities are normalized by their respective control values denoted by an asterisk ($*$; $V^*_p = 93 \; ms^{-1}$). Colored shape denotes the input parameter varied from among the four parameters on which the potential intensity depends (Eq. \eqref{eq:vpot3}). Scaling is shown in base-2 log-log space, such that a 1-unit increase (decrease) represents doubling (having).  Thus, a straight line with unit slope indicates that a doubling of $V_p$ is associated with a doubling of $Y$.}
+\caption{Scaling of the equilibrium value of $V_m$ (ordinate) with the potential intensity (abscissa). Both quantities are normalized by their respective control values denoted by an asterisk ($*$; $V^*_p = 93 \; ms^{-1}$). Colored shape denotes the input parameter varied from among the four parameters on which the potential intensity depends (Eq. \eqref{eq:vpot3}). Scaling is shown in base-2 log-log space, such that a 1-unit increase (decrease) represents doubling (having). Grey bars indicate the range of variability of the 30-day running mean after day 60.}
 \label{fig:mpicollapse_V}
 \end{figure*}
 \efloatseparator
@@ -64,18 +64,8 @@
 [h!]
 \centering
 %  \noindent\includegraphics[width=19pc,angle=0]{FIGURES/Control_run.pdf}
-  \noindent\includegraphics[width=10cm,height=10cm]{FIGURES_TC_RCE_equilibrium_v2.0/Fig5half_LR_nocollapse_r0ctrlwcool.pdf}
-\caption{As in Figure \ref{fig:mpicollapse_r0ctrlwcool}, but for the scaling with the Rossby deformation radius.}
-\label{fig:LRcollapse_r0ctrlwcool}
-\end{figure*}
-\efloatseparator
- 
-\begin{figure*}
-[h!]
-\centering
-%  \noindent\includegraphics[width=19pc,angle=0]{FIGURES/Control_run.pdf}
   \noindent\includegraphics[width=8cm,height=20cm]{FIGURES_TC_RCE_equilibrium_v2.0/Fig6_Dimensional_scaling.pdf}
-\caption{Scaling of the equilibrium value of each structural variable $Y$ (ordinate) with relevant dimensional parameters, $X$ (absicssa). All quantities are normalized by their respective control values denoted by an asterisk ($*$). Plot layout as in Figure \ref{fig:mpicollapse_V}.}
+\caption{Scaling of the equilibrium value of each structural variable (ordinate) with relevant dimensional parameters, $X$ (absicssa). All quantities are normalized by their respective control values denoted by an asterisk ($*$). Plot layout as in Figure \ref{fig:mpicollapse_V}.}
 \label{fig:dimscaling}
 \end{figure*}
 \efloatseparator
@@ -90,7 +80,7 @@
 
   \noindent\includegraphics[width=6cm,height=6cm]{FIGURES_TC_RCE_equilibrium_v2.0/Fig7c_Nondimensional_scaling_r0.pdf}
 
-\caption{Scaling of the equilibrium value of each structural variable non-dimensionalized by an appropriate dimensional scale ($V_p$ for $V_m$; $\frac{V_p}{f}$ for $r_m$ and $r_0$), $Y$, with the non-dimensional number $C = \frac{V_p}{fl_h}$ (see text for details). All quantities are normalized by their respective control values denoted by an asterisk ($*$; $C^* = 1240$). Plot layout as in Figure \ref{fig:mpicollapse}.  Linearly-regressed slopes, corresponding to the estimated scaling exponent in \eqref{eq:buckpipowerlaw}, and associated p-values shown in red.}
+\caption{Scaling of the equilibrium values of the non-dimensionalized structural variable $V_m$ (top), $r_m$ (middle), and $r_0$ (bottom) with the non-dimensional number $C = \frac{V_p}{fl_h}$; see text for details. All quantities are normalized by their respective control values denoted by an asterisk ($*$; $C^* = 1220$). Plot layout as in Figure \ref{fig:mpicollapse_V}.  Best-fit linear regressions plotted (dash); linearly-regressed slopes, corresponding to the estimated power-law scaling exponent in \eqref{eq:buckpipowerlaw}, and associated p-values listed within. For $V_m$, a logarithmic regression is also shown (dash-dot).}
 \label{fig:nondimscaling}
 \end{figure*}
 \efloatseparator
@@ -99,14 +89,9 @@
 [h!]
 \centering
 %  \noindent\includegraphics[width=19pc,angle=0]{FIGURES/Control_run.pdf}
-  \noindent\includegraphics[width=6cm,height=6cm]{FIGURES_TC_RCE_equilibrium_v2.0/Fig8a_CkCd_nondimensional_scaling_V.pdf}
-
-  \noindent\includegraphics[width=6cm,height=6cm]{FIGURES_TC_RCE_equilibrium_v2.0/Fig8b_CkCd_nondimensional_scaling_rm.pdf}
-
-  \noindent\includegraphics[width=6cm,height=6cm]{FIGURES_TC_RCE_equilibrium_v2.0/Fig8c_CkCd_nondimensional_scaling_r0.pdf}
-
-\caption{As in figure \ref{fig:nondimscaling}, but for scaling with the non-dimensional ratio of exchange coefficients, $\frac{C_k}{C_d}$.}
-\label{fig:nondimscaling_CkCd}
+  \noindent\includegraphics[width=10cm,height=10cm]{FIGURES_TC_RCE_equilibrium_v2.0/Fig5half_LR_nocollapse_r0ctrlwcool.pdf}
+\caption{As in Figure \ref{fig:mpicollapse_r0ctrlwcool}, but for the scaling with the Rossby deformation radius.}
+\label{fig:LRnocollapse_r0ctrlwcool}
 \end{figure*}
 \efloatseparator
  
@@ -115,7 +100,7 @@
 \centering
 %  \noindent\includegraphics[width=19pc,angle=0]{FIGURES/Control_run.pdf}
   \noindent\includegraphics[width=10cm,height=10cm]{FIGURES_TC_RCE_equilibrium_v2.0/Fig9_CkCd_scaling_VmVp.pdf}
-\caption{Relationship between of $\frac{V_m}{V_p}$ and $\frac{C_k}{C_d}$ in simulations (markers) and the theoretical relation given by Eq. (41) of \cite{Emanuel_Rotunno_2011}.}
+\caption{Scaling between $\frac{V_m}{V_p}$ and $\frac{C_k}{C_d}$ in simulations (markers) and the theoretical relation given by \cite{Emanuel_Rotunno_2011}.}
 \label{fig:VmVp_CkCd}
 \end{figure*}
 \efloatseparator
@@ -124,8 +109,23 @@
 [h!]
 \centering
 %  \noindent\includegraphics[width=19pc,angle=0]{FIGURES/Control_run.pdf}
+%  \noindent\includegraphics[width=6cm,height=6cm]{FIGURES_TC_RCE_equilibrium_v2.0/Fig8a_CkCd_nondimensional_scaling_V.pdf}
+
+  \noindent\includegraphics[width=10cm,height=10cm]{FIGURES_TC_RCE_equilibrium_v2.0/Fig8b_CkCd_nondimensional_scaling_rm.pdf}
+
+  \noindent\includegraphics[width=10cm,height=10cm]{FIGURES_TC_RCE_equilibrium_v2.0/Fig8c_CkCd_nondimensional_scaling_r0.pdf}
+
+\caption{Scaling of $r_m$ and $r_0$ with the ratio of exchange coefficients, $\frac{C_k}{C_d}$.}
+\label{fig:nondimscaling_CkCd_r}
+\end{figure*}
+\efloatseparator
+ 
+\begin{figure*}
+[h!]
+\centering
+%  \noindent\includegraphics[width=19pc,angle=0]{FIGURES/Control_run.pdf}
   \noindent\includegraphics[width=10cm,height=10cm]{FIGURES_TC_RCE_equilibrium_v2.0/Fig10_lh_optimize.pdf}
-\caption{Dependence of $V_m$ on $l_h$. Matching a power-law fit of the data (solid blue line) to the theoretical relationship between $V_m$ and $V_p$ (dashed red line) given in \cite{Emanuel_Rotunno_2011} leads to a best-estimate value for $l_h$ of $2350 \; m$ (green dot).}
+\caption{Estimation of the optimal value of the radial mixing length normalized by $\frac{V_p}{f}$ by matching the logarithmic fit to the data (black dash) to the theoretical relationship of $\frac{V_m}{V_p} = \frac{1}{\sqrt{2}}$ (red dash-dot) for $\frac{C_k}{C_d} = 1$ in \cite{Emanuel_Rotunno_2011}. The best estimate (green dot) is $l_h / \frac{V_p}{f} = 9.4*10^{-4}$.}
 \label{fig:lh_optimize}
 \end{figure*}
 \efloatseparator

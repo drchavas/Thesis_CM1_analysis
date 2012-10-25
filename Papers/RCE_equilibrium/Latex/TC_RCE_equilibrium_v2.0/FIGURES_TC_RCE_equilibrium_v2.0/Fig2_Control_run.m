@@ -38,7 +38,7 @@ datamin_plot = -5000;   %minimum data value plotted
 datamax_plot = 5000;   %minimum data value plotted
 
 %%Simulations
-subdir = 'CTRLv0qrhSATqdz5000_nx3072'; %name of sub-directory with nc files
+subdir = 'CTRLv0qrhSATqdz5000_nx3072_drag'; %name of sub-directory with nc files
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

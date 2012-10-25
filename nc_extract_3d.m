@@ -205,6 +205,7 @@ v_xmin = netcdf.getAtt(ncid,varid,'x_min');
 
 %YMIN OF VARIABLE
 v_ymin = netcdf.getAtt(ncid,varid,'y_min');
+v_ymin = v_ymin - dz/2 + dy/2;   %DRC 25 Oct 2012; COMPENSATE FOR DUMB ERROR IN 3D STITCH FILE THAT ADDS DZ/2 INSTEAD OF DY/2
 
 %ZMIN OF VARIABLE
 if(num_dim>=3)

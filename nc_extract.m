@@ -1,8 +1,8 @@
-%nc_extract_axisym.m
+%nc_extract.m
 
-%Adapted to axisym output: 25 Jan 2011, Dan Chavas
+%Created: 02 Dec 2010, Dan Chavas
 
-%Purpose: to extract subsets of data from a netcdf file and plot them
+%Purpose: to extract subsets of data from a netcdf file
 
 %NOTE: data at varying x (i.e. zonal cross-sec) = matrix COLUMN in MATLAB!
 
@@ -10,95 +10,91 @@
 function [data xmin_sub xmax_sub ymin_sub ymax_sub zmin_sub zmax_sub dx dy dz nx_sub ny_sub nz_sub xunits yunits zunits v_def v_units time t_units fcor] = nc_extract(dir_in,subdir,nc_file,var,x0,xf,y0,yf,z0,zf)
 
 %% USER INPUT %%%%%%%%%%%%%%%%%%
-%direc = 'CTRL1'; %name of directory with nc files
-%nc_file = 'cm1out_0200.nc';    %nc file of interest
+%direc = 'test_96_thrandpert'; %name of directory with nc files
+%nc_file = 'cm1out_t0080.nc';    %nc file of interest
 %var = 'winterp';  %variable of interest
 %x0=0;   %first x grid point [0,end]
 %xf=100;   %first y grid point [0,end]
 %y0=0;   %first y grid point [0,end]
-%yf=0;   %last z grid point [0,end]
-%z0=0;  %first z grid point [0,end]
-%zf=20;  %last z grid point [0,end]
+%yf=100;   %last z grid point [0,end]
+%z0=3;  %first z grid point [0,end]
+%zf=3;  %last z grid point [0,end]
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% CHANGE TO PROPER DIRECTORY
 dir_start=pwd;
 dir_tmp = strcat(dir_in,subdir);
-cd(dir_tmp);
-dir_tmp;
+cd(dir_tmp)
+dir_tmp
 
 %% OPEN FILE AND EXTRACT FILE ID#
 %ncid = netcdf.open(nc_file,'NOWRITE');
 ncid = netcdf.open(nc_file,'WRITE');
-
-%%TESTING TO FIGURE OUT WHATS IN THE FILE
 %[ndims,nvars,ngatts,unlimdimid] = netcdf.inq(ncid)
-%dimIDs = netcdf.inqDimIDs(ncid)
-
 
 %% GET # GRIDPTS IN EACH DIMENSION (CM1:nx(0),ny(1),nz(2),time(6))
 %NX
-dimid = netcdf.inqDimID(ncid,'ni');
+dimid = netcdf.inqDimID(ncid,'nx');
 [junk, nx] = netcdf.inqDim(ncid,dimid);
 
 %NY
-dimid = netcdf.inqDimID(ncid,'nj');
+dimid = netcdf.inqDimID(ncid,'ny');
 [junk, ny] = netcdf.inqDim(ncid,dimid);
 
 %NZ
-dimid = netcdf.inqDimID(ncid,'nk');
+dimid = netcdf.inqDimID(ncid,'nz');
 [junk, nz] = netcdf.inqDim(ncid,dimid);
 
 %MODIFY xf, yf, zf IF SMALLER THAN DIMENSION BOUNDS
 if(x0 < 0)
     x0=0;
-    sprintf('X0 input cannot be negative; reset to 0');
+    sprintf('X0 input cannot be negative; reset to 0')
 end
 if(y0 < 0)
     y0=0;
-    sprintf('Y0 input cannot be negative; reset to 0');
+    sprintf('Y0 input cannot be negative; reset to 0')
 end
 if(z0 < 0)
     z0=0;
-    sprintf('Z0 input cannot be negative; reset to 0');
+    sprintf('Z0 input cannot be negative; reset to 0')
 end
 if(xf < 0)
     xf=0;
-    sprintf('XF input cannot be negative; reset to 0');
+    sprintf('XF input cannot be negative; reset to 0')
 end
 if(yf < 0)
     yf=0;
-    sprintf('YF input cannot be negative; reset to 0');
+    sprintf('YF input cannot be negative; reset to 0')
 end
 if(zf < 0)
     zf=0;
-    sprintf('ZF input cannot be negative; reset to 0');
+    sprintf('ZF input cannot be negative; reset to 0')
 end
 
 %MODIFY xf, yf, zf IF LARGER THAN DIMENSION BOUNDS
 if(xf > nx-1)
     xf=nx-1;
-    sprintf('XF input too large; reset to max = %i',xf);
+    sprintf('XF input too large; reset to max = %i',xf)
 end
 if(yf > ny-1)
     yf=ny-1;
-    sprintf('YF input too large; reset to max = %i',yf);
+    sprintf('YF input too large; reset to max = %i',yf)
 end
 if(zf > nz-1)
     zf=nz-1;
-    sprintf('ZF input too large; reset to max = %i',zf);
+    sprintf('ZF input too large; reset to max = %i',zf)
 end
 if(x0 > nx-1)
     x0=nx-1;
-    sprintf('XF input too large; reset to max = %i',x0);
+    sprintf('XF input too large; reset to max = %i',x0)
 end
 if(y0 > ny-1)
     y0=ny-1;
-    sprintf('YF input too large; reset to max = %i',y0);
+    sprintf('YF input too large; reset to max = %i',y0)
 end
 if(z0 > nz-1)
     z0=nz-1;
-    sprintf('ZF input too large; reset to max = %i',z0);
+    sprintf('ZF input too large; reset to max = %i',z0)
 end
 
 %% GET GLOBAL ATTRIBUTES FOR DATASET
@@ -148,26 +144,18 @@ dy = netcdf.getAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'y_delta');
 
 %DZ
 %name_tmp = netcdf.inqAttName(ncid,netcdf.getConstant('NC_GLOBAL'),14);
-dz = netcdf.getAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'z_delta');
-
-%%  IF SUBSET, CALCULATE nx_sub, ny_sub, nz_sub (# pts in subset domain)
-nx_sub=xf-x0+1;
-ny_sub=yf-y0+1;
-nz_sub=zf-z0+1;
+if(strmatch(netcdf.inqAttName(ncid,netcdf.getConstant('NC_GLOBAL'),14),'z_delta'))
+    dz = netcdf.getAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'z_delta');
+else
+    dz = (zmax-zmin)/nz;
+end
 
 %% EXTRACT TIME SINCE START OF SIMULATION
-t_id = netcdf.inqVarID(ncid,'time');
-
-%VARIABLE DEFINITION
-name_tmp = netcdf.inqAttName(ncid,t_id,0);
-t_def = netcdf.getAtt(ncid,t_id,name_tmp);
-
-%UNITS
-name_tmp = netcdf.inqAttName(ncid,t_id,1);
-t_units = netcdf.getAtt(ncid,t_id,name_tmp);
-
-%GET THE TIME
-time = netcdf.getVar(ncid,t_id,0,1);
+%% EXTRACT TIME
+varid_t = netcdf.inqVarID(ncid,'time');
+%[varname_t,xtype_t,dimids_t,natts_t]=netcdf.inqVar(ncid,varid_t);
+time = netcdf.getVar(ncid,varid_t)
+t_units='s';
 %t_day = time / 86400;
 
 %% EXTRACT CORIOLIS PARAMETER
@@ -176,10 +164,15 @@ fcor = netcdf.getVar(ncid,varid);
 
 %%%%%%%%%%%%%%% END GLOBAL STUFF %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%% CALCULATE nx_sub, ny_sub, nz_sub (# pts in subset domain)
+nx_sub=xf-x0+1;
+ny_sub=yf-y0+1;
+nz_sub=zf-z0+1;
+
 %% EXTRACT VARIABLE ID#
 varid = netcdf.inqVarID(ncid,var);
 [varname,xtype,dimids,natts]=netcdf.inqVar(ncid,varid);
-%length(dimids)
+varname
 
 %% EXTRACT VARIABLE INFO
 %NUMBER OF DIMENSIONS OF DATA (E.G. RAIN IS xy ONLY)
@@ -193,7 +186,16 @@ else
 end
 
 %VARIABLE DEFINITION
-v_def = netcdf.getAtt(ncid,varid,'def');
+v_def_flag=0;
+for m=0:natts-1     %check if variable as "def" attribute
+    if ( strmatch(netcdf.inqAttName(ncid,varid,m),'def')==1 )
+        v_def = netcdf.getAtt(ncid,varid,'def');
+        v_def_flag = 1;
+    end
+end
+if(v_def_flag == 0)
+    v_def = varname;
+end
 
 %UNITS
 v_units = netcdf.getAtt(ncid,varid,'units');
@@ -203,46 +205,37 @@ v_xmin = netcdf.getAtt(ncid,varid,'x_min');
 
 %YMIN OF VARIABLE
 v_ymin = netcdf.getAtt(ncid,varid,'y_min');
+v_ymin = v_ymin - dz/2 + dy/2;   %DRC 25 Oct 2012; COMPENSATE FOR DUMB ERROR IN 3D STITCH FILE THAT ADDS DZ/2 INSTEAD OF DY/2
 
 %ZMIN OF VARIABLE
-if(num_dim>3)
+if(num_dim>=3)
     v_zmin = netcdf.getAtt(ncid,varid,'z_min');
 else
     v_zmin=NaN;
 end
 
-%%TESTING
-%[varname,xtype,dimids,natts]=netcdf.inqVar(ncid,varid)
-%% EXTRACT DATA
-%EXTRACT SUBSET OF DATA FOR DESIRED VARIABLE: netcdf.getVar(ncid,varid, [start], [count])
+%% EXTRACT SUBSET DATA
+%SYNTAX: netcdf.getVar(ncid,varid, [start], [count])
 %NOTE: if error, be sure dimensions are correct!
 if(num_dim == 4)
-    %4D data
+    %4D data (e.g. qv)
     data = netcdf.getVar(ncid,varid,[x0 y0 z0 0],[nx_sub ny_sub nz_sub 1]);
         %start = [x0 y0 z0 t0]
         %count = [nx ny nz nt] (including first point, i.e. 1=single point)
         %NOTE: data at varying x (i.e. zonal cross-sec) = matrix COLUMN in MATLAB!
 elseif(num_dim == 3)
-    %3D data
-    if(sum(dimids==[0 1 6])==length(dimids))    %XY; e.g. rain
-        data = netcdf.getVar(ncid,varid,[x0 y0 0],[nx_sub ny_sub 1]);
-        %start = [x0 y0 t0]
-        %count = [nx ny t1] (including first point, i.e. 1=single point)
-        %NOTE: data at varying x (i.e. zonal cross-sec) = matrix COLUMN in MATLAB!
-%    elseif((sum(dimids==[0 1 2])==length(dimids)) || (sum(dimids==[3 1 2])==length(dimids)))    %3D constant in t; e.g. q0
-    else
-        data = netcdf.getVar(ncid,varid,[x0 y0 z0],[nx_sub ny_sub nz_sub]);
+    %3D data (e.g. qv0)
+    data = netcdf.getVar(ncid,varid,[x0 y0 z0],[nx_sub ny_sub nz_sub]);
         %start = [x0 y0 z0]
         %count = [nx ny nz] (including first point, i.e. 1=single point)
         %NOTE: data at varying x (i.e. zonal cross-sec) = matrix COLUMN in MATLAB!
-    end
 else
-    %2D data
+    %2D data (e.g. rain)
     data = netcdf.getVar(ncid,varid,[x0 y0],[nx_sub ny_sub]);
 end
 
 %% OUTPUT TO SCREEN FOR VERIFICATION
-%sprintf('Dimensions of your dataset are:'),size(data)
+%sprintf('Size of your dataset (X*Y*Z) is %i * %i * %i',nx_sub,ny_sub,nz_sub)
 %lowest_level_data_xy=data(:,:,1)
 %data_min = min(min(data))
 %data_max = max(max(data))
@@ -260,6 +253,5 @@ zmin_sub=v_zmin+dz*z0;
 zmax_sub=v_zmin+dz*zf;
 
 %% RETURN TO ORIGINAL DIRECTORY
-cd(dir_start);
-
+cd(dir_start)
 end

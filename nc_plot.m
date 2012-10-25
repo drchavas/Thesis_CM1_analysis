@@ -16,14 +16,14 @@ clf(1)
 run_type=3; %1=axisym; 3=3d; 10/30=initial condition test (subdir 'code_test')
 
 %subdir_pre='CTRL_icRCE/';    %general subdir that includes multiple runs within
-subdir_pre='TRANSFER/';
-%subdir_pre='RCE/';    %general subdir that includes multiple runs within
+%subdir_pre='TRANSFER/';
+subdir_pre='RCE/';    %general subdir that includes multiple runs within
 %subdir_pre='';    %general subdir that includes multiple runs within
-ext_hd = 1; %0=local hard drive; 1='CHAVAS_CM1_FINAL'; 2='CHAVAS_CM1_FINAL_nodrag'
+ext_hd = 1; %0=local hard drive; 1='CHAVAS_CM1_FINAL'; 2='CHAVAS_CM1_FINAL_nodrag'; 3='CHAVAS_CM1_FINAL_trans'
 
 
-subdir = 'TEST_3d_hop'; %name of sub-directory with nc files
-t_file=1;  %file timestep
+subdir = 'RCE_nx48_SST300.00K_Tthresh200K_usfc3_drag'; %name of sub-directory with nc files
+t_file=100;  %file timestep
 
 plot_type = 1;  %0=no plotd
                 %1=single plot of [var] in domain defined below
@@ -50,10 +50,10 @@ plot_type = 1;  %0=no plotd
  elseif(run_type==3 || run_type==30)   %3d
     x0=0;   %first x grid point [0,end]
     xf=1000;   %first y grid point [0,end]
-    y0=96;   %first y grid point [0,end]
-    yf=96;   %last y grid point [0,end]
-    z0=0;  %first z grid point [0,end]
-    zf=20;  %last z grid point [0,end]
+    y0=0;   %first y grid point [0,end]
+    yf=1000;   %last y grid point [0,end]
+    z0=2;  %first z grid point [0,end]
+    zf=2;  %last z grid point [0,end]
  end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -71,7 +71,7 @@ if(run_type==1)
     run_type_str='axisym';
     copyfile('nc_extract_axisym.m','nc_extract.m') %copy nc_extract_axisym.m to nc_extract
 elseif(run_type==3)
-    run_type_str='3D';
+    run_type_str='3d';
     copyfile('nc_extract_3d.m','nc_extract.m') %copy nc_extract_3d.m to nc_extract
 end
 
@@ -82,6 +82,8 @@ switch ext_hd
         dir_in=sprintf('/Volumes/CHAVAS_CM1_FINAL/CM1_output/%s/%s',run_type_str,subdir_pre);
     case 2,
         dir_in=sprintf('/Volumes/CHAVAS_CM1_FINAL_nodrag/CM1_output/%s/%s',run_type_str,subdir_pre);
+    case 3,
+        dir_in=sprintf('/Volumes/CHAVAS_CM1_FINAL_3dtrans/CM1_output/%s/%s',run_type_str,subdir_pre);
     otherwise
         assert(2==3,'Invalid number for ext_hd!')
 end   
